@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="item"
+            type="com.example.proyecto_final_de_onboarding.Item" />
+
+        <variable
+            name="mainScreenViewModel"
+            type="com.example.proyecto_final_de_onboarding.mainScreen.MainScreenViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:fontFamily="monospace"
+            android:textColor="@color/material_dynamic_neutral_variant50"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:itemNameString="@{item}"
+            app:layout_constraintBottom_toTopOf="@id/item_price"
+            app:layout_constraintEnd_toStartOf="@+id/button_remove"
+            app:layout_constraintStart_toEndOf="@id/item_image"
+            tools:text="Avocado" />
+
+
+        <TextView
+            android:id="@+id/item_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:textColor="@color/material_dynamic_neutral_variant50"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:itemPriceString="@{item}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/item_name"
+            app:layout_constraintHorizontal_bias="0.166"
+            app:layout_constraintStart_toStartOf="@id/item_name"
+            app:layout_constraintTop_toTopOf="@id/item_name"
+            tools:text="40" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/item_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            app:itemImage="@{item}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_price"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:srcCompat="@drawable/avocado"
+            app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"/>
+
+
+
+        <ImageButton
+            android:id="@+id/button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:onClick="@{() -> mainScreenViewModel.onAddItem}"
+            android:src="@drawable/icon_plus"
+            android:text="@string/add"
+            app:itemImage="@{item}"
+            app:layout_constraintBottom_toBottomOf="@+id/cant_text"
+            app:layout_constraintTop_toTopOf="@+id/cant_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/cant_text"
+            android:layout_marginStart="0dp"
+            tools:layout_editor_absoluteX="360dp" />
+
+        <TextView
+            android:id="@+id/cant_text"
+            android:layout_width="30dp"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:fontFamily="@font/walter_turncoat"
+            app:layout_constraintBottom_toBottomOf="@+id/item_price"
+            app:layout_constraintTop_toTopOf="@+id/item_name"
+            app:layout_constraintStart_toEndOf="@id/button_remove"
+            app:layout_constraintEnd_toStartOf="@id/button_add"
+            tools:text="4" />
+
+        <ImageButton
+            android:id="@+id/button_remove"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:onClick="@{() -> mainScreenViewModel.onRemoveItem}"
+            android:src="@drawable/icon_minus"
+            android:text="@string/add"
+            app:itemImage="@{item}"
+            app:layout_constraintBottom_toBottomOf="@+id/cant_text"
+            app:layout_constraintEnd_toStartOf="@+id/cant_text"
+            app:layout_constraintStart_toEndOf="@+id/item_name"
+            app:layout_constraintTop_toTopOf="@+id/cant_text" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
