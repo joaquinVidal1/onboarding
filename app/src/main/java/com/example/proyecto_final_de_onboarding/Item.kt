@@ -6,7 +6,7 @@ enum class Kind{
     fruit, veggie
 }
 
-class Item(val id: Int, val name: String, val price: Int, @DrawableRes val image: Int, val kind: Kind) {
+class Item(val id: Int, val name: String, val price: Int, @DrawableRes val mainImage: Int, val kind: Kind, @DrawableRes val checkoutImage: Int? = null) {
 }
 
 data class CartItem(val itemId: Int, var cant: Int){
@@ -21,5 +21,11 @@ data class CartItem(val itemId: Int, var cant: Int){
     }
 }
 
-data class ScreenItem(val item: Item, val cant: Int){}
+sealed class ScreenListItem(val id : Int){
+    data class ScreenHeader(val kind: String): ScreenListItem(Int.MAX_VALUE){}
+
+    data class ScreenItem(val item: Item, val cant: Int =0): ScreenListItem(item.id){}
+}
+
+
 

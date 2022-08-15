@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/entire_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="8dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp">
+
+        <ImageView
+            android:id="@+id/item_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:flow_horizontalBias="0.0"
+            app:layout_constraintBottom_toTopOf="@id/item_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/kiwi_2" />
+
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            app:layout_constraintBottom_toTopOf="@id/item_cant"
+            app:layout_constraintEnd_toStartOf="@id/item_price"
+            app:layout_constraintStart_toStartOf="@+id/item_image"
+            app:layout_constraintTop_toBottomOf="@id/item_image"
+            tools:text="Kiwi" />
+
+        <TextView
+            android:id="@+id/item_cant"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/item_image"
+            app:layout_constraintTop_toBottomOf="@id/item_image"
+            tools:text="3"
+            tools:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/item_price"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textSize="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/item_image"
+            app:layout_constraintStart_toEndOf="@id/item_name"
+            app:layout_constraintTop_toBottomOf="@id/item_image"
+            tools:text="$5" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

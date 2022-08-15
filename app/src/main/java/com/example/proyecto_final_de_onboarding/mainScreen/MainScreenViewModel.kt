@@ -1,38 +1,155 @@
 package com.example.proyecto_final_de_onboarding.mainScreen
 
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.proyecto_final_de_onboarding.CartItem
+import com.example.proyecto_final_de_onboarding.Item
+import com.example.proyecto_final_de_onboarding.Kind
+import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
+import java.util.Collections.list
 
 class MainScreenViewModel : ViewModel() {
-    val itemList = ItemRepository.itemList
+    val itemList = orderList(ItemRepository.itemList)
     private val _cart = MutableLiveData<List<CartItem>>(listOf())
     val cart: LiveData<List<CartItem>>
         get() = _cart
 
-    fun onAddItem(itemId :Int) {
-        var found = false
-        _cart.value = _cart.value?.map {
-            if (it.itemId == itemId){
-                found = true
-                it.increment()
-            }else it
-        }
-        if (!found){
-            _cart.value = _cart.value?.toMutableList()?.apply {
-                add(CartItem(itemId, 1))
-            }?.toList()
-        }
+    fun onAddItem(itemId: Int) {
+        _cart.value = ItemRepository.addItem(itemId)
 
     }
+
     fun onRemoveItem(itemId: Int) {
-        _cart.value = _cart.value?.map {
-            if (it.itemId == itemId) {
-                it.decrement()
-            } else it
-        }
+        _cart.value = ItemRepository.removeItem(itemId)
     }
 
+    //orders the list, first fruits then veggies
+    fun orderList(list: List<Item>): List<Item> {
+        val newList = mutableListOf<Item>()
+        for (item in list) {
+            if (item.kind == Kind.fruit) {
+                newList.add(item)
+            }
+        }
+        for (item in list) {
+            if (item.kind == Kind.veggie) {
+                newList.add(item)
+            }
+        }
+        return newList
+    }
+
+    private fun findItemById(id: Int) = itemList.find { it.id == id }
+    fun cartItemToScreenItem(cartItem: CartItem) =
+        ScreenListItem.ScreenItem(findItemById(cartItem.itemId)!!, cartItem.cant)
+
+    //returns the list that should be displayed when there has been a query made
+    private fun getScreenListQuery(cartList: List<CartItem>?, query: String): List<ScreenListItem> {
+        val screenList = mutableListOf<ScreenListItem>()
+        var text = "fruits"
+        if (text.contains(query)) {
+            screenList.add(ScreenListItem.ScreenHeader(Kind.fruit.toString()))
+            screenList.addAll(addItems(cartList, Kind.fruit))
+        } else {
+            text = "veggie"
+            if (text.contains(query)) {
+                screenList.add(ScreenListItem.ScreenHeader(Kind.veggie.toString()))
+                screenList.addAll(addItems(cartList, Kind.veggie))
+            }
+        }
+        return AddByName(cartList, query, screenList)
+
+    }
+
+    //returns a list with all the ScreenItems that match the query and had not been added previously to screenList
+    private fun AddByName(
+        cartList: List<CartItem>?,
+        query: String,
+        screenList: MutableList<ScreenListItem>
+    ): List<ScreenListItem> {
+        var added = Array(itemList.size, { false })
+        for (item in screenList) {
+            if (item is ScreenListItem.ScreenItem)
+                added[item.id] = true
+        }
+
+
+        for (item in itemList) {
+            if ((item.name.lowercase().contains(query)) && (!added[item.id])) {
+                val headerIndex =
+                    screenList.indexOfFirst { it is ScreenListItem.ScreenHeader && it.kind == item.kind.toString() }
+                if (headerIndex >= 0) {
+                    screenList.add(headerIndex+1, ScreenListItem.ScreenItem(item,
+                        if (cartList?.find { it.itemId == item.id } != null)
+                            cartList?.find { it.itemId == item.id }!!.cant
+                        else 0
+                    )
+                    )
+                }else{
+                    //add header and item
+                    screenList.add(ScreenListItem.ScreenHeader(item.kind.toString()))
+                    screenList.add(ScreenListItem.ScreenItem(item,
+                        if (cartList?.find { it.itemId == item.id } != null)
+                            cartList?.find { it.itemId == item.id }!!.cant
+                        else 0
+                    )
+                    )
+
+
+                }
+
+            }
+        }
+        return screenList
+
+    }
+
+
+    //returns all the ScreenItems that match the kind specified
+    private fun addItems(cartList: List<CartItem>?, kind: Kind): List<ScreenListItem> {
+        val screenList = mutableListOf<ScreenListItem>()
+        for (item in itemList) {
+            if (item.kind == kind) {
+                screenList.add(
+                    ScreenListItem.ScreenItem(item,
+                        if (cartList?.find { it.itemId == item.id } != null)
+                            cartList?.find { it.itemId == item.id }!!.cant
+                        else 0
+                    )
+                )
+            }
+        }
+        return screenList
+    }
+
+    //gets the final list that should be displayed by the adapter
+    fun getScreenList(query: String? = null): List<ScreenListItem> {
+        val cartList = ItemRepository.cart
+        val screenList = mutableListOf<ScreenListItem>()
+        if (query == null) {
+            //no query
+            screenList.add(ScreenListItem.ScreenHeader(Kind.fruit.toString()))
+            screenList.addAll(addItems(cartList, Kind.fruit))
+            screenList.add(ScreenListItem.ScreenHeader(Kind.veggie.toString()))
+            screenList.addAll(addItems(cartList, Kind.veggie))
+            return screenList
+        } else {
+            return getScreenListQuery(cartList, query)
+        }
+    }
+    private val _navigateToCheckoutScreen = MutableLiveData<List<CartItem>?>()
+    val navigateToCheckoutScreen: LiveData<List<CartItem>?>
+        get() = _navigateToCheckoutScreen
+    fun doneNavigating(){
+        _navigateToCheckoutScreen.value = null
+    }
+
+    fun onCartClicked(){
+        _navigateToCheckoutScreen.value = cart.value
+    }
 }
+
+

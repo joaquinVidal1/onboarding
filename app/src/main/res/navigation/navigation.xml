@@ -12,12 +12,22 @@
         tools:layout="@layout/fragment_main_screen" >
         <action
             android:id="@+id/action_mainScreenFragment_to_checkoutScreenFragment"
-            app:destination="@id/checkout_screen_fragment" />
+            app:destination="@id/checkout_screen_fragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popEnterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left" />
     </fragment>
 
     <fragment
         android:id="@+id/checkout_screen_fragment"
-        android:name="com.example.proyecto_final_de_onboarding.checkoutScreen.CheckoutScreen"
+        android:name="com.example.proyecto_final_de_onboarding.checkoutScreen.CheckoutScreenFragment"
         android:label="fragmentCheckoutScreen"
-        tools:layout="@layout/fragment_checkout_screen" />
+        tools:layout="@layout/fragment_checkout_screen" >
+        <action
+            android:id="@+id/action_checkout_screen_fragment_to_main_screen_fragment"
+            app:destination="@id/main_screen_fragment"
+            app:enterAnim="@anim/in_from_left"
+            app:exitAnim="@anim/out_to_right"
+            app:popUpTo="@id/main_screen_fragment" />
+    </fragment>
 </navigation>
