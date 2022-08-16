@@ -8,4 +8,5 @@
     <string name="total">Total:</string>
     <string name="shopping_cart_text">Shopping Cart</string>
     <string name="totalText">Total</string>
+    <string name="remove">remove</string>
 </resources>

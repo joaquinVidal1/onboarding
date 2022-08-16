@@ -37,4 +37,9 @@ class CheckoutScreenViewModel: ViewModel() {
             cartItem.cant * ItemRepository.itemList.find { it.id == cartItem.itemId }!!.price }
 
     }
+
+    fun getScreenListItem(itemId: Int): ScreenListItem.ScreenItem {
+        return ScreenListItem.ScreenItem(ItemRepository.itemList.find { it.id == itemId }!!, ItemRepository.cart.find { it.itemId == itemId }!!.cant)
+
+    }
 }

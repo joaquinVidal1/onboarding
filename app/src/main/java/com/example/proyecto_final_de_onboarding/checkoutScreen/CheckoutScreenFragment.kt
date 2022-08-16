@@ -2,18 +2,19 @@ package com.example.proyecto_final_de_onboarding.checkoutScreen
 
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
-import com.example.proyecto_final_de_onboarding.R
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.proyecto_final_de_onboarding.CartItem
+import com.example.proyecto_final_de_onboarding.R
+import com.example.proyecto_final_de_onboarding.checkoutDialog.EditQuantityDialog
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
-import com.example.proyecto_final_de_onboarding.data.ItemRepository
-import com.example.proyecto_final_de_onboarding.mainScreen.MainScreenAdapter
 
 /**
  * A simple [Fragment] subclass.
@@ -35,15 +36,37 @@ class CheckoutScreenFragment : Fragment() {
     ): View? {
 
         val binding: FragmentCheckoutScreenBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_checkout_screen, container, false)
-        binding.backButton.setOnClickListener { this.findNavController().navigate(CheckoutScreenFragmentDirections.actionCheckoutScreenFragmentToMainScreenFragment()) }
+            inflater, R.layout.fragment_checkout_screen, container, false
+        )
+        binding.backButton.setOnClickListener {
+            this.findNavController()
+                .navigate(CheckoutScreenFragmentDirections.actionCheckoutScreenFragmentToMainScreenFragment())
+        }
         binding.lifecycleOwner = this
+        var cart = listOf<CartItem>()
         binding.cartItemsList.layoutManager = GridLayoutManager(activity, 2)
-        val adapter = CheckoutScreenAdapter(CheckoutScreenAdapter.AddUnitListener{itemId -> viewModel.onAddItem(itemId)}, CheckoutScreenAdapter.RemoveUnitListener{itemId -> viewModel.onRemoveItem(itemId) })
+        val adapter = CheckoutScreenAdapter(
+            CheckoutScreenAdapter.EntireItemListener { itemId ->
+                EditQuantityDialog(
+                    itemId,
+                    viewModel
+                ).show(parentFragmentManager, "dialog_fragment")
+
+            }
+        )
+
         binding.cartItemsList.adapter = adapter
         // Inflate the layout for this fragment
-        adapter.submitList(viewModel.getScreenList())
+        //adapter.submitList(viewModel.getScreenList())
         binding.totalAmount.setText("$" + viewModel.getCheckout().toString())
+        viewModel.cart.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                cart = it
+                adapter.submitList(viewModel.getScreenList())
+                binding.totalAmount.text = "$" + viewModel.getCheckout().toString()
+            }
+
+        })
         return binding.root//inflater.inflate(R.layout.fragment_checkout_screen, container, false)
     }
 
