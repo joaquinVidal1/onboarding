@@ -14,6 +14,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/carrousel"
+            android:layout_width="0dp"
+            android:layout_height="150dp"
+            android:layout_margin="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cartButton" />
+
+        <com.example.proyecto_final_de_onboarding.mainScreen.ViewPagerIndicator
+            android:id="@+id/view_page_indicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/carrousel"
+            app:layout_constraintStart_toStartOf="@+id/carrousel"
+            app:layout_constraintTop_toBottomOf="@id/carrousel"
+            tools:background="@color/transparent_white_50"
+            tools:layout_height="20dp"
+            tools:layout_width="100dp" />
+
         <androidx.appcompat.widget.SearchView
             android:id="@+id/itemSearch"
             android:layout_width="match_parent"
@@ -22,11 +42,9 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toTopOf="@id/items_list"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cartButton"
-            app:layout_constraintVertical_bias="0.3">
+            app:layout_constraintTop_toBottomOf="@+id/view_page_indicator">
         </androidx.appcompat.widget.SearchView>
 
         <ImageButton
@@ -34,20 +52,15 @@
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
             android:src="@drawable/icon_cart"
-            app:flow_verticalBias="0.1"
-            app:layout_constraintBottom_toTopOf="@id/itemSearch"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.95"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/carrousel"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/items_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

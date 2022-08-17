@@ -1,0 +1,39 @@
+package com.example.proyecto_final_de_onboarding.mainScreen
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.core.content.ContextCompat
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import com.example.proyecto_final_de_onboarding.R
+import com.example.proyecto_final_de_onboarding.databinding.FragmentFeatureCarrouselPageBinding
+
+class FeatureCarrouselFragment: Fragment() {
+    companion object{
+        const val ARG_DRAWABLE_ID = "arg_drawable_id"
+        const val ARG_TITLE = "arg_title"
+        const val ARG_DESCRIPTION = "arg_descriprion"
+    }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = inflater.inflate(R.layout.fragment_feature_carrousel_page, container, false)
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding : FragmentFeatureCarrouselPageBinding = DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_feature_carrousel_page)
+        arguments?.takeIf { it.containsKey(ARG_DRAWABLE_ID) }?.apply {
+            binding.bannerImage.setImageDrawable(ContextCompat.getDrawable(requireContext(), getInt(
+                ARG_DRAWABLE_ID)))
+        }
+        arguments?.takeIf { it.containsKey(ARG_TITLE) }?.apply {
+            binding.mainText.text = getString(ARG_TITLE)
+        }
+        arguments?.takeIf { it.containsKey(ARG_DESCRIPTION) }?.apply {
+            binding.descriptionText.text = getString(ARG_DESCRIPTION)
+        }
+    }
+
+}

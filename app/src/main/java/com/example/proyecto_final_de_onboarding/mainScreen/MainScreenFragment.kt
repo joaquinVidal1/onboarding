@@ -1,22 +1,21 @@
 package com.example.proyecto_final_de_onboarding.mainScreen
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.example.proyecto_final_de_onboarding.R
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.FragmentNavigatorDestinationBuilder
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import androidx.viewpager2.widget.ViewPager2
 import com.example.proyecto_final_de_onboarding.CartItem
-import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.ScreenListItem
+import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 
 
@@ -27,6 +26,11 @@ import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBi
  * create an instance of this fragment.
  */
 class MainScreenFragment : Fragment() {
+
+    companion object{
+        private const val NUM_PAGES = 4
+    }
+    private lateinit var viewPager: ViewPager2
 
     private val viewModel: MainScreenViewModel by lazy {
         ViewModelProvider(this).get(MainScreenViewModel::class.java)
@@ -46,12 +50,11 @@ class MainScreenFragment : Fragment() {
             inflater, R.layout.fragment_main_screen, container, false)
 
         binding.mainScreenViewModel = viewModel
-        binding.lifecycleOwner = this
         val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener{itemId -> viewModel.onAddItem(itemId) }, MainScreenAdapter.RemoveUnitListener{itemId -> viewModel.onRemoveItem(itemId)})
         binding.itemsList.adapter = adapter
         var cart = listOf<CartItem>()
         binding.mainScreenViewModel = viewModel
-        viewModel.cart.observe(this, Observer {
+        viewModel.cart.observe(viewLifecycleOwner, Observer {
             it?.let {
                 cart = it
                 adapter.submitList(viewModel.getScreenList())
@@ -75,13 +78,54 @@ class MainScreenFragment : Fragment() {
 
         })
         binding.cartButton.setOnClickListener { this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())}//viewModel.onCartClicked() }
-        viewModel.navigateToCheckoutScreen.observe(this, Observer { list ->
+        viewModel.navigateToCheckoutScreen.observe(viewLifecycleOwner, Observer { list ->
             list?.let {
                 this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
             }
         })
-        Log.e("joaquin", "fin viewModel")
+        binding.carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
+
+//        val pageChangeCallback = object : ViewPager2.OnPageChangeCallback(){
+//            override fun onPageSelected(position: Int) {
+//                super.onPageSelected(position)
+//                si queres hacer algo dependiendo de la pagina va aca
+//            }
+//        }
+//
+//        binding.carrousel.registerOnPageChangeCallback(pageChangeCallback)
+
+        //binding.viewPageIndicator.setUpWithViewPager2(binding.carrousel)
+
         return binding.root//inflater.inflate(R.layout.fragment_main_screen, container, false)
+    }
+
+
+
+    private inner class BannerSlidePagerAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
+        override fun getItemCount(): Int = NUM_PAGES
+
+        override fun createFragment(position: Int): Fragment {
+            val fragment = FeatureCarrouselFragment()
+            fragment.arguments = Bundle().apply {
+                putInt(FeatureCarrouselFragment.ARG_DRAWABLE_ID, when(position){
+                    0-> R.drawable.banner_1
+                    1-> R.drawable.banner_2
+                    2-> R.drawable.banner_3
+                    else->R.drawable.banner_4
+                })
+
+                putString(FeatureCarrouselFragment.ARG_TITLE, when(position){
+                    0-> getString(R.string.brazilian_bananas)
+                    1-> getString(R.string.chinese_grapefruits)
+                    2-> getString(R.string.uruguayan_cucumbers)
+                    else-> getString(R.string.asutralian_kiwis)
+                })
+
+                putString(FeatureCarrouselFragment.ARG_DESCRIPTION, getString(R.string.product_of_the_month))
+            }
+
+            return fragment
+        }
     }
 
 

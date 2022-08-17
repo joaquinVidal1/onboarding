@@ -25,8 +25,8 @@ class EditQuantityDialog(val itemId: Int, val viewModel: CheckoutScreenViewModel
         val item = viewModel.getScreenListItem(itemId)
         binding.itemName.text = item.item.name
         var cant = item.cant
-        binding.itemCant.text = item.cant.toString()
-        binding.itemPrice.text = item.item.price.toString()
+        binding.itemPrice.setText("$"+item.item.price.toString())
+        binding.itemCant.setText(item.cant.toString() + " units")
         if (item.item.checkoutImage != null) {
             binding.itemImage.setImageResource(item.item.checkoutImage)
         } else {
