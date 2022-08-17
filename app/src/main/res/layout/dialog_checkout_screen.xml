@@ -14,6 +14,7 @@
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             app:flow_horizontalBias="0.0"
+            android:src="@drawable/kiwi_2"
             app:layout_constraintBottom_toTopOf="@id/item_name"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
