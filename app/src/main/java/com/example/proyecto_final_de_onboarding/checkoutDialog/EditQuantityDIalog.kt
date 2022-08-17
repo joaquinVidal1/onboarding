@@ -1,6 +1,5 @@
 package com.example.proyecto_final_de_onboarding.checkoutDialog
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,25 +15,20 @@ import com.example.proyecto_final_de_onboarding.databinding.DialogCheckoutScreen
 class EditQuantityDialog(val itemId: Int, val viewModel: CheckoutScreenViewModel) :
     DialogFragment() {
     private lateinit var binding: DialogCheckoutScreenBinding
+    //private lateinit var builder: AlertDialog.Builder
     var cart = listOf<CartItem>()
 
-    override fun onStart() {
-        val builder = AlertDialog.Builder(activity)
-        //val view = layoutInflater.inflate(R.layout.dialog_checkout_screen, null)
-        //builder.setView(view)
-//        val binding: DialogCheckoutScreenBinding = DataBindingUtil.inflate(
-//            LayoutInflater.from(context), R.layout.dialog_checkout_screen, null, false
-//        )
-        //builder.setView(binding.root)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val item = viewModel.getScreenListItem(itemId)
-        binding.itemName.text = item.item.name
+        binding.dialogItemName.text = item.item.name
         var cant = item.cant
-        binding.itemCant.text = item.cant.toString()
-        binding.itemPrice.text = item.item.price.toString()
+        binding.dialogItemCant.text = item.cant.toString() + " units"
+        binding.dialogItemPrice.text = "$" + item.item.price.toString()
         if (item.item.checkoutImage != null) {
-            binding.itemImage.setImageResource(item.item.checkoutImage)
+            binding.dialogItemImage.setImageResource(item.item.checkoutImage)
         } else {
-            binding.itemImage.setImageResource(item.item.mainImage)
+            binding.dialogItemImage.setImageResource(item.item.mainImage)
         }
         viewModel.cart.observe(this, Observer {
             it?.let {
@@ -42,102 +36,32 @@ class EditQuantityDialog(val itemId: Int, val viewModel: CheckoutScreenViewModel
             }
 
         })
-        //val dialog = builder.create()
-        binding.buttonAdd.setOnClickListener {
+        binding.dialogButtonAdd.setOnClickListener {
             viewModel.onAddItem(itemId)
             cant++
-            binding.itemCant.text = cant.toString()
+            binding.dialogItemCant.text = cant.toString()
         }
-        binding.buttonRemove.setOnClickListener {
+        binding.dialogButtonRemove.setOnClickListener {
             viewModel.onRemoveItem(itemId)
             cant--
-            binding.itemCant.text = cant.toString()
+            binding.dialogItemCant.text = cant.toString() + " units"
             if (cant <= 0) {
-                super.dismiss()
+                dismiss()
             }
         }
-        builder.create()
-        super.onStart()
     }
 
-    //   override fun onCreate(savedInstanceState: Bundle?) {
-    //        val builder = AlertDialog.Builder(activity)
-//        //val view = layoutInflater.inflate(R.layout.dialog_checkout_screen, null)
-//        //builder.setView(view)
-////        val binding: DialogCheckoutScreenBinding = DataBindingUtil.inflate(
-////            LayoutInflater.from(context), R.layout.dialog_checkout_screen, null, false
-////        )
-//        builder.setView(binding.root)
-//        val item = viewModel.getScreenListItem(itemId)
-//        binding.itemName.text = item.item.name
-//        var cant = item.cant
-//        binding.itemCant.text = item.cant.toString()
-//        binding.itemPrice.text = item.item.price.toString()
-//        if (item.item.checkoutImage != null) {
-//            binding.itemImage.setImageResource(item.item.checkoutImage)
-//        } else {
-//            binding.itemImage.setImageResource(item.item.mainImage)
-//        }
-//        viewModel.cart.observe(this, Observer {
-//            it?.let {
-//                cart = it
-//            }
-//
-//        })
-//        val dialog = builder.create()
-//        binding.buttonAdd.setOnClickListener {
-//            viewModel.onAddItem(itemId)
-//            cant++
-//            binding.itemCant.text = cant.toString()
-//        }
-//        binding.buttonRemove.setOnClickListener {
-//            viewModel.onRemoveItem(itemId)
-//            cant--
-//            binding.itemCant.text = cant.toString()
-//            if (cant <= 0) {
-//                dialog.hide()
-//            }
-//        }
-//        super.onCreate(savedInstanceState)
-//        super.dismiss()
-//        dialog.show()
-//    }
-//}
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        super.onCreate(savedInstanceState)
-         binding = DataBindingUtil.inflate(
-            inflater, R.layout.dialog_checkout_screen, null, false
+        //super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.dialog_checkout_screen, container, false
         )
-//        val item = viewModel.getScreenListItem(itemId)
-//        binding.itemName.text = item.item.name
-//        var cant = item.cant
-//        binding.itemCant.text = item.cant.toString()
-//        binding.itemPrice.text = item.item.price.toString()
-//        if (item.item.checkoutImage != null) {
-//            binding.itemImage.setImageResource(item.item.checkoutImage)
-//        } else {
-//            binding.itemImage.setImageResource(item.item.mainImage)
-//        }
-//        viewModel.cart.observe(viewLifecycleOwner, Observer {
-//            it?.let {
-//                cart = it
-//            }
-//
-//        })
-//        binding.buttonAdd.setOnClickListener {
-//            viewModel.onAddItem(itemId)
-//            cant++
-//            binding.itemCant.text = cant.toString()
-//        }
-//        binding.buttonRemove.setOnClickListener {
-//            viewModel.onRemoveItem(itemId)
-//            cant--
-//            binding.itemCant.text = cant.toString()
-//        }
-        return binding.root//inflater.inflate(R.layout.dialog_checkout_screen, container, false)//binding.root
+
+        return binding.root
     }
 }
 
