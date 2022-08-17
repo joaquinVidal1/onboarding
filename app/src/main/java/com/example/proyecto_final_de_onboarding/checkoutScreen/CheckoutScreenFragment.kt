@@ -51,7 +51,7 @@ class CheckoutScreenFragment : Fragment() {
                 EditQuantityDialog(
                     itemId,
                     viewModel
-                ).show(parentFragmentManager, "dialog_fragment")
+                ).show(childFragmentManager, "dialog_fragment")
 
             }
         )

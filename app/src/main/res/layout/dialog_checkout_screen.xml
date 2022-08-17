@@ -5,74 +5,68 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="24dp">
+        android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/item_image"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            app:flow_horizontalBias="0.0"
-            app:layout_constraintBottom_toTopOf="@id/item_name"
+            android:id="@+id/dialog_item_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:scaleType="fitStart"
+            android:src="@drawable/kiwi_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/kiwi_2" />
 
         <TextView
-            android:id="@+id/item_name"
+            android:id="@+id/dialog_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            app:layout_constraintBottom_toTopOf="@id/item_cant"
-            app:layout_constraintEnd_toStartOf="@id/item_price"
-            app:layout_constraintStart_toStartOf="@+id/item_image"
-            app:layout_constraintTop_toBottomOf="@id/item_image"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@id/dialog_item_price"
+            app:layout_constraintStart_toStartOf="@id/dialog_item_image"
+            app:layout_constraintTop_toBottomOf="@id/dialog_item_image"
             tools:text="Kiwi" />
 
         <TextView
-            android:id="@+id/item_cant"
+            android:id="@+id/dialog_item_cant"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toTopOf="@id/button_remove"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/item_image"
-            app:layout_constraintTop_toBottomOf="@id/item_image"
+            app:layout_constraintStart_toStartOf="@+id/dialog_item_image"
+            app:layout_constraintTop_toBottomOf="@id/dialog_item_name"
             tools:text="3"
             tools:textColor="@color/black" />
 
         <TextView
-            android:id="@+id/item_price"
+            android:id="@+id/dialog_item_price"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toTopOf="@id/button_add"
-            app:layout_constraintEnd_toEndOf="@+id/item_image"
-            app:layout_constraintStart_toEndOf="@id/item_name"
-            app:layout_constraintTop_toBottomOf="@id/item_image"
-            app:layout_constraintVertical_bias="0.0"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="@+id/dialog_item_image"
+            app:layout_constraintStart_toEndOf="@id/dialog_item_name"
+            app:layout_constraintBottom_toBottomOf="@id/dialog_item_name"
             tools:text="$5" />
 
         <Button
-            android:id="@+id/button_remove"
-            android:layout_width="0dp"
+            android:id="@+id/dialog_button_remove"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="@string/remove"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/item_cant"
-            app:layout_constraintEnd_toStartOf="@id/button_add"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dialog_item_cant"
+            app:layout_constraintEnd_toStartOf="@id/dialog_button_add"
             />
         <Button
-            android:id="@+id/button_add"
-            android:layout_width="0dp"
+            android:id="@+id/dialog_button_add"
+            android:layout_width="100dp"
             android:text="@string/add"
+            android:textSize="16sp"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/button_remove"
-            app:layout_constraintTop_toBottomOf="@id/item_price"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/dialog_button_remove"
+            app:layout_constraintTop_toTopOf="@id/dialog_button_remove"
             app:layout_constraintEnd_toEndOf="parent"/>
 
 
