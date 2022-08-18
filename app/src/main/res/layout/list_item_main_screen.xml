@@ -32,7 +32,7 @@
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/item_price"
-            app:layout_constraintEnd_toStartOf="@+id/button_remove"
+            app:layout_constraintEnd_toStartOf="@id/view_button_add"
             app:layout_constraintStart_toEndOf="@id/item_image"
             tools:text="Avocado" />
 
@@ -50,7 +50,7 @@
             app:layout_constraintHorizontal_bias="0.166"
             app:layout_constraintStart_toStartOf="@id/item_name"
             app:layout_constraintTop_toTopOf="@id/item_name"
-            tools:text="40" />
+            tools:text="$40" />
 
         <com.google.android.material.imageview.ShapeableImageView
             android:id="@+id/item_image"
@@ -65,44 +65,37 @@
             app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent"
             tools:srcCompat="@drawable/avocado" />
 
-
-        <ImageView
-            android:id="@+id/button_add"
-            android:layout_width="wrap_content"
-            android:layout_height="50dp"
-            android:layout_marginStart="0dp"
-            android:src="@drawable/icon_plus"
-            app:layout_constraintBottom_toBottomOf="@+id/cant_text"
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/view_button_add"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="@id/item_price"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/cant_text"
-            app:layout_constraintTop_toTopOf="@+id/cant_text"
-            tools:layout_editor_absoluteX="360dp" />
-
-
+            app:layout_constraintStart_toEndOf="@id/item_name"
+            app:layout_constraintTop_toTopOf="@id/item_name">
 
             <TextView
-                android:id="@+id/cant_text"
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:fontFamily="@font/walter_turncoat"
+                android:id="@+id/button_add"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/border_button_add"
+                android:fontFamily="sans-serif-medium"
                 android:gravity="center"
-                app:layout_constraintBottom_toBottomOf="@+id/item_price"
-                app:layout_constraintEnd_toStartOf="@id/button_add"
-                app:layout_constraintStart_toEndOf="@id/button_remove"
-                app:layout_constraintTop_toTopOf="@+id/item_name"
-                tools:text="4" />
-
-            <ImageView
-                android:id="@+id/button_remove"
-                android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:src="@drawable/icon_minus"
                 android:text="@string/add"
-                app:layout_constraintBottom_toBottomOf="@+id/cant_text"
-                app:layout_constraintEnd_toStartOf="@+id/cant_text"
-                app:layout_constraintStart_toEndOf="@+id/item_name"
-                app:layout_constraintTop_toTopOf="@+id/cant_text" />
-        </TextView>
+                android:textAlignment="center"
+                android:textColor="@color/color_add_button"
+                android:textSize="20sp" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/button_add_quant"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

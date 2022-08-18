@@ -9,4 +9,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="colorPrimary" >#4180CD</color>
     <color name="transparent_white_50">#80FFFFFF</color>
+    <color name="color_add_button">#FF4F08CC</color>
 </resources>
