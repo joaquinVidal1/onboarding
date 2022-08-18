@@ -16,7 +16,6 @@
             android:id="@+id/kind_header"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="monospace"

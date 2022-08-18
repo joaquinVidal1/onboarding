@@ -94,7 +94,7 @@ class MainScreenFragment : Fragment() {
 //
 //        binding.carrousel.registerOnPageChangeCallback(pageChangeCallback)
 
-        //binding.viewPageIndicator.setUpWithViewPager2(binding.carrousel)
+        binding.viewPageIndicator.setUpWithViewPager2(binding.carrousel)
 
         return binding.root//inflater.inflate(R.layout.fragment_main_screen, container, false)
     }

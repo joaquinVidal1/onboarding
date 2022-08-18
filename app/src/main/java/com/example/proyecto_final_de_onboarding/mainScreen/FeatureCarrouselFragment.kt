@@ -16,14 +16,17 @@ class FeatureCarrouselFragment: Fragment() {
         const val ARG_TITLE = "arg_title"
         const val ARG_DESCRIPTION = "arg_descriprion"
     }
+    lateinit var binding: FragmentFeatureCarrouselPageBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View = inflater.inflate(R.layout.fragment_feature_carrousel_page, container, false)
+    ): View {
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_feature_carrousel_page, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val binding : FragmentFeatureCarrouselPageBinding = DataBindingUtil.setContentView(requireActivity(), R.layout.fragment_feature_carrousel_page)
         arguments?.takeIf { it.containsKey(ARG_DRAWABLE_ID) }?.apply {
             binding.bannerImage.setImageDrawable(ContextCompat.getDrawable(requireContext(), getInt(
                 ARG_DRAWABLE_ID)))
