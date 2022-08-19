@@ -8,7 +8,6 @@ import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,36 +30,40 @@ class MainScreenFragment : Fragment() {
         private const val NUM_PAGES = 4
     }
     private lateinit var viewPager: ViewPager2
+    private lateinit var binding: FragmentMainScreenBinding
 
     private val viewModel: MainScreenViewModel by lazy {
         ViewModelProvider(this).get(MainScreenViewModel::class.java)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
+    override fun onResume() {
+        super.onResume()
+        viewModel.refreshCart()
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        val binding: FragmentMainScreenBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_main_screen, container, false)
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         binding.mainScreenViewModel = viewModel
         val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener{itemId -> viewModel.onAddItem(itemId) }, MainScreenAdapter.RemoveUnitListener{itemId -> viewModel.onRemoveItem(itemId)})
         binding.itemsList.adapter = adapter
+        adapter.submitList(viewModel.getScreenList())
         var cart = listOf<CartItem>()
         binding.mainScreenViewModel = viewModel
-        viewModel.cart.observe(viewLifecycleOwner, Observer {
+        viewModel.cart.observe(viewLifecycleOwner) {
             it?.let {
                 cart = it
                 adapter.submitList(viewModel.getScreenList())
             }
 
-        })
+        }
+        viewModel.showCartCircle.observe(viewLifecycleOwner) {
+            if (it) {
+                binding.cartDot.visibility = View.VISIBLE
+            } else {
+                binding.cartDot.visibility = View.GONE
+            }
+        }
         val manager = LinearLayoutManager(activity)
         binding.itemsList.layoutManager = manager
         binding.itemSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
@@ -77,12 +80,13 @@ class MainScreenFragment : Fragment() {
 
 
         })
+        binding.itemSearch.queryHint = "Search"
         binding.cartButton.setOnClickListener { this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())}//viewModel.onCartClicked() }
-        viewModel.navigateToCheckoutScreen.observe(viewLifecycleOwner, Observer { list ->
-            list?.let {
-                this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
-            }
-        })
+//        viewModel.navigateToCheckoutScreen.observe(viewLifecycleOwner, Observer { list ->
+//            list?.let {
+//                this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
+//            }
+//        })
         binding.carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
 
 //        val pageChangeCallback = object : ViewPager2.OnPageChangeCallback(){
@@ -95,6 +99,15 @@ class MainScreenFragment : Fragment() {
 //        binding.carrousel.registerOnPageChangeCallback(pageChangeCallback)
 
         binding.viewPageIndicator.setUpWithViewPager2(binding.carrousel)
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        binding= DataBindingUtil.inflate(
+            inflater, R.layout.fragment_main_screen, container, false)
 
         return binding.root//inflater.inflate(R.layout.fragment_main_screen, container, false)
     }

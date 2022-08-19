@@ -9,9 +9,10 @@
     <string name="shopping_cart_text">Shopping Cart</string>
     <string name="totalText">Total</string>
     <string name="remove">remove</string>
-    <string name="brazilian_bananas">BRAZILIAN BANANAS</string>
-    <string name="chinese_grapefruits">CHINESE GRAPEFRUITS</string>
-    <string name="uruguayan_cucumbers">URUGUAYAN CUCUMBERS</string>
-    <string name="asutralian_kiwis">AUSTRALIAN KIWIS</string>
+    <string name="brazilian_bananas">Brazilian Bananas</string>
+    <string name="chinese_grapefruits">Chinese Grapefruits</string>
+    <string name="uruguayan_cucumbers">Uruguayan Cucumbers</string>
+    <string name="asutralian_kiwis">Australian Kiwis</string>
     <string name="product_of_the_month">Product of the month</string>
+    <string name="search">Search</string>
 </resources>

@@ -39,7 +39,7 @@ class EditQuantityDialog(val itemId: Int, val viewModel: CheckoutScreenViewModel
         binding.dialogButtonAdd.setOnClickListener {
             viewModel.onAddItem(itemId)
             cant++
-            binding.dialogItemCant.text = cant.toString()
+            binding.dialogItemCant.text = cant.toString() + " units"
         }
         binding.dialogButtonRemove.setOnClickListener {
             viewModel.onRemoveItem(itemId)

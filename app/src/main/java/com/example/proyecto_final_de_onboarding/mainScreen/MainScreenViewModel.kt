@@ -1,15 +1,14 @@
 package com.example.proyecto_final_de_onboarding.mainScreen
 
-import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
-import java.util.Collections.list
 
 class MainScreenViewModel : ViewModel() {
     val itemList = orderList(ItemRepository.itemList)
@@ -17,9 +16,12 @@ class MainScreenViewModel : ViewModel() {
     val cart: LiveData<List<CartItem>>
         get() = _cart
 
+    val showCartCircle: LiveData<Boolean> =
+        Transformations.map(cart) { it.isNotEmpty() }
+
+
     fun onAddItem(itemId: Int) {
         _cart.value = ItemRepository.addItem(itemId)
-
     }
 
     fun onRemoveItem(itemId: Int) {
@@ -150,6 +152,12 @@ class MainScreenViewModel : ViewModel() {
     fun onCartClicked(){
         _navigateToCheckoutScreen.value = cart.value
     }
+
+    fun refreshCart() {
+        _cart.value = ItemRepository.cart
+    }
+
+
 }
 
 

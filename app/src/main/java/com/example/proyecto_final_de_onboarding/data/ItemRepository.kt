@@ -41,4 +41,9 @@ object ItemRepository {
             return cart
         }
 
+    fun cleanCart(): MutableList<CartItem> {
+        cart = mutableListOf()
+        return cart
+    }
+
 }

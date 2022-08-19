@@ -29,6 +29,7 @@ class CheckoutScreenFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
     }
 
     override fun onCreateView(
@@ -40,8 +41,7 @@ class CheckoutScreenFragment : Fragment() {
             inflater, R.layout.fragment_checkout_screen, container, false
         )
         binding.backButton.setOnClickListener {
-            this.findNavController()
-                .navigate(CheckoutScreenFragmentDirections.actionCheckoutScreenFragmentToMainScreenFragment())
+            this.findNavController().popBackStack()
         }
         binding.lifecycleOwner = this
         var cart = listOf<CartItem>()
@@ -71,6 +71,8 @@ class CheckoutScreenFragment : Fragment() {
         binding.checkoutButton.setOnClickListener {
             val message = "Total is " + viewModel.getCheckout().toString()
             Toast.makeText( context, message, Toast.LENGTH_SHORT).show()
+            viewModel.cleanCart()
+            this.findNavController().popBackStack()
         }
         return binding.root//inflater.inflate(R.layout.fragment_checkout_screen, container, false)
     }

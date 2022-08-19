@@ -1,42 +1,58 @@
 package com.example.proyecto_final_de_onboarding.mainScreen
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.ListAdapter
-import com.example.proyecto_final_de_onboarding.*
+import androidx.recyclerview.widget.RecyclerView
+import com.example.proyecto_final_de_onboarding.Item
+import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemMainScreenBinding
 import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBinding
 
 
-private const val ITEM_VIEW_TYPE_SECTION_CONTENT =1
-private const val ITEM_VIEW_TYPE_SECTION_HEADER =0
+private const val ITEM_VIEW_TYPE_SECTION_CONTENT = 1
+private const val ITEM_VIEW_TYPE_SECTION_HEADER = 0
 
-class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: RemoveUnitListener):
-    ListAdapter<ScreenListItem, RecyclerView.ViewHolder>(MainScreenDiffCallback()){
+class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: RemoveUnitListener) :
+    ListAdapter<ScreenListItem, RecyclerView.ViewHolder>(MainScreenDiffCallback()) {
 
-    class AddUnitListener(private val clickListener: (itemId: Int) -> Unit){
+    class AddUnitListener(private val clickListener: (itemId: Int) -> Unit) {
         fun onClick(item: Item) = clickListener(item.id)
     }
 
-    class RemoveUnitListener(private val clickListener: (itemId: Int) -> Unit){
+    class RemoveUnitListener(private val clickListener: (itemId: Int) -> Unit) {
         fun onClick(item: Item) = clickListener(item.id)
     }
 
 
-    class ViewHolder private constructor (val binding: ListItemMainScreenBinding): RecyclerView.ViewHolder(binding.root){
+    class ViewHolder private constructor(val binding: ListItemMainScreenBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ScreenListItem.ScreenItem, addClickListener: AddUnitListener, removeClickListener: RemoveUnitListener){
-            binding.buttonAdd.setOnClickListener{addClickListener.onClick(item.item)}
+        fun bind(
+            item: ScreenListItem.ScreenItem,
+            addClickListener: AddUnitListener,
+            removeClickListener: RemoveUnitListener
+        ) {
+            if (item.cant == 0) {
+                binding.buttonAddQuant.visibility = View.GONE
+                binding.entireButtonAdd.visibility = View.VISIBLE
+            }else{
+                binding.entireButtonAdd.visibility = View.GONE
+                binding.buttonAddQuant.visibility = View.VISIBLE
+            }
+            binding.entireButtonAdd.setOnClickListener { addClickListener.onClick(item.item) }
+            binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
             binding.itemImage.setImageResource(item.item.mainImage)
             binding.itemName.setText(item.item.name)
             binding.itemPrice.setText("$" + item.item.price.toString())
             binding.cantText.setText(item.cant.toString())
             binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.item) }
         }
-        companion object{
-            fun from(parent: ViewGroup):ViewHolder{
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemMainScreenBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
@@ -56,13 +72,14 @@ class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: Remo
 //    }
 
 
-    class TextViewHolder(val binding: ListKindMainScreenBinding): RecyclerView.ViewHolder(binding.root){
-        fun bind(kind: String){
-            binding.kindHeader.setText(kind)
+    class TextViewHolder(val binding: ListKindMainScreenBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(kind: String) {
+            binding.kindHeader.setText(kind.toCharArray()[0].uppercase().toString() + kind.subSequence(1, kind.length) +"s")
         }
 
-        companion object{
-            fun from(parent: ViewGroup): TextViewHolder{
+        companion object {
+            fun from(parent: ViewGroup): TextViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListKindMainScreenBinding.inflate(layoutInflater, parent, false)
                 return TextViewHolder(binding)
@@ -71,7 +88,7 @@ class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: Remo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return when(viewType){
+        return when (viewType) {
             ITEM_VIEW_TYPE_SECTION_HEADER -> TextViewHolder.from(parent)
             ITEM_VIEW_TYPE_SECTION_CONTENT -> ViewHolder.from(parent)
             else -> throw ClassCastException("Unknown viewType ${viewType}")
@@ -80,7 +97,7 @@ class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: Remo
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        when (holder){
+        when (holder) {
             is ViewHolder -> {
                 val listItem = getItem(position) as ScreenListItem.ScreenItem
                 holder.bind(listItem, addListener, lessListener)
@@ -93,20 +110,21 @@ class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: Remo
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)){
+        return when (getItem(position)) {
             is ScreenListItem.ScreenHeader -> ITEM_VIEW_TYPE_SECTION_HEADER
             is ScreenListItem.ScreenItem -> ITEM_VIEW_TYPE_SECTION_CONTENT
+            else -> throw IllegalArgumentException("Unknow ListItem class")
         }
     }
 
-    class MainScreenDiffCallback : DiffUtil.ItemCallback<ScreenListItem>(){
+    class MainScreenDiffCallback : DiffUtil.ItemCallback<ScreenListItem>() {
         override fun areContentsTheSame(oldItem: ScreenListItem, newItem: ScreenListItem): Boolean {
-            if (oldItem is ScreenListItem.ScreenHeader && newItem is ScreenListItem.ScreenHeader){
+            if (oldItem is ScreenListItem.ScreenHeader && newItem is ScreenListItem.ScreenHeader) {
                 return oldItem.kind == newItem.kind
-            }else{
-                if (oldItem is ScreenListItem.ScreenItem && newItem is ScreenListItem.ScreenItem){
-                    return oldItem.id == newItem.id && oldItem.cant==newItem.cant
-                }else return false //when one is header and other is item
+            } else {
+                if (oldItem is ScreenListItem.ScreenItem && newItem is ScreenListItem.ScreenItem) {
+                    return oldItem.id == newItem.id && oldItem.cant == newItem.cant
+                } else return false //when one is header and other is item
             }
         }
 

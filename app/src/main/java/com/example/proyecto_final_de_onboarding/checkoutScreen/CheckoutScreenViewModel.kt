@@ -6,8 +6,6 @@ import androidx.lifecycle.ViewModel
 import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
-import com.example.proyecto_final_de_onboarding.data.ItemRepository.cart
-import com.example.proyecto_final_de_onboarding.data.ItemRepository.itemList
 
 class CheckoutScreenViewModel: ViewModel() {
     private val _cart = MutableLiveData<List<CartItem>>(listOf())
@@ -41,5 +39,9 @@ class CheckoutScreenViewModel: ViewModel() {
     fun getScreenListItem(itemId: Int): ScreenListItem.ScreenItem {
         return ScreenListItem.ScreenItem(ItemRepository.itemList.find { it.id == itemId }!!, ItemRepository.cart.find { it.itemId == itemId }!!.cant)
 
+    }
+
+    fun cleanCart() {
+        _cart.value = ItemRepository.cleanCart()
     }
 }

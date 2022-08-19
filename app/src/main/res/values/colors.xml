@@ -10,4 +10,7 @@
     <color name="colorPrimary" >#4180CD</color>
     <color name="transparent_white_50">#80FFFFFF</color>
     <color name="color_add_button">#FF4F08CC</color>
+    <color name="item_name_color">#38136C</color>
+    <color name="item_price_color">#FFBBBBBC</color>
+    <color name="borders_main_screenItems">#9FD5D4D6</color>
 </resources>

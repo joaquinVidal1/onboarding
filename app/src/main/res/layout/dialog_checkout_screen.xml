@@ -11,7 +11,7 @@
             android:id="@+id/dialog_item_image"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:scaleType="fitStart"
+            android:scaleType="centerCrop"
             android:src="@drawable/kiwi_2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textSize="16sp"
-            app:layout_constraintEnd_toStartOf="@id/dialog_item_price"
             app:layout_constraintStart_toStartOf="@id/dialog_item_image"
             app:layout_constraintTop_toBottomOf="@id/dialog_item_image"
             tools:text="Kiwi" />
@@ -45,7 +44,6 @@
             android:layout_height="wrap_content"
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="@+id/dialog_item_image"
-            app:layout_constraintStart_toEndOf="@id/dialog_item_name"
             app:layout_constraintBottom_toBottomOf="@id/dialog_item_name"
             tools:text="$5" />
 
