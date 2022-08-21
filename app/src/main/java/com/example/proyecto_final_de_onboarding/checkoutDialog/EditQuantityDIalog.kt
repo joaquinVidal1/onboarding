@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
@@ -13,7 +14,7 @@ import com.example.proyecto_final_de_onboarding.checkoutScreen.CheckoutScreenVie
 import com.example.proyecto_final_de_onboarding.databinding.DialogCheckoutScreenBinding
 
 class EditQuantityDialog(val itemId: Int, val viewModel: CheckoutScreenViewModel) :
-    DialogFragment() {
+    NumberPicker {
     private lateinit var binding: DialogCheckoutScreenBinding
     //private lateinit var builder: AlertDialog.Builder
     var cart = listOf<CartItem>()
