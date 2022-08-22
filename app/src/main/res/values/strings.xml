@@ -15,4 +15,6 @@
     <string name="asutralian_kiwis">Australian Kiwis</string>
     <string name="product_of_the_month">Product of the month</string>
     <string name="search">Search</string>
+    <string name="confirm">CONFIRM</string>
+    <string name="cancel">CANCEL</string>
 </resources>

@@ -1,10 +1,12 @@
 package com.example.proyecto_final_de_onboarding.checkoutScreen
 
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -14,7 +16,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.R
-import com.example.proyecto_final_de_onboarding.checkoutDialog.EditQuantityDialog
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 
 /**
@@ -48,10 +49,18 @@ class CheckoutScreenFragment : Fragment() {
         binding.cartItemsList.layoutManager = GridLayoutManager(activity, 2)
         val adapter = CheckoutScreenAdapter(
             CheckoutScreenAdapter.EntireItemListener { itemId ->
-                EditQuantityDialog(
-                    itemId,
-                    viewModel
-                ).show(childFragmentManager, "dialog_fragment")
+                val builder = AlertDialog.Builder(context)
+                val numberPicker = NumberPicker(context)
+                numberPicker.minValue = 0
+                numberPicker.maxValue = 500
+                builder.setPositiveButton(getString(R.string.confirm)) { dialog, i ->
+                    viewModel.itemQantChanged(itemId, numberPicker.value)
+
+                }
+                builder.setNegativeButton(getString(R.string.cancel)) { dialog, i -> }
+                builder.setTitle("Edit quantity")
+                builder.setView(numberPicker)
+                builder.show()
 
             }
         )
@@ -78,3 +87,4 @@ class CheckoutScreenFragment : Fragment() {
     }
 
 }
+

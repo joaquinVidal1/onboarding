@@ -44,4 +44,8 @@ class CheckoutScreenViewModel: ViewModel() {
     fun cleanCart() {
         _cart.value = ItemRepository.cleanCart()
     }
+
+    fun itemQantChanged(itemId: Int, newQant: Int) {
+        _cart.value = ItemRepository.editQuantity(itemId, newQant)
+    }
 }

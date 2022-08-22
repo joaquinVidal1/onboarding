@@ -41,6 +41,12 @@ object ItemRepository {
             return cart
         }
 
+    fun editQuantity(id: Int, qant: Int): List<CartItem>{
+        val itemToEdit = cart.find { it.itemId == id }
+        itemToEdit?.cant = qant
+        return cart
+    }
+
     fun cleanCart(): MutableList<CartItem> {
         cart = mutableListOf()
         return cart
