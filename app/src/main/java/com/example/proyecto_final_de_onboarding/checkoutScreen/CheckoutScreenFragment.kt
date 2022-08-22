@@ -14,7 +14,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
-import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 
@@ -45,7 +44,6 @@ class CheckoutScreenFragment : Fragment() {
             this.findNavController().popBackStack()
         }
         binding.lifecycleOwner = this
-        var cart = listOf<CartItem>()
         binding.cartItemsList.layoutManager = GridLayoutManager(activity, 2)
         val adapter = CheckoutScreenAdapter(
             CheckoutScreenAdapter.EntireItemListener { itemId ->
@@ -53,6 +51,7 @@ class CheckoutScreenFragment : Fragment() {
                 val numberPicker = NumberPicker(context)
                 numberPicker.minValue = 0
                 numberPicker.maxValue = 500
+                numberPicker.value = viewModel.getQant(itemId)!!
                 builder.setPositiveButton(getString(R.string.confirm)) { dialog, i ->
                     viewModel.itemQantChanged(itemId, numberPicker.value)
 
@@ -71,7 +70,6 @@ class CheckoutScreenFragment : Fragment() {
         binding.totalAmount.setText("$" + viewModel.getCheckout().toString())
         viewModel.cart.observe(viewLifecycleOwner, Observer {
             it?.let {
-                cart = it
                 adapter.submitList(viewModel.getScreenList())
                 binding.totalAmount.text = "$" + viewModel.getCheckout().toString()
             }

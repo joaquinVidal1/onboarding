@@ -8,6 +8,7 @@ import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
+import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
 
 class MainScreenViewModel : ViewModel() {
@@ -21,11 +22,11 @@ class MainScreenViewModel : ViewModel() {
 
 
     fun onAddItem(itemId: Int) {
-        _cart.value = ItemRepository.addItem(itemId)
+        _cart.value = CartRepository.addItem(itemId)
     }
 
     fun onRemoveItem(itemId: Int) {
-        _cart.value = ItemRepository.removeItem(itemId)
+        _cart.value = CartRepository.removeItem(itemId)
     }
 
     //orders the list, first fruits then veggies
@@ -129,7 +130,7 @@ class MainScreenViewModel : ViewModel() {
 
     //gets the final list that should be displayed by the adapter
     fun getScreenList(query: String? = null): List<ScreenListItem> {
-        val cartList = ItemRepository.cart
+        val cartList = CartRepository.cart
         val screenList = mutableListOf<ScreenListItem>()
         if (query == null) {
             //no query
@@ -154,7 +155,7 @@ class MainScreenViewModel : ViewModel() {
     }
 
     fun refreshCart() {
-        _cart.value = ItemRepository.cart
+        _cart.value = CartRepository.cart
     }
 
 
