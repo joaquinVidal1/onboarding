@@ -50,7 +50,7 @@ class MainScreenFragment : Fragment() {
         adapter.submitList(viewModel.getScreenList())
         var cart = listOf<CartItem>()
         binding.mainScreenViewModel = viewModel
-        viewModel.cart.observe(viewLifecycleOwner) {
+        viewModel.queriedCart.observe(viewLifecycleOwner) {
             it?.let {
                 cart = it
                 adapter.submitList(viewModel.getScreenList())
@@ -68,13 +68,15 @@ class MainScreenFragment : Fragment() {
         binding.itemsList.layoutManager = manager
         binding.itemSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextChange(newText: String?): Boolean {
-                adapter.submitList(viewModel.getScreenList(newText))
+                viewModel.query = newText
+                adapter.submitList(viewModel.getScreenList())
                 return false
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 binding.itemSearch.clearFocus()
-                adapter.submitList(viewModel.getScreenList(query))
+                viewModel.query = query
+                adapter.submitList(viewModel.getScreenList())
                 return true
             }
 

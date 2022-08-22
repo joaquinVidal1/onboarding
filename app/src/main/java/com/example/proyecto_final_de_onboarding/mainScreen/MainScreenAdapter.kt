@@ -122,9 +122,11 @@ class MainScreenAdapter(val addListener: AddUnitListener, val lessListener: Remo
             if (oldItem is ScreenListItem.ScreenHeader && newItem is ScreenListItem.ScreenHeader) {
                 return oldItem.kind == newItem.kind
             } else {
-                if (oldItem is ScreenListItem.ScreenItem && newItem is ScreenListItem.ScreenItem) {
-                    return oldItem.id == newItem.id && oldItem.cant == newItem.cant
-                } else return false //when one is header and other is item
+                return if (oldItem is ScreenListItem.ScreenItem && newItem is ScreenListItem.ScreenItem) {
+                    (oldItem.id == newItem.id) && (oldItem.cant == newItem.cant)
+                } else {
+                    false //when one is header and other is item
+                }
             }
         }
 

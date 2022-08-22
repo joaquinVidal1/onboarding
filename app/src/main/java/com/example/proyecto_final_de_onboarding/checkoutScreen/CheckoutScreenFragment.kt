@@ -51,6 +51,7 @@ class CheckoutScreenFragment : Fragment() {
                 val numberPicker = NumberPicker(context)
                 numberPicker.minValue = 0
                 numberPicker.maxValue = 500
+                numberPicker.wrapSelectorWheel = false
                 numberPicker.value = viewModel.getQant(itemId)!!
                 builder.setPositiveButton(getString(R.string.confirm)) { dialog, i ->
                     viewModel.itemQantChanged(itemId, numberPicker.value)

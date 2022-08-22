@@ -18,8 +18,7 @@ object CartRepository {
                     add(CartItem(id, 1))
                 }
             }
-            return cart
-
+            return cart.toList()
         }
         fun removeItem(id: Int): List<CartItem>{
             val itemToRemove = cart.find { it.itemId == id }
@@ -28,7 +27,7 @@ object CartRepository {
             }else{
                 itemToRemove?.cant = itemToRemove?.cant!!?.minus(1)
             }
-            return cart
+            return cart.toList()
         }
 
     fun editQuantity(id: Int, qant: Int): List<CartItem>{

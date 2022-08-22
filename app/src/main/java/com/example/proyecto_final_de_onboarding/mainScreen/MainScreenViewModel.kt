@@ -12,6 +12,7 @@ import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
 
 class MainScreenViewModel : ViewModel() {
+    var query: String? = null
     val itemList = orderList(ItemRepository.itemList)
     private val _cart = MutableLiveData<List<CartItem>>(listOf())
     val cart: LiveData<List<CartItem>>
@@ -19,6 +20,9 @@ class MainScreenViewModel : ViewModel() {
 
     val showCartCircle: LiveData<Boolean> =
         Transformations.map(cart) { it.isNotEmpty() }
+
+    val queriedCart: LiveData<List<CartItem>> =
+        Transformations.map(cart) {it.queriedCart(query)}
 
 
     fun onAddItem(itemId: Int) {
@@ -118,9 +122,7 @@ class MainScreenViewModel : ViewModel() {
             if (item.kind == kind) {
                 screenList.add(
                     ScreenListItem.ScreenItem(item,
-                        if (cartList?.find { it.itemId == item.id } != null)
-                            cartList?.find { it.itemId == item.id }!!.cant
-                        else 0
+                        cartList?.find{ it.itemId == item.id}?.cant ?:0
                     )
                 )
             }
@@ -129,8 +131,8 @@ class MainScreenViewModel : ViewModel() {
     }
 
     //gets the final list that should be displayed by the adapter
-    fun getScreenList(query: String? = null): List<ScreenListItem> {
-        val cartList = CartRepository.cart
+    fun getScreenList(): List<ScreenListItem> {
+        val cartList = CartRepository.cart.queriedCart(query)
         val screenList = mutableListOf<ScreenListItem>()
         if (query == null) {
             //no query
@@ -140,7 +142,7 @@ class MainScreenViewModel : ViewModel() {
             screenList.addAll(addItems(cartList, Kind.veggie))
             return screenList
         } else {
-            return getScreenListQuery(cartList, query)
+            return getScreenListQuery(cartList, query!!)
         }
     }
     private val _navigateToCheckoutScreen = MutableLiveData<List<CartItem>?>()
@@ -158,6 +160,16 @@ class MainScreenViewModel : ViewModel() {
         _cart.value = CartRepository.cart
     }
 
+
+}
+
+private fun  List<CartItem>.queriedCart(query: String? = null): List<CartItem> {
+     if (query == null){
+        this
+    }else{
+        this.filter { item -> ItemRepository.itemList.find{ item.itemId == it.id} ?.name!!.contains(query) }
+    }
+    return this
 
 }
 
