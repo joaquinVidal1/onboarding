@@ -54,6 +54,7 @@
             tools:itemCount="2"
             tools:listitem="@layout/list_item_checkout_screen" />
 
+
         <TextView
             android:id="@+id/total_text"
             android:layout_width="wrap_content"
