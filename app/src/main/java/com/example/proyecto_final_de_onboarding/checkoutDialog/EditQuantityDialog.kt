@@ -21,33 +21,18 @@ class EditQuantityDialog(val itemId: Int, val viewModel: CheckoutScreenViewModel
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val item = viewModel.getScreenListItem(itemId)
-        binding.dialogItemName.text = item.item.name
         var cant = item.cant
-        binding.dialogItemCant.text = item.cant.toString() + " units"
-        binding.dialogItemPrice.text = "$" + item.item.price.toString()
-        if (item.item.checkoutImage != null) {
-            binding.dialogItemImage.setImageResource(item.item.checkoutImage)
-        } else {
-            binding.dialogItemImage.setImageResource(item.item.mainImage)
-        }
+
         viewModel.cart.observe(this, Observer {
             it?.let {
                 cart = it
             }
 
         })
-        binding.dialogButtonAdd.setOnClickListener {
+        binding.numberPicker.minValue =0
+        binding.numberPicker.maxValue = Int.MAX_VALUE
+        binding.numberPicker.setOnValueChangedListener { itemId ->
             viewModel.onAddItem(itemId)
-            cant++
-            binding.dialogItemCant.text = cant.toString() + " units"
-        }
-        binding.dialogButtonRemove.setOnClickListener {
-            viewModel.onRemoveItem(itemId)
-            cant--
-            binding.dialogItemCant.text = cant.toString() + " units"
-            if (cant <= 0) {
-                dismiss()
-            }
         }
     }
 
