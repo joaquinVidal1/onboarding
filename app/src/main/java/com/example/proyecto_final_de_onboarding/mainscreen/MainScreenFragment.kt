@@ -100,6 +100,7 @@ class MainScreenFragment : Fragment() {
 //        binding.carrousel.registerOnPageChangeCallback(pageChangeCallback)
 
         binding.viewPageIndicator.setUpWithViewPager2(binding.carrousel)
+        binding.carrousel.setPageTransformer(ZoomOutPageTransformer())
     }
 
     override fun onCreateView(
