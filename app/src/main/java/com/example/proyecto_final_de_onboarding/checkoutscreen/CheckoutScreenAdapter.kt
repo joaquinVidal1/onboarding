@@ -1,13 +1,11 @@
-package com.example.proyecto_final_de_onboarding.checkoutScreen
+package com.example.proyecto_final_de_onboarding.checkoutscreen
 
-import android.app.AlertDialog
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
 

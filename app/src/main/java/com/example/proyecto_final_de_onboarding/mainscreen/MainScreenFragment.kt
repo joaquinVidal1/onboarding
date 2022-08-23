@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.mainScreen
+package com.example.proyecto_final_de_onboarding.mainscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,10 +13,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
-import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
-
+import com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment
 
 
 /**
@@ -26,9 +25,10 @@ import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBi
  */
 class MainScreenFragment : Fragment() {
 
-    companion object{
+    companion object {
         private const val NUM_PAGES = 4
     }
+
     private lateinit var viewPager: ViewPager2
     private lateinit var binding: FragmentMainScreenBinding
 
@@ -44,15 +44,13 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.mainScreenViewModel = viewModel
-        val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener{itemId -> viewModel.onAddItem(itemId) }, MainScreenAdapter.RemoveUnitListener{itemId -> viewModel.onRemoveItem(itemId)})
+        val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
+            viewModel.onAddItem(itemId)
+        }, MainScreenAdapter.RemoveUnitListener { itemId -> viewModel.onRemoveItem(itemId) })
         binding.itemsList.adapter = adapter
         adapter.submitList(viewModel.getScreenList())
-        var cart = listOf<CartItem>()
-        binding.mainScreenViewModel = viewModel
         viewModel.queriedCart.observe(viewLifecycleOwner) {
             it?.let {
-                cart = it
                 adapter.submitList(viewModel.getScreenList())
             }
 
@@ -60,13 +58,15 @@ class MainScreenFragment : Fragment() {
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
             if (it) {
                 binding.cartDot.visibility = View.VISIBLE
+                binding.cartButton.isEnabled = true
             } else {
                 binding.cartDot.visibility = View.GONE
+                binding.cartButton.isEnabled = false
             }
         }
         val manager = LinearLayoutManager(activity)
         binding.itemsList.layoutManager = manager
-        binding.itemSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        binding.itemSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 viewModel.query = newText
                 adapter.submitList(viewModel.getScreenList())
@@ -83,14 +83,13 @@ class MainScreenFragment : Fragment() {
 
         })
         binding.itemSearch.queryHint = "Search"
-        binding.cartButton.setOnClickListener { this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())}//viewModel.onCartClicked() }
-//        viewModel.navigateToCheckoutScreen.observe(viewLifecycleOwner, Observer { list ->
-//            list?.let {
-//                this.findNavController().navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
-//            }
-//        })
+        binding.cartButton.setOnClickListener {
+            this.findNavController()
+                .navigate(actionMainScreenFragmentToCheckoutScreenFragment())
+        }
         binding.carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
 
+        //funcion que se llama al cambiar de pagina en el banner
 //        val pageChangeCallback = object : ViewPager2.OnPageChangeCallback(){
 //            override fun onPageSelected(position: Int) {
 //                super.onPageSelected(position)
@@ -108,41 +107,47 @@ class MainScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding= DataBindingUtil.inflate(
-            inflater, R.layout.fragment_main_screen, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_main_screen, container, false
+        )
 
-        return binding.root//inflater.inflate(R.layout.fragment_main_screen, container, false)
+        return binding.root
     }
 
 
-
-    private inner class BannerSlidePagerAdapter(fa: FragmentActivity): FragmentStateAdapter(fa) {
+    private inner class BannerSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = NUM_PAGES
 
         override fun createFragment(position: Int): Fragment {
             val fragment = FeatureCarrouselFragment()
             fragment.arguments = Bundle().apply {
-                putInt(FeatureCarrouselFragment.ARG_DRAWABLE_ID, when(position){
-                    0-> R.drawable.banner_1
-                    1-> R.drawable.banner_2
-                    2-> R.drawable.banner_3
-                    else->R.drawable.banner_4
-                })
+                putInt(
+                    FeatureCarrouselFragment.ARG_DRAWABLE_ID, when (position) {
+                        0 -> R.drawable.banner_1
+                        1 -> R.drawable.banner_2
+                        2 -> R.drawable.banner_3
+                        else -> R.drawable.banner_4
+                    }
+                )
 
-                putString(FeatureCarrouselFragment.ARG_TITLE, when(position){
-                    0-> getString(R.string.brazilian_bananas)
-                    1-> getString(R.string.chinese_grapefruits)
-                    2-> getString(R.string.uruguayan_cucumbers)
-                    else-> getString(R.string.asutralian_kiwis)
-                })
+                putString(
+                    FeatureCarrouselFragment.ARG_TITLE, when (position) {
+                        0 -> getString(R.string.brazilian_bananas)
+                        1 -> getString(R.string.chinese_grapefruits)
+                        2 -> getString(R.string.uruguayan_cucumbers)
+                        else -> getString(R.string.asutralian_kiwis)
+                    }
+                )
 
-                putString(FeatureCarrouselFragment.ARG_DESCRIPTION, getString(R.string.product_of_the_month))
+                putString(
+                    FeatureCarrouselFragment.ARG_DESCRIPTION,
+                    getString(R.string.product_of_the_month)
+                )
             }
 
             return fragment
         }
     }
-
 
 
 }

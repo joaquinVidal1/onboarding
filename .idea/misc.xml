@@ -17,14 +17,16 @@
         <entry key="app/src/main/res/drawable/indicator_dot_selected.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/indicator_dot_unselected.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/search_field.xml" value="0.175" />
+        <entry key="app/src/main/res/font/.xml" value="0.2201795639162035" />
+        <entry key="app/src/main/res/font/sf_proext.xml" value="0.21932449764856776" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3591485507246377" />
         <entry key="app/src/main/res/layout/dialog_checkout_screen.xml" value="0.2713978702528605" />
         <entry key="app/src/main/res/layout/dialog_checkout_screen_BACKUP_85659.xml" value="0.27233860624198375" />
-        <entry key="app/src/main/res/layout/fragment_checkout_screen.xml" value="0.2799847344292534" />
-        <entry key="app/src/main/res/layout/fragment_feature_carrousel_page.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_main_screen.xml" value="0.3235382080078125" />
-        <entry key="app/src/main/res/layout/list_item_checkout_screen.xml" value="0.23854313181407416" />
-        <entry key="app/src/main/res/layout/list_item_main_screen.xml" value="0.2625059195611355" />
+        <entry key="app/src/main/res/layout/fragment_checkout_screen.xml" value="0.2970135539724903" />
+        <entry key="app/src/main/res/layout/fragment_feature_carrousel_page.xml" value="0.47287139892578134" />
+        <entry key="app/src/main/res/layout/fragment_main_screen.xml" value="0.34747314453125" />
+        <entry key="app/src/main/res/layout/list_item_checkout_screen.xml" value="0.37419681833751167" />
+        <entry key="app/src/main/res/layout/list_item_main_screen.xml" value="0.3492063492063492" />
         <entry key="app/src/main/res/layout/list_kind_main_screen.xml" value="0.36057078043619795" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2985" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2985" />

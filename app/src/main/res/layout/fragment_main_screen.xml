@@ -1,18 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@color/transparent_white_50">
+    android:background="@color/color_background_app">
 
-    <data>
-
-        <import type="com.example.proyecto_final_de_onboarding.mainScreen.MainScreenViewModel" />
-
-        <variable
-            name="mainScreenViewModel"
-            type="com.example.proyecto_final_de_onboarding.mainScreen.MainScreenViewModel" />
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -23,11 +14,12 @@
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginTop="16dp"
-            app:layout_constraintEnd_toEndOf="@id/itemSearch"
-            app:layout_constraintStart_toStartOf="@id/itemSearch"
+            android:paddingHorizontal="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cartButton" />
 
-        <com.example.proyecto_final_de_onboarding.mainScreen.ViewPagerIndicator
+        <com.example.proyecto_final_de_onboarding.mainscreen.ViewPagerIndicator
             android:id="@+id/view_page_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +27,7 @@
             app:layout_constraintEnd_toEndOf="@+id/carrousel"
             app:layout_constraintStart_toStartOf="@+id/carrousel"
             app:layout_constraintTop_toBottomOf="@id/carrousel"
-            tools:background="@color/transparent_white_50"
+            tools:background="@color/color_background_app"
             tools:layout_height="20dp"
             tools:layout_width="100dp" />
 
@@ -43,23 +35,33 @@
             android:id="@+id/itemSearch"
             android:layout_width="0dp"
             android:layout_height="50dp"
+            android:layout_marginHorizontal="18dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/search_field"
-            android:layout_marginTop="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
             android:queryHint="@string/search"
-            app:iconifiedByDefault="@drawable/icon_search"
-            android:searchIcon="@drawable/icon_search"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_page_indicator" />
+
+
+        <ImageButton
+            android:id="@+id/cartButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="29dp"
+            android:background="@color/color_background_app"
+            android:src="@drawable/icon_cart"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <ImageView
             android:id="@+id/cart_dot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginEnd="15dp"
+            android:layout_marginEnd="25dp"
             android:paddingTop="10dp"
             android:src="@drawable/circle"
             android:textColor="@color/item_name_color"
@@ -67,28 +69,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/cartButton" />
 
-
-        <ImageView
-            android:id="@+id/cartButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:src="@drawable/icon_cart"
-            app:layout_constraintEnd_toEndOf="@id/carrousel"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/items_list"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/itemSearch"
             app:layout_constraintStart_toStartOf="@id/itemSearch"
             app:layout_constraintTop_toBottomOf="@id/itemSearch"
-            tools:listitem="@layout/list_item_main_screen">
-
-        </androidx.recyclerview.widget.RecyclerView>
+            tools:listitem="@layout/list_item_main_screen" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

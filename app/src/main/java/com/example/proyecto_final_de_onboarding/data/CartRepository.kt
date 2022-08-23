@@ -5,27 +5,38 @@ import com.example.proyecto_final_de_onboarding.CartItem
 object CartRepository {
 
     var cart = mutableListOf<CartItem>()
-        fun addItem(id: Int): List<CartItem>{
-            var found = false
-            cart = cart.map {
-                if (it.itemId == id) {
-                    found = true
-                    it.increment()
-                } else it
-            } as MutableList<CartItem>
-            if (!found) {
-                cart = cart.apply {
-                    add(CartItem(id, 1))
-                }
-            }
-            return cart.toList()
+
+    fun addItem(id: Int):List<CartItem>{
+        val itemToAdd = cart.find { it.itemId == id }
+        if (itemToAdd!=null){
+            cart.find { it.itemId == id }!!.cant++
+        }else{
+            cart.add(CartItem(id, 1))
         }
+        return cart.toList()
+    }
+
+//        fun addItem2(id: Int): List<CartItem>{
+//            var found = false
+//            cart = cart.map {
+//                if (it.itemId == id) {
+//                    found = true
+//                    it.increment()
+//                } else it
+//            } as MutableList<CartItem>
+//            if (!found) {
+//                cart = cart.apply {
+//                    add(CartItem(id, 1))
+//                }
+//            }
+//            return cart.toList()
+//        }
         fun removeItem(id: Int): List<CartItem>{
             val itemToRemove = cart.find { it.itemId == id }
             if (itemToRemove?.cant == 1){
                 cart.remove(itemToRemove)
             }else{
-                itemToRemove?.cant = itemToRemove?.cant!!?.minus(1)
+                itemToRemove?.cant = itemToRemove?.cant!!.minus(1)
             }
             return cart.toList()
         }

@@ -8,7 +8,7 @@
             <stroke
                 android:width="1dp"
                 android:color="@color/borders_main_screenItems" />
-            <solid android:color="@color/transparent_white_50" />
+            <solid android:color="@color/color_background_app" />
         </shape>
     </item>
 </layer-list>

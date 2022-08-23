@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.mainScreen
+package com.example.proyecto_final_de_onboarding.mainscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater

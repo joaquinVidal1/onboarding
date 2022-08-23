@@ -5,19 +5,18 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/color_background_app">
 
 
-        <ImageView
+        <ImageButton
             android:id="@+id/back_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginStart="22dp"
+            android:layout_marginTop="30dp"
+            android:background="@color/color_background_app"
             android:src="@drawable/icon_back"
-            app:layout_constraintBottom_toTopOf="@id/shopping_cart_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -25,33 +24,31 @@
             android:id="@+id/shopping_cart_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/sf_pro_text"
             android:text="@string/shopping_cart_text"
             android:textColor="@color/item_name_color"
-            android:textSize="25dp"
+            android:textSize="22sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.063"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/back_button" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/cart_items_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="150dp"
-            android:layout_marginTop="100dp"
-            android:paddingEnd="24dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="40dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="18dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/total_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/shopping_cart_text"
-            app:layout_constraintVertical_bias="0.0"
             app:spanCount="2"
-            tools:itemCount="2"
+            tools:itemCount="5"
             tools:listitem="@layout/list_item_checkout_screen" />
 
 
@@ -59,13 +56,13 @@
             android:id="@+id/total_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/totalText"
-            android:textSize="26sp"
-            android:textColor="@color/item_name_color"
-            android:fontFamily="@font/roboto_light"
-            android:textStyle="bold"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="20dp"
+            android:fontFamily="@font/sf_pro_text"
+            android:text="@string/totalText"
+            android:textColor="@color/item_name_color"
+            android:textSize="22sp"
+            android:textStyle="normal"
             app:layout_constraintBottom_toTopOf="@id/checkout_button"
             app:layout_constraintStart_toStartOf="@id/checkout_button"
             tools:text="@string/total" />
@@ -74,33 +71,36 @@
             android:id="@+id/total_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="40dp"
-            android:textStyle="bold"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/sf_pro_text"
             android:textColor="@color/item_name_color"
-            android:layout_marginEnd="10dp"
-            app:layout_constraintEnd_toEndOf="@id/checkout_button"
+            android:textSize="40sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@id/total_text"
+            app:layout_constraintEnd_toEndOf="@id/checkout_button"
             tools:text="$25.97" />
 
-        <TextView
+        <Button
             android:id="@+id/checkout_button"
             android:layout_width="0dp"
-            android:background="@drawable/checkout_button"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="44dp"
+            android:background="@drawable/checkout_button"
+            android:fontFamily="@font/sf_pro_text"
+            android:paddingTop="14dp"
+            android:paddingBottom="14dp"
             android:text="@string/checkout"
-            android:textColor="@color/white"
-            android:fontFamily="@font/roboto_bold"
             android:textAlignment="center"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/cart_items_list"
-            app:layout_constraintStart_toStartOf="@id/cart_items_list"/>
+            app:layout_constraintStart_toStartOf="@id/cart_items_list" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

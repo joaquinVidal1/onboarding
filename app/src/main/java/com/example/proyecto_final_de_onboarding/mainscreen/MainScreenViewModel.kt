@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.mainScreen
+package com.example.proyecto_final_de_onboarding.mainscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,7 +22,7 @@ class MainScreenViewModel : ViewModel() {
         Transformations.map(cart) { it.isNotEmpty() }
 
     val queriedCart: LiveData<List<CartItem>> =
-        Transformations.map(cart) {it.queriedCart(query)}
+        Transformations.map(cart) { it.queriedCart(query) }
 
 
     fun onAddItem(itemId: Int) {
@@ -49,9 +49,6 @@ class MainScreenViewModel : ViewModel() {
         return newList
     }
 
-    private fun findItemById(id: Int) = itemList.find { it.id == id }
-    fun cartItemToScreenItem(cartItem: CartItem) =
-        ScreenListItem.ScreenItem(findItemById(cartItem.itemId)!!, cartItem.cant)
 
     //returns the list that should be displayed when there has been a query made
     private fun getScreenListQuery(cartList: List<CartItem>?, query: String): List<ScreenListItem> {
@@ -67,12 +64,12 @@ class MainScreenViewModel : ViewModel() {
                 screenList.addAll(addItems(cartList, Kind.veggie))
             }
         }
-        return AddByName(cartList, query, screenList)
+        return addByName(cartList, query, screenList)
 
     }
 
     //returns a list with all the ScreenItems that match the query and had not been added previously to screenList
-    private fun AddByName(
+    private fun addByName(
         cartList: List<CartItem>?,
         query: String,
         screenList: MutableList<ScreenListItem>
@@ -89,13 +86,13 @@ class MainScreenViewModel : ViewModel() {
                 val headerIndex =
                     screenList.indexOfFirst { it is ScreenListItem.ScreenHeader && it.kind == item.kind.toString() }
                 if (headerIndex >= 0) {
-                    screenList.add(headerIndex+1, ScreenListItem.ScreenItem(item,
+                    screenList.add(headerIndex + 1, ScreenListItem.ScreenItem(item,
                         if (cartList?.find { it.itemId == item.id } != null)
                             cartList?.find { it.itemId == item.id }!!.cant
                         else 0
                     )
                     )
-                }else{
+                } else {
                     //add header and item
                     screenList.add(ScreenListItem.ScreenHeader(item.kind.toString()))
                     screenList.add(ScreenListItem.ScreenItem(item,
@@ -121,8 +118,9 @@ class MainScreenViewModel : ViewModel() {
         for (item in itemList) {
             if (item.kind == kind) {
                 screenList.add(
-                    ScreenListItem.ScreenItem(item,
-                        cartList?.find{ it.itemId == item.id}?.cant ?:0
+                    ScreenListItem.ScreenItem(
+                        item,
+                        cartList?.find { it.itemId == item.id }?.cant ?: 0
                     )
                 )
             }
@@ -145,16 +143,7 @@ class MainScreenViewModel : ViewModel() {
             return getScreenListQuery(cartList, query!!)
         }
     }
-    private val _navigateToCheckoutScreen = MutableLiveData<List<CartItem>?>()
-    val navigateToCheckoutScreen: LiveData<List<CartItem>?>
-        get() = _navigateToCheckoutScreen
-    fun doneNavigating(){
-        _navigateToCheckoutScreen.value = null
-    }
 
-    fun onCartClicked(){
-        _navigateToCheckoutScreen.value = cart.value
-    }
 
     fun refreshCart() {
         _cart.value = CartRepository.cart
@@ -163,11 +152,15 @@ class MainScreenViewModel : ViewModel() {
 
 }
 
-private fun  List<CartItem>.queriedCart(query: String? = null): List<CartItem> {
-     if (query == null){
+private fun List<CartItem>.queriedCart(query: String? = null): List<CartItem> {
+    if (query == null) {
         this
-    }else{
-        this.filter { item -> ItemRepository.itemList.find{ item.itemId == it.id} ?.name!!.contains(query) }
+    } else {
+        this.filter { item ->
+            ItemRepository.itemList.find { item.itemId == it.id }?.name!!.contains(
+                query
+            )
+        }
     }
     return this
 

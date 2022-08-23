@@ -3,11 +3,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
-    <data>
-        <variable
-            name="header"
-            type="com.example.proyecto_final_de_onboarding.ScreenListItem.ScreenHeader" />
-    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,20 +10,20 @@
         android:background="@drawable/border">
 
         <TextView
-            android:gravity="center_vertical"
             android:id="@+id/kind_header"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="16dp"
-            android:fontFamily="@font/roboto_bold"
+            android:fontFamily="@font/sf_pro_text"
+            android:gravity="center_vertical"
             android:textColor="@color/item_name_color"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            tools:text="Fruits"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Fruits" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

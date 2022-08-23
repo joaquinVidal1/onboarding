@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.checkoutScreen
+package com.example.proyecto_final_de_onboarding.checkoutscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -13,13 +13,6 @@ class CheckoutScreenViewModel: ViewModel() {
     val cart: LiveData<List<CartItem>>
         get() = _cart
 
-    fun onAddItem(itemId: Int) {
-        _cart.value = CartRepository.addItem(itemId)
-    }
-
-    fun onRemoveItem(itemId: Int) {
-        _cart.value = CartRepository.removeItem(itemId)
-    }
 
     fun getScreenList(): List<ScreenListItem.ScreenItem>{
         val cartList = CartRepository.cart
@@ -38,10 +31,6 @@ class CheckoutScreenViewModel: ViewModel() {
 
     }
 
-    fun getScreenListItem(itemId: Int): ScreenListItem.ScreenItem {
-        return ScreenListItem.ScreenItem(ItemRepository.itemList.find { it.id == itemId }!!, CartRepository.cart.find { it.itemId == itemId }!!.cant)
-
-    }
 
     fun cleanCart() {
         _cart.value = CartRepository.cleanCart()
@@ -54,5 +43,9 @@ class CheckoutScreenViewModel: ViewModel() {
     fun getQant(itemId: Int): Int? {
         _cart.value = CartRepository.cart
         return _cart.value?.find { it.itemId == itemId }?.cant
+    }
+
+    fun updateCart() {
+        _cart.value = CartRepository.cart
     }
 }
