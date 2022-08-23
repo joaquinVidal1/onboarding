@@ -1,6 +1,8 @@
 package com.example.proyecto_final_de_onboarding.mainscreen
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,23 +68,19 @@ class MainScreenFragment : Fragment() {
         }
         val manager = LinearLayoutManager(activity)
         binding.itemsList.layoutManager = manager
-        binding.itemSearch.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextChange(newText: String?): Boolean {
-                viewModel.query = newText
-                adapter.submitList(viewModel.getScreenList())
-                return false
+        binding.itemSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
-            override fun onQueryTextSubmit(query: String?): Boolean {
-                binding.itemSearch.clearFocus()
-                viewModel.query = query
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.query = binding.itemSearch.text.toString()
                 adapter.submitList(viewModel.getScreenList())
-                return true
             }
 
+            override fun afterTextChanged(p0: Editable?) {
+            }
 
         })
-        binding.itemSearch.queryHint = "Search"
         binding.cartButton.setOnClickListener {
             this.findNavController()
                 .navigate(actionMainScreenFragmentToCheckoutScreenFragment())
