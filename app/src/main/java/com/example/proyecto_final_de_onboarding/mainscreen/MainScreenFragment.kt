@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -14,7 +13,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.widget.ViewPager2
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 import com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment
@@ -31,7 +29,6 @@ class MainScreenFragment : Fragment() {
         private const val NUM_PAGES = 4
     }
 
-    private lateinit var viewPager: ViewPager2
     private lateinit var binding: FragmentMainScreenBinding
 
     private val viewModel: MainScreenViewModel by lazy {
@@ -49,7 +46,14 @@ class MainScreenFragment : Fragment() {
         val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
             viewModel.onAddItem(itemId)
         }, MainScreenAdapter.RemoveUnitListener { itemId -> viewModel.onRemoveItem(itemId) })
-        binding.itemsList.adapter = adapter
+        val itemsList = binding.itemsList
+        val cartDot = binding.cartDot
+        val cartButton = binding.cartButton
+        val itemSearch = binding.itemSearch
+        val carrousel = binding.carrousel
+        val viewPageIndicator = binding.viewPageIndicator
+
+        itemsList.adapter = adapter
         adapter.submitList(viewModel.getScreenList())
         viewModel.queriedCart.observe(viewLifecycleOwner) {
             it?.let {
@@ -59,21 +63,21 @@ class MainScreenFragment : Fragment() {
         }
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
             if (it) {
-                binding.cartDot.visibility = View.VISIBLE
-                binding.cartButton.isEnabled = true
+                cartDot.visibility = View.VISIBLE
+                cartButton.isEnabled = true
             } else {
-                binding.cartDot.visibility = View.GONE
-                binding.cartButton.isEnabled = false
+                cartDot.visibility = View.GONE
+                cartButton.isEnabled = false
             }
         }
         val manager = LinearLayoutManager(activity)
-        binding.itemsList.layoutManager = manager
-        binding.itemSearch.addTextChangedListener(object : TextWatcher {
+        itemsList.layoutManager = manager
+        itemSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.query = binding.itemSearch.text.toString()
+                viewModel.query = itemSearch.text.toString()
                 adapter.submitList(viewModel.getScreenList())
             }
 
@@ -81,13 +85,16 @@ class MainScreenFragment : Fragment() {
             }
 
         })
-        binding.cartButton.setOnClickListener {
+        cartButton.setOnClickListener {
             this.findNavController()
                 .navigate(actionMainScreenFragmentToCheckoutScreenFragment())
         }
-        binding.carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
+        carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
+        viewPageIndicator.setUpWithViewPager2(carrousel)
+        carrousel.setPageTransformer(ZoomOutPageTransformer())
 
-        //funcion que se llama al cambiar de pagina en el banner
+        //funcion que se llama al cambiar de pagina en el banner,
+        // la dejo para ya tenerlo si en algun momento la preciso
 //        val pageChangeCallback = object : ViewPager2.OnPageChangeCallback(){
 //            override fun onPageSelected(position: Int) {
 //                super.onPageSelected(position)
@@ -97,8 +104,6 @@ class MainScreenFragment : Fragment() {
 //
 //        binding.carrousel.registerOnPageChangeCallback(pageChangeCallback)
 
-        binding.viewPageIndicator.setUpWithViewPager2(binding.carrousel)
-        binding.carrousel.setPageTransformer(ZoomOutPageTransformer())
     }
 
     override fun onCreateView(

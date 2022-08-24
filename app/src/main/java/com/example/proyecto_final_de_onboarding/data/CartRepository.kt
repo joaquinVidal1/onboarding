@@ -6,46 +6,31 @@ object CartRepository {
 
     var cart = mutableListOf<CartItem>()
 
-    fun addItem(id: Int):List<CartItem>{
+    fun addItem(id: Int): List<CartItem> {
         val itemToAdd = cart.find { it.itemId == id }
-        if (itemToAdd!=null){
+        if (itemToAdd != null) {
             cart.find { it.itemId == id }!!.cant++
-        }else{
+        } else {
             cart.add(CartItem(id, 1))
         }
         return cart.toList()
     }
 
-//        fun addItem2(id: Int): List<CartItem>{
-//            var found = false
-//            cart = cart.map {
-//                if (it.itemId == id) {
-//                    found = true
-//                    it.increment()
-//                } else it
-//            } as MutableList<CartItem>
-//            if (!found) {
-//                cart = cart.apply {
-//                    add(CartItem(id, 1))
-//                }
-//            }
-//            return cart.toList()
-//        }
-        fun removeItem(id: Int): List<CartItem>{
-            val itemToRemove = cart.find { it.itemId == id }
-            if (itemToRemove?.cant == 1){
-                cart.remove(itemToRemove)
-            }else{
-                itemToRemove?.cant = itemToRemove?.cant!!.minus(1)
-            }
-            return cart.toList()
+    fun removeItem(id: Int): List<CartItem> {
+        val itemToRemove = cart.find { it.itemId == id }
+        if (itemToRemove?.cant == 1) {
+            cart.remove(itemToRemove)
+        } else {
+            itemToRemove?.cant = itemToRemove?.cant!!.minus(1)
         }
+        return cart.toList()
+    }
 
-    fun editQuantity(id: Int, qant: Int): List<CartItem>{
+    fun editQuantity(id: Int, qant: Int): List<CartItem> {
         val itemToEdit = cart.find { it.itemId == id }
-        if (qant == 0){
+        if (qant == 0) {
             cart.remove(itemToEdit)
-        }else {
+        } else {
             itemToEdit?.cant = qant
         }
         return cart

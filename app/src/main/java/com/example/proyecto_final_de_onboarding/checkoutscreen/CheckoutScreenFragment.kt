@@ -40,11 +40,17 @@ class CheckoutScreenFragment : Fragment() {
         val binding: FragmentCheckoutScreenBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_checkout_screen, container, false
         )
-        binding.backButton.setOnClickListener {
+        val backButton = binding.backButton
+        val checkoutButton = binding.checkoutButton
+        val totalAmount = binding.totalAmount
+        val cartItemsList = binding.cartItemsList
+
+
+        backButton.setOnClickListener {
             this.findNavController().popBackStack()
         }
         binding.lifecycleOwner = this
-        binding.cartItemsList.layoutManager = GridLayoutManager(activity, 2)
+        cartItemsList.layoutManager = GridLayoutManager(activity, 2)
         val adapter = CheckoutScreenAdapter(
             CheckoutScreenAdapter.EntireItemListener { itemId ->
                 val builder = AlertDialog.Builder(context)
@@ -58,21 +64,21 @@ class CheckoutScreenFragment : Fragment() {
 
                 }
                 builder.setNegativeButton(getString(R.string.cancel)) { dialog, i -> }
-                builder.setTitle("Edit quantity")
+                builder.setTitle(getString(R.string.dialog_title))
                 builder.setView(numberPicker)
                 builder.show()
 
             }
         )
 
-        binding.cartItemsList.adapter = adapter
+        cartItemsList.adapter = adapter
         // Inflate the layout for this fragment
-        binding.totalAmount.setText("$" + viewModel.getCheckout().toString())
+        totalAmount.setText("$" + viewModel.getCheckout().toString())
         viewModel.cart.observe(viewLifecycleOwner) {
             it?.let {
                 adapter.submitList(viewModel.getScreenList())
-                binding.totalAmount.text = "$" + viewModel.getCheckout().toString()
-                binding.checkoutButton.isEnabled = it.isNotEmpty()
+                totalAmount.text = "$" + viewModel.getCheckout().toString()
+                checkoutButton.isEnabled = it.isNotEmpty()
 
             }
 

@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Proyecto_final_de_onboarding</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="add">Add</string>
     <string name="avocado">Avocado</string>
@@ -17,4 +16,5 @@
     <string name="search">Search</string>
     <string name="confirm">CONFIRM</string>
     <string name="cancel">CANCEL</string>
+    <string name="dialog_title">Edit quantity</string>
 </resources>

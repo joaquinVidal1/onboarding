@@ -15,7 +15,7 @@
     <color name="item_name_color">#46496B</color>
     <color name="item_price_color">#9FA1B5</color>
     <color name="borders_main_screenItems">#F6F5F5</color>
-    <color name="cartDotColor">#6850D9</color>
+    <color name="cart_dot_color">#6850D9</color>
     <color name="backgrouns_search_color">#EEEFF4</color>
     <color name="color_dot_unselected">#DBD6D9</color>
     <color name="color_dot_selected">#50546D</color>
