@@ -16,9 +16,13 @@
             android:layout_marginStart="22dp"
             android:layout_marginTop="30dp"
             android:background="@color/color_background_app"
+            android:contentDescription="@string/back_button"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
             android:src="@drawable/icon_back"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="RedundantDescriptionCheck" />
 
         <TextView
             android:id="@+id/shopping_cart_text"
@@ -35,13 +39,13 @@
             app:layout_constraintTop_toBottomOf="@id/back_button" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/item_name_color"
             android:id="@+id/cart_items_list"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_marginTop="24dp"
             android:layout_marginBottom="35dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="18dp"
+            android:paddingHorizontal="12dp"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:layout_constraintBottom_toTopOf="@id/total_text"
             app:layout_constraintEnd_toEndOf="parent"

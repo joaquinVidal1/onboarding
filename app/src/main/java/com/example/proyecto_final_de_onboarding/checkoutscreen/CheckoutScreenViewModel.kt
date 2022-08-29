@@ -2,19 +2,26 @@ package com.example.proyecto_final_de_onboarding.checkoutscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
 
-class CheckoutScreenViewModel: ViewModel() {
+class CheckoutScreenViewModel : ViewModel() {
     private val _cart = MutableLiveData<List<CartItem>>(listOf())
-    val cart: LiveData<List<CartItem>>
+    private val cart: LiveData<List<CartItem>>
         get() = _cart
 
+    val screenList: LiveData<List<ScreenListItem.ScreenItem>> =
+        Transformations.map(cart) { getScreenList() }
 
-    fun getScreenList(): List<ScreenListItem.ScreenItem>{
+    val showCheckoutButton: LiveData<Boolean> =
+        Transformations.map(cart) { it.isNotEmpty() }
+
+
+    private fun getScreenList(): List<ScreenListItem.ScreenItem> {
         val cartList = CartRepository.cart
         val screenList = mutableListOf<ScreenListItem.ScreenItem>()
         for (item in cartList) {
@@ -27,7 +34,8 @@ class CheckoutScreenViewModel: ViewModel() {
     fun getCheckout(): Int {
         val checkoutCart = CartRepository.cart
         return checkoutCart.sumOf { cartItem ->
-            cartItem.cant * ItemRepository.itemList.find { it.id == cartItem.itemId }!!.price }
+            cartItem.cant * ItemRepository.itemList.find { it.id == cartItem.itemId }!!.price
+        }
 
     }
 
@@ -36,11 +44,11 @@ class CheckoutScreenViewModel: ViewModel() {
         _cart.value = CartRepository.cleanCart()
     }
 
-    fun itemQantChanged(itemId: Int, newQant: Int) {
-        _cart.value = CartRepository.editQuantity(itemId, newQant)
+    fun itemQtyChanged(itemId: Int, newQty: Int) {
+        _cart.value = CartRepository.editQuantity(itemId, newQty)
     }
 
-    fun getQant(itemId: Int): Int? {
+    fun getQty(itemId: Int): Int? {
         _cart.value = CartRepository.cart
         return _cart.value?.find { it.itemId == itemId }?.cant
     }

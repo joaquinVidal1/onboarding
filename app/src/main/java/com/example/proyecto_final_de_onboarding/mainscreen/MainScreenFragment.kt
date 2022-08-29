@@ -1,11 +1,15 @@
 package com.example.proyecto_final_de_onboarding.mainscreen
 
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
+import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -18,11 +22,6 @@ import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBi
 import com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment
 
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainScreenFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class MainScreenFragment : Fragment() {
 
     companion object {
@@ -32,7 +31,7 @@ class MainScreenFragment : Fragment() {
     private lateinit var binding: FragmentMainScreenBinding
 
     private val viewModel: MainScreenViewModel by lazy {
-        ViewModelProvider(this).get(MainScreenViewModel::class.java)
+        ViewModelProvider(this)[MainScreenViewModel::class.java]
     }
 
     override fun onResume() {
@@ -54,7 +53,6 @@ class MainScreenFragment : Fragment() {
         val viewPageIndicator = binding.viewPageIndicator
 
         itemsList.adapter = adapter
-        adapter.submitList(viewModel.getScreenList())
         viewModel.queriedCart.observe(viewLifecycleOwner) {
             it?.let {
                 adapter.submitList(viewModel.getScreenList())
@@ -85,6 +83,13 @@ class MainScreenFragment : Fragment() {
             }
 
         })
+        itemSearch.setOnKeyListener { _, keyCode, keyEvent -> //If the keyEvent is a key-down event on the "enter" button
+            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
+                hideKeyboard()
+                true
+            } else false
+        }
+
         cartButton.setOnClickListener {
             this.findNavController()
                 .navigate(actionMainScreenFragmentToCheckoutScreenFragment())
@@ -106,10 +111,16 @@ class MainScreenFragment : Fragment() {
 
     }
 
+    private fun hideKeyboard() {
+        val manager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        manager.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
@@ -155,6 +166,7 @@ class MainScreenFragment : Fragment() {
 
 
 }
+
 
 
 

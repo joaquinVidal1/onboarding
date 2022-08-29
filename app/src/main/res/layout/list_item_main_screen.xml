@@ -4,17 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="viewModel"
-            type="com.example.proyecto_final_de_onboarding.mainscreen.MainScreenViewModel" />
-
-        <variable
-            name="item"
-            type="com.example.proyecto_final_de_onboarding.ScreenListItem.ScreenItem" />
-    </data>
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/item"
         android:layout_width="match_parent"
@@ -68,6 +57,7 @@
             android:id="@+id/view_button_add"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:minHeight="48dp"
             android:layout_marginStart="250dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
@@ -83,18 +73,20 @@
                 android:background="@drawable/border_button_add"
                 android:fontFamily="@font/sf_pro_text"
                 android:gravity="center"
+                android:minHeight="48dp"
                 android:text="@string/add"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/color_add_button"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                tools:ignore="TouchTargetSizeCheck" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/button_add_quant"
+                android:id="@+id/button_add_qty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border_button_add_quant">
+                android:background="@drawable/border_button_add_qty">
 
                 <ImageButton
                     android:id="@+id/button_add"
@@ -103,7 +95,7 @@
                     android:layout_margin="7dp"
                     android:layout_marginStart="0dp"
                     android:background="@color/color_background_add_button"
-
+                    android:contentDescription="@string/button_add"
                     android:src="@drawable/icon_plus"
                     app:layout_constraintBottom_toBottomOf="@+id/cant_text"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -133,6 +125,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="7dp"
                     android:background="@color/color_background_add_button"
+                    android:contentDescription="@string/button_remove"
                     android:src="@drawable/icon_minus"
                     android:text="@string/add"
                     app:layout_constraintBottom_toBottomOf="@+id/cant_text"

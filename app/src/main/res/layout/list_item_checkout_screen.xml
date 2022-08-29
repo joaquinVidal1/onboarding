@@ -5,10 +5,11 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/entire_item"
+        android:background="@color/design_default_color_error"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
-        android:paddingStart="13dp"
+        android:paddingHorizontal="6dp"
         app:layout_constraintBottom_toBottomOf="@+id/item_image"
         app:layout_constraintTop_toBottomOf="@+id/item_image">
 
@@ -19,6 +20,7 @@
             android:adjustViewBounds="true"
             android:background="@drawable/checkout_item_image_shape"
             android:clipToOutline="true"
+            android:contentDescription="@string/item_image"
             app:layout_constraintDimensionRatio="H,1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -63,7 +65,6 @@
             app:layout_constraintBottom_toBottomOf="@id/item_name"
             app:layout_constraintEnd_toEndOf="@+id/item_image"
             app:layout_constraintTop_toTopOf="@id/item_name"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="$5" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

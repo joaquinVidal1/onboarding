@@ -16,14 +16,21 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.proyecto_final_de_onboarding.R
 
-class ViewPagerIndicator @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = -1, defStyleRes: Int = -1) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
+class ViewPagerIndicator @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = -1,
+    defStyleRes: Int = -1
+) : LinearLayout(context, attrs, defStyleAttr, defStyleRes) {
 
     companion object {
 
         @DrawableRes
         private val DRAWABLE_INDICATOR_SELECTED = R.drawable.indicator_dot_selected
+
         @DrawableRes
         private val DRAWABLE_INDICATOR_NOT_SELECTED = R.drawable.indicator_dot_unselected
+
         @DimenRes
         private val DEFAULT_INDICATOR_MARGIN = R.dimen.viewpager_indicator_margin
         private const val DEFAULT_INDICATOR_TINT = -1
@@ -39,7 +46,8 @@ class ViewPagerIndicator @JvmOverloads constructor(context: Context, attrs: Attr
         override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
             super.onScrollStateChanged(recyclerView, newState)
             if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                val position = (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
+                val position =
+                    (recyclerView.layoutManager as LinearLayoutManager).findFirstCompletelyVisibleItemPosition()
 
                 if (position == RecyclerView.NO_POSITION) {
                     return
@@ -58,12 +66,22 @@ class ViewPagerIndicator @JvmOverloads constructor(context: Context, attrs: Attr
         iconUnselected = AppCompatResources.getDrawable(context, DRAWABLE_INDICATOR_NOT_SELECTED)
 
         if (attrs != null) {
-            val a = context.obtainStyledAttributes(attrs, R.styleable.ViewPagerIndicator, defStyleAttr, 0)
+            val a = context.obtainStyledAttributes(
+                attrs,
+                R.styleable.ViewPagerIndicator,
+                defStyleAttr,
+                0
+            )
 
-            indicatorMargin = a.getDimensionPixelSize(R.styleable.ViewPagerIndicator_vpiIndicatorMargin, resources.getDimensionPixelSize(
-                DEFAULT_INDICATOR_MARGIN
-            ))
-            indicatorColorTint = a.getColor(R.styleable.ViewPagerIndicator_vpiIndicatorTint, ContextCompat.getColor(context, R.color.white))
+            indicatorMargin = a.getDimensionPixelSize(
+                R.styleable.ViewPagerIndicator_vpiIndicatorMargin, resources.getDimensionPixelSize(
+                    DEFAULT_INDICATOR_MARGIN
+                )
+            )
+            indicatorColorTint = a.getColor(
+                R.styleable.ViewPagerIndicator_vpiIndicatorTint,
+                ContextCompat.getColor(context, R.color.white)
+            )
 
             a.recycle()
         }
@@ -87,7 +105,11 @@ class ViewPagerIndicator @JvmOverloads constructor(context: Context, attrs: Attr
         addDots(adapter.itemCount)
 
         val pageChangeCallback = object : ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
 
             }
 
@@ -108,7 +130,10 @@ class ViewPagerIndicator @JvmOverloads constructor(context: Context, attrs: Attr
 
         dots = (0 until itemCount).map {
             val imageView = ImageView(context)
-            val params = LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            val params = LayoutParams(
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT
+            )
             params.marginEnd = indicatorMargin
             params.marginStart = indicatorMargin
             imageView.layoutParams = params

@@ -12,15 +12,14 @@
         tools:layout="@layout/fragment_main_screen">
         <action
             android:id="@+id/action_mainScreenFragment_to_checkoutScreenFragment"
+            app:destination="@id/checkout_screen_fragment"
             app:enterAnim="@anim/slide_in_right"
-            app:popEnterAnim="@anim/in_from_left"
-            app:destination="@id/checkout_screen_fragment" />
+            app:popEnterAnim="@anim/in_from_left" />
     </fragment>
 
     <fragment
         android:id="@+id/checkout_screen_fragment"
         android:name="com.example.proyecto_final_de_onboarding.checkoutscreen.CheckoutScreenFragment"
         android:label="fragmentCheckoutScreen"
-        tools:layout="@layout/fragment_checkout_screen">
-    </fragment>
+        tools:layout="@layout/fragment_checkout_screen" />
 </navigation>

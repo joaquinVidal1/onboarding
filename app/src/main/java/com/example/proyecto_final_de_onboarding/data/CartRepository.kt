@@ -26,12 +26,12 @@ object CartRepository {
         return cart.toList()
     }
 
-    fun editQuantity(id: Int, qant: Int): List<CartItem> {
+    fun editQuantity(id: Int, qty: Int): List<CartItem> {
         val itemToEdit = cart.find { it.itemId == id }
-        if (qant == 0) {
+        if (qty == 0) {
             cart.remove(itemToEdit)
         } else {
-            itemToEdit?.cant = qant
+            itemToEdit?.cant = qty
         }
         return cart
     }

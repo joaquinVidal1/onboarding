@@ -16,14 +16,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 
-/**
- * A simple [Fragment] subclass.
- * Use the [CheckoutScreen.newInstance] factory method to
- * create an instance of this fragment.
- */
+
 class CheckoutScreenFragment : Fragment() {
     private val viewModel: CheckoutScreenViewModel by lazy {
-        ViewModelProvider(this).get(CheckoutScreenViewModel::class.java)
+        ViewModelProvider(this)[CheckoutScreenViewModel::class.java]
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +31,7 @@ class CheckoutScreenFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         val binding: FragmentCheckoutScreenBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_checkout_screen, container, false
@@ -58,12 +54,12 @@ class CheckoutScreenFragment : Fragment() {
                 numberPicker.minValue = 0
                 numberPicker.maxValue = 500
                 numberPicker.wrapSelectorWheel = false
-                numberPicker.value = viewModel.getQant(itemId)!!
-                builder.setPositiveButton(getString(R.string.confirm)) { dialog, i ->
-                    viewModel.itemQantChanged(itemId, numberPicker.value)
+                numberPicker.value = viewModel.getQty(itemId)!!
+                builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                    viewModel.itemQtyChanged(itemId, numberPicker.value)
 
                 }
-                builder.setNegativeButton(getString(R.string.cancel)) { dialog, i -> }
+                builder.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
                 builder.setTitle(getString(R.string.dialog_title))
                 builder.setView(numberPicker)
                 builder.show()
@@ -73,15 +69,15 @@ class CheckoutScreenFragment : Fragment() {
 
         cartItemsList.adapter = adapter
         // Inflate the layout for this fragment
-        totalAmount.setText("$" + viewModel.getCheckout().toString())
-        viewModel.cart.observe(viewLifecycleOwner) {
-            it?.let {
-                adapter.submitList(viewModel.getScreenList())
-                totalAmount.text = "$" + viewModel.getCheckout().toString()
-                checkoutButton.isEnabled = it.isNotEmpty()
+        viewModel.screenList.observe(viewLifecycleOwner) {
+            val totalText = "$" + viewModel.getCheckout().toString()
+            adapter.submitList(it)
+            totalAmount.text = totalText
 
-            }
+        }
 
+        viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
+                checkoutButton.isEnabled = it
         }
         binding.checkoutButton.setOnClickListener {
             val message = "Total is " + viewModel.getCheckout().toString()

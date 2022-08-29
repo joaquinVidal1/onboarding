@@ -10,7 +10,7 @@ import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
 
 class CheckoutScreenAdapter(
-    val entireItemListener: CheckoutScreenAdapter.EntireItemListener,
+    private val entireItemListener: EntireItemListener,
 ) : ListAdapter<ScreenListItem.ScreenItem, RecyclerView.ViewHolder>(CheckoutScreenDiffCallback()) {
 
     class CheckoutScreenDiffCallback : DiffUtil.ItemCallback<ScreenListItem.ScreenItem>() {
@@ -30,26 +30,34 @@ class CheckoutScreenAdapter(
         }
 
     }
-    class EntireItemListener(private val clickListener: (itemId: Int) -> Unit){
+
+    class EntireItemListener(private val clickListener: (itemId: Int) -> Unit) {
         fun onClick(item: Item) = clickListener(item.id)
     }
 
 
-    class ViewHolder private constructor (val binding: ListItemCheckoutScreenBinding): RecyclerView.ViewHolder(binding.root){
+    class ViewHolder private constructor(val binding: ListItemCheckoutScreenBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: ScreenListItem.ScreenItem, entireItemClickListener: EntireItemListener){
-            binding.entireItem.setOnClickListener{entireItemClickListener.onClick(item.item)}
+        fun bind(item: ScreenListItem.ScreenItem, entireItemClickListener: EntireItemListener) {
+            binding.entireItem.setOnClickListener { entireItemClickListener.onClick(item.item) }
             if (item.item.checkoutImage == null) {
                 binding.itemImage.setImageResource(item.item.mainImage)
-            }else{
+            } else {
                 binding.itemImage.setImageResource(item.item.checkoutImage)
             }
-            binding.itemName.setText(item.item.name)
-            binding.itemPrice.setText("$"+item.item.price.toString())
-            binding.itemCant.setText(item.cant.toString() + " units")
+            binding.itemName.text = item.item.name
+            val itemPriceText = "$" + item.item.price.toString()
+            binding.itemPrice.text = itemPriceText
+            var itemCantText = "${item.cant} unit"
+            if (item.cant > 1) {
+                itemCantText = "${item.cant} units"
+            }
+            binding.itemCant.text = itemCantText
         }
-        companion object{
-            fun from(parent: ViewGroup):ViewHolder{
+
+        companion object {
+            fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemCheckoutScreenBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
@@ -63,7 +71,7 @@ class CheckoutScreenAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val listItem = getItem(position) as ScreenListItem.ScreenItem
-        if (holder is ViewHolder){
+        if (holder is ViewHolder) {
             holder.bind(listItem, entireItemListener)
         }
     }

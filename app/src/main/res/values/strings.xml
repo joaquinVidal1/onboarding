@@ -17,4 +17,11 @@
     <string name="confirm">CONFIRM</string>
     <string name="cancel">CANCEL</string>
     <string name="dialog_title">Edit quantity</string>
+    <string name="units">\" units\"</string>
+    <string name="unit">\" unit\"</string>
+    <string name="back_button"> Back button </string>
+    <string name="button_add">button add</string>
+    <string name="button_remove">button remove</string>
+    <string name="item_image">Item image</string>
+    />
 </resources>
