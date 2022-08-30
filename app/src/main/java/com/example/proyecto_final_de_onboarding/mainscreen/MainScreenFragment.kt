@@ -34,10 +34,7 @@ class MainScreenFragment : Fragment() {
         ViewModelProvider(this)[MainScreenViewModel::class.java]
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.refreshCart()
-    }
+
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -53,9 +50,9 @@ class MainScreenFragment : Fragment() {
         val viewPageIndicator = binding.viewPageIndicator
 
         itemsList.adapter = adapter
-        viewModel.queriedCart.observe(viewLifecycleOwner) {
+        viewModel.screenList.observe(viewLifecycleOwner) {
             it?.let {
-                adapter.submitList(viewModel.getScreenList())
+                adapter.submitList(it)
             }
 
         }
@@ -75,8 +72,8 @@ class MainScreenFragment : Fragment() {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.query = itemSearch.text.toString()
-                adapter.submitList(viewModel.getScreenList())
+                viewModel.onQueryChanged(itemSearch.text.toString())
+                //adapter.submitList(viewModel.getScreenList())
             }
 
             override fun afterTextChanged(p0: Editable?) {

@@ -1,44 +1,48 @@
 package com.example.proyecto_final_de_onboarding.data
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.proyecto_final_de_onboarding.CartItem
 
 object CartRepository {
+    private val _cart: MutableLiveData<List<CartItem>> = MutableLiveData<List<CartItem>>(listOf())
+    val cart: LiveData<List<CartItem>>
+        get() = _cart
 
-    var cart = mutableListOf<CartItem>()
-
-    fun addItem(id: Int): List<CartItem> {
-        val itemToAdd = cart.find { it.itemId == id }
+    fun addItem(id: Int) {
+        val itemToAdd = _cart.value?.find { it.itemId == id }
         if (itemToAdd != null) {
-            cart.find { it.itemId == id }!!.cant++
+            itemToAdd.cant.plus(1)
+//            _cart.value =
+//                _cart.value!!.toMutableList().apply {
+//                    find { it.itemId == id }
+//                        ?.cant?.plus(1)
+//                }
         } else {
-            cart.add(CartItem(id, 1))
+            _cart.value = _cart.value?.toMutableList()?.apply { add(CartItem(id, 1)) }
         }
-        return cart.toList()
     }
 
-    fun removeItem(id: Int): List<CartItem> {
-        val itemToRemove = cart.find { it.itemId == id }
+    fun removeItem(id: Int) {
+        val itemToRemove = _cart.value?.find { it.itemId == id }
         if (itemToRemove?.cant == 1) {
-            cart.remove(itemToRemove)
+            _cart.value = cart.value?.toMutableList()?.apply { remove(itemToRemove)}
         } else {
             itemToRemove?.cant = itemToRemove?.cant!!.minus(1)
         }
-        return cart.toList()
     }
 
-    fun editQuantity(id: Int, qty: Int): List<CartItem> {
-        val itemToEdit = cart.find { it.itemId == id }
+    fun editQuantity(id: Int, qty: Int) {
+        val itemToEdit = _cart.value!!.find { it.itemId == id }
         if (qty == 0) {
-            cart.remove(itemToEdit)
+            _cart.value = cart.value?.toMutableList()?.apply { remove(itemToEdit)}
         } else {
             itemToEdit?.cant = qty
         }
-        return cart
     }
 
-    fun cleanCart(): MutableList<CartItem> {
-        cart = mutableListOf()
-        return cart
+    fun cleanCart() {
+        _cart.value = mutableListOf()
     }
 
 }

@@ -24,7 +24,7 @@ class CheckoutScreenFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.updateCart()
+        //viewModel.updateCart()
 
     }
 
@@ -70,10 +70,11 @@ class CheckoutScreenFragment : Fragment() {
         cartItemsList.adapter = adapter
         // Inflate the layout for this fragment
         viewModel.screenList.observe(viewLifecycleOwner) {
-            val totalText = "$" + viewModel.getCheckout().toString()
             adapter.submitList(it)
-            totalAmount.text = totalText
 
+        }
+        viewModel.totalAmount.observe(viewLifecycleOwner){
+            totalAmount.text = "$"+ it.toString()
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {

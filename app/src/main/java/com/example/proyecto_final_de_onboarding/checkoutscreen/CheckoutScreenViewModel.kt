@@ -1,18 +1,15 @@
 package com.example.proyecto_final_de_onboarding.checkoutscreen
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.CartRepository
+import com.example.proyecto_final_de_onboarding.data.CartRepository.cart
 import com.example.proyecto_final_de_onboarding.data.ItemRepository
+import com.example.proyecto_final_de_onboarding.data.ItemRepository.storeItems
 
 class CheckoutScreenViewModel : ViewModel() {
-    private val _cart = MutableLiveData<List<CartItem>>(listOf())
-    private val cart: LiveData<List<CartItem>>
-        get() = _cart
 
     val screenList: LiveData<List<ScreenListItem.ScreenItem>> =
         Transformations.map(cart) { getScreenList() }
@@ -20,11 +17,16 @@ class CheckoutScreenViewModel : ViewModel() {
     val showCheckoutButton: LiveData<Boolean> =
         Transformations.map(cart) { it.isNotEmpty() }
 
+    val totalAmount: LiveData<Int> =
+        Transformations.map(cart){
+            it.sumOf { it.cant * storeItems.value!!.find { storeItem -> storeItem.id == it.itemId }!!.price }
+        }
+
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
-        val cartList = CartRepository.cart
+        val cartList = CartRepository.cart.value
         val screenList = mutableListOf<ScreenListItem.ScreenItem>()
-        for (item in cartList) {
+        for (item in cartList!!) {
             ItemRepository.itemList.find { it.id == item.itemId }
                 ?.let { ScreenListItem.ScreenItem(it, item.cant) }?.let { screenList.add(it) }
         }
@@ -32,8 +34,7 @@ class CheckoutScreenViewModel : ViewModel() {
     }
 
     fun getCheckout(): Int {
-        val checkoutCart = CartRepository.cart
-        return checkoutCart.sumOf { cartItem ->
+        return cart.value!!.sumOf { cartItem ->
             cartItem.cant * ItemRepository.itemList.find { it.id == cartItem.itemId }!!.price
         }
 
@@ -41,19 +42,15 @@ class CheckoutScreenViewModel : ViewModel() {
 
 
     fun cleanCart() {
-        _cart.value = CartRepository.cleanCart()
+        CartRepository.cleanCart()
     }
 
     fun itemQtyChanged(itemId: Int, newQty: Int) {
-        _cart.value = CartRepository.editQuantity(itemId, newQty)
+       CartRepository.editQuantity(itemId, newQty)
     }
 
     fun getQty(itemId: Int): Int? {
-        _cart.value = CartRepository.cart
-        return _cart.value?.find { it.itemId == itemId }?.cant
+        return cart.value?.find { it.itemId == itemId }?.cant
     }
 
-    fun updateCart() {
-        _cart.value = CartRepository.cart
-    }
 }
