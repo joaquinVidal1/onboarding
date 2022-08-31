@@ -22,12 +22,6 @@ class CheckoutScreenFragment : Fragment() {
         ViewModelProvider(this)[CheckoutScreenViewModel::class.java]
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //viewModel.updateCart()
-
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,7 +34,6 @@ class CheckoutScreenFragment : Fragment() {
         val checkoutButton = binding.checkoutButton
         val totalAmount = binding.totalAmount
         val cartItemsList = binding.cartItemsList
-
 
         backButton.setOnClickListener {
             this.findNavController().popBackStack()
@@ -68,7 +61,6 @@ class CheckoutScreenFragment : Fragment() {
         )
 
         cartItemsList.adapter = adapter
-        // Inflate the layout for this fragment
         viewModel.screenList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
 

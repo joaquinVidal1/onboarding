@@ -12,12 +12,13 @@ object CartRepository {
     fun addItem(id: Int) {
         val itemToAdd = _cart.value?.find { it.itemId == id }
         if (itemToAdd != null) {
-            itemToAdd.cant.plus(1)
-//            _cart.value =
-//                _cart.value!!.toMutableList().apply {
-//                    find { it.itemId == id }
-//                        ?.cant?.plus(1)
-//                }
+            //           itemToAdd.cant.plus(1)
+            _cart.value =
+                _cart.value!!.toMutableList().apply {
+                    find { it.itemId == id }
+                        ?.apply { cant = cant?.plus(1) }
+
+                }
         } else {
             _cart.value = _cart.value?.toMutableList()?.apply { add(CartItem(id, 1)) }
         }
@@ -26,23 +27,27 @@ object CartRepository {
     fun removeItem(id: Int) {
         val itemToRemove = _cart.value?.find { it.itemId == id }
         if (itemToRemove?.cant == 1) {
-            _cart.value = cart.value?.toMutableList()?.apply { remove(itemToRemove)}
+            _cart.value = cart.value?.toMutableList()?.apply { remove(itemToRemove) }
         } else {
-            itemToRemove?.cant = itemToRemove?.cant!!.minus(1)
+            _cart.value =
+                _cart.value!!.toMutableList().apply {
+                    find { it.itemId == id }
+                        ?.apply { cant = cant?.minus(1) }
+                }
+            }
         }
-    }
 
-    fun editQuantity(id: Int, qty: Int) {
-        val itemToEdit = _cart.value!!.find { it.itemId == id }
-        if (qty == 0) {
-            _cart.value = cart.value?.toMutableList()?.apply { remove(itemToEdit)}
-        } else {
-            itemToEdit?.cant = qty
+        fun editQuantity(id: Int, qty: Int) {
+            val itemToEdit = _cart.value!!.find { it.itemId == id }
+            if (qty == 0) {
+                _cart.value = cart.value?.toMutableList()?.apply { remove(itemToEdit) }
+            } else {
+                itemToEdit?.cant = qty
+            }
         }
-    }
 
-    fun cleanCart() {
-        _cart.value = mutableListOf()
-    }
+        fun cleanCart() {
+            _cart.value = mutableListOf()
+        }
 
-}
+    }

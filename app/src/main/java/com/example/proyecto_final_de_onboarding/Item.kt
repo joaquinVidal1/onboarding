@@ -8,7 +8,7 @@ enum class Kind(val header: String) {
 }
 
 
-class Item(
+data class Item(
     val id: Int,
     val name: String,
     val price: Int,

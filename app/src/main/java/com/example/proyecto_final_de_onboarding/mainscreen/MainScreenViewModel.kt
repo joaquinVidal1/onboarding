@@ -1,49 +1,76 @@
 package com.example.proyecto_final_de_onboarding.mainscreen
 
 import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.CartItem
+import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.CartRepository.cart
-import com.example.proyecto_final_de_onboarding.data.ItemRepository
+import com.example.proyecto_final_de_onboarding.data.ItemRepository.storeItems
 
 class MainScreenViewModel : ViewModel() {
-    val _query = MutableLiveData<String>("")
-    val query: LiveData<String>
-        get() = _query
-
-    val displayList = listOf<ScreenListItem>()
+    private val _query = MutableLiveData("")
 
     private val itemList =
-        Transformations.map(ItemRepository.storeItems) { repository -> repository.sortedBy { it.kind } }
+        Transformations.map(storeItems) { repository ->
+            repository.sortedBy { it.kind }
+        }
 
     val showCartCircle: LiveData<Boolean> =
         Transformations.map(cart) { it.isNotEmpty() }
 
-    val queriedCart: LiveData<List<CartItem>> =
-        Transformations.map(cart) { it.queriedCart(query.value) }
-
-    val screenList = MediatorLiveData<List<ScreenListItem>>()
+    private val screenItemsList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
 
     init {
-        screenList.addSource(cart) { screenList.value = onInputChanged() }
-        screenList.addSource(query) { screenList.value = onInputChanged() }
+        screenItemsList.addSource(itemList) {
+            screenItemsList.value = onInputChanged()
+        }
+        screenItemsList.addSource(cart) {
+            screenItemsList.value = onInputChanged()
+        }
+        screenItemsList.addSource(_query) {
+            screenItemsList.value = onInputChanged()
+        }
     }
 
-    private fun onInputChanged(): List<ScreenListItem> {
-        return itemList.value?.filter {
-            query.value?.let { it1 ->
-                it.kind.name.contains(it1) || it.name.contains(
-                    query.value.toString()
-                )
+    val displayList: LiveData<List<ScreenListItem>> = Transformations.map(screenItemsList) { list ->
+        val entireList = itemList.value!!
+        val flattenedList: MutableList<ScreenListItem> =
+            list.groupBy { item -> entireList.find { storeItem -> storeItem.id == item.id }!!.kind }.values.toList()
+                .flatten().toMutableList()
+        Kind.values().forEach { kind ->
+            val index =
+                list.indexOfFirst { item -> entireList.find { storeItem -> storeItem.id == item.id }!!.kind == kind }
+            if (index >= 0) {
+                flattenedList.add(index, ScreenListItem.ScreenHeader(kind))
             }
-        }!!.map { item ->
+        }
+        flattenedList
+    }
+
+    private fun shouldBeAdded(query: String, item: Item) =
+        item.kind.name.lowercase().contains(query) || item.name.lowercase()
+            .contains(query)
+
+    private fun getItemQty(itemId: Int) =
+        cart.value?.find { cartItem -> itemId == cartItem.itemId }?.cant ?: 0
+
+    private fun onInputChanged(): List<ScreenListItem.ScreenItem> {
+        val query: String = _query.value!!
+        val entireList = itemList.value!!
+
+        return entireList.filter { item ->
+            when (query) {
+                "" -> true
+                else -> shouldBeAdded(query, item)
+            }
+        }.map { item ->
             ScreenListItem.ScreenItem(
                 item,
-                cart.value?.find { cartItem -> item.id == cartItem.itemId }?.cant ?: 0
+                getItemQty(item.id)
             )
         }
+
     }
 
     fun onAddItem(itemId: Int) {
@@ -54,106 +81,12 @@ class MainScreenViewModel : ViewModel() {
         CartRepository.removeItem(itemId)
     }
 
-    //returns the list that should be displayed when there has been a query made
-    private fun getScreenListQuery(cartList: List<CartItem>, query: String): List<ScreenListItem> {
-        val screenList = mutableListOf<ScreenListItem>()
-        for (kind in Kind.values()) {
-            if (kind.toString().lowercase().contains(query)) {
-                screenList.add(ScreenListItem.ScreenHeader(kind))
-                screenList.addAll(getFilteredScreenItems(cartList, kind))
-            }
-        }
-        return addByName(cartList, query, screenList)
-
-    }
-
-    //returns a list with all the ScreenItems that match the query and had not been added previously to screenList
-    private fun addByName(
-        cartList: List<CartItem>,
-        query: String,
-        screenList: MutableList<ScreenListItem>
-    ): List<ScreenListItem> {
-        val added = Array(itemList.value!!.size) { false }
-        for (item in screenList) {
-            if (item is ScreenListItem.ScreenItem)
-                added[item.id] = true
-        }
-
-        itemList.value?.forEach { item ->
-            if ((item.name.lowercase().contains(query)) && (!added[item.id])) {
-                val headerIndex =
-                    screenList.indexOfFirst { it is ScreenListItem.ScreenHeader && it.kind == item.kind }
-                val pos: Int = if (headerIndex < 0) {
-                    //add header and item
-                    screenList.add(ScreenListItem.ScreenHeader(item.kind))
-                    screenList.lastIndex + 1
-                } else {
-                    headerIndex + 1
-                }
-                screenList.add(
-                    pos, ScreenListItem.ScreenItem(
-                        item,
-                        cartList.find { it.itemId == item.id }?.cant ?: 0
-                    )
-                )
-            }
-        }
-        return screenList
-
-    }
-
-    private fun getFilteredScreenItems(cartList: List<CartItem>, kind: Kind): List<ScreenListItem> {
-        return itemList.value?.filter { item -> item.kind == kind }
-            ?.map { item ->
-                ScreenListItem.ScreenItem(item, cartList.find { it.itemId == item.id }?.cant ?: 0)
-            } ?: listOf()
-    }
-
     fun onQueryChanged(query: String) {
         _query.value = query
-
     }
 
-    //gets the final list that should be displayed by the adapter
-//    fun getScreenList(): List<ScreenListItem> {
-//        val cartList = cart.value
-//        val screenList = mutableListOf<ScreenListItem>().apply {
-//            add(ScreenListItem.ScreenHeader(Kind.Fruit))
-//            addAll(getFilteredScreenItems(cartList, Kind.Fruit))
-//            add(ScreenListItem.ScreenHeader(Kind.Veggie))
-//            addAll(getFilteredScreenItems(cartList, Kind.Veggie))
-//        }
-//        return when (query) {
-//            null -> {
-//                //no query
-//                screenList.add(ScreenListItem.ScreenHeader(Kind.Fruit))
-//                screenList.addAll(getFilteredScreenItems(cartList, Kind.Fruit))
-//                screenList.add(ScreenListItem.ScreenHeader(Kind.Veggie))
-//                screenList.addAll(getFilteredScreenItems(cartList, Kind.Veggie))
-//                screenList
-//            }
-//            else -> {
-//                getScreenListQuery(cartList, query!!)
-//            }
-//        }
-//    }
 }
 
-private fun List<CartItem>.queriedCart(query: String? = null): List<CartItem> {
-    if (query != null) {
-        this.filter { item ->
-            ItemRepository.itemList.find { item.itemId == it.id }?.name?.contains(
-                query,
-                true
-            ) == true ||
-                    ItemRepository.itemList.find { item.itemId == it.id }?.kind?.name?.contains(
-                        query,
-                        true
-                    ) == true
-        }
-    }
-    return this
-}
 
 
 

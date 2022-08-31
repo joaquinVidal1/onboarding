@@ -35,8 +35,6 @@ class MainScreenFragment : Fragment() {
     }
 
 
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
@@ -50,12 +48,13 @@ class MainScreenFragment : Fragment() {
         val viewPageIndicator = binding.viewPageIndicator
 
         itemsList.adapter = adapter
-        viewModel.screenList.observe(viewLifecycleOwner) {
+        viewModel.displayList.observe(viewLifecycleOwner) {
             it?.let {
                 adapter.submitList(it)
             }
 
         }
+
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
             if (it) {
                 cartDot.visibility = View.VISIBLE
@@ -73,7 +72,6 @@ class MainScreenFragment : Fragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 viewModel.onQueryChanged(itemSearch.text.toString())
-                //adapter.submitList(viewModel.getScreenList())
             }
 
             override fun afterTextChanged(p0: Editable?) {
@@ -90,6 +88,7 @@ class MainScreenFragment : Fragment() {
         cartButton.setOnClickListener {
             this.findNavController()
                 .navigate(actionMainScreenFragmentToCheckoutScreenFragment())
+            itemSearch.setText("")
         }
         carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
         viewPageIndicator.setUpWithViewPager2(carrousel)

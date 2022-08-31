@@ -18,13 +18,13 @@ class CheckoutScreenViewModel : ViewModel() {
         Transformations.map(cart) { it.isNotEmpty() }
 
     val totalAmount: LiveData<Int> =
-        Transformations.map(cart){
-            it.sumOf { it.cant * storeItems.value!!.find { storeItem -> storeItem.id == it.itemId }!!.price }
+        Transformations.map(cart) {
+            it.sumOf { item -> item.cant * storeItems.value!!.find { storeItem -> storeItem.id == item.itemId }!!.price }
         }
 
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
-        val cartList = CartRepository.cart.value
+        val cartList = cart.value
         val screenList = mutableListOf<ScreenListItem.ScreenItem>()
         for (item in cartList!!) {
             ItemRepository.itemList.find { it.id == item.itemId }
@@ -46,7 +46,7 @@ class CheckoutScreenViewModel : ViewModel() {
     }
 
     fun itemQtyChanged(itemId: Int, newQty: Int) {
-       CartRepository.editQuantity(itemId, newQty)
+        CartRepository.editQuantity(itemId, newQty)
     }
 
     fun getQty(itemId: Int): Int? {
