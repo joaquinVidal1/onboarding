@@ -16,7 +16,7 @@ object CartRepository {
             _cart.value =
                 _cart.value!!.toMutableList().apply {
                     find { it.itemId == id }
-                        ?.apply { cant = cant?.plus(1) }
+                        ?.apply { cant = cant.plus(1) }
 
                 }
         } else {
@@ -32,7 +32,7 @@ object CartRepository {
             _cart.value =
                 _cart.value!!.toMutableList().apply {
                     find { it.itemId == id }
-                        ?.apply { cant = cant?.minus(1) }
+                        ?.apply { cant = cant.minus(1) }
                 }
             }
         }

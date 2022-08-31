@@ -121,7 +121,6 @@ class MainScreenFragment : Fragment() {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main_screen, container, false
         )
-
         return binding.root
     }
 
@@ -155,7 +154,6 @@ class MainScreenFragment : Fragment() {
                     getString(R.string.product_of_the_month)
                 )
             }
-
             return fragment
         }
     }

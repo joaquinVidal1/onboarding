@@ -11,7 +11,7 @@ enum class Kind(val header: String) {
 data class Item(
     val id: Int,
     val name: String,
-    val price: Int,
+    val price: Double,
     @DrawableRes val mainImage: Int,
     val kind: Kind,
     @DrawableRes val checkoutImage: Int? = null

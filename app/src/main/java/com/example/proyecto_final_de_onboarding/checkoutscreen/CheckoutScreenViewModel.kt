@@ -17,9 +17,11 @@ class CheckoutScreenViewModel : ViewModel() {
     val showCheckoutButton: LiveData<Boolean> =
         Transformations.map(cart) { it.isNotEmpty() }
 
-    val totalAmount: LiveData<Int> =
+    private fun getItemPrice(itemId: Int) = storeItems.value?.find { it.id == itemId }!!.price
+
+    val totalAmount: LiveData<Double> =
         Transformations.map(cart) {
-            it.sumOf { item -> item.cant * storeItems.value!!.find { storeItem -> storeItem.id == item.itemId }!!.price }
+            it.sumOf { item -> item.cant * getItemPrice(item.itemId) }
         }
 
 
@@ -33,13 +35,9 @@ class CheckoutScreenViewModel : ViewModel() {
         return screenList
     }
 
-    fun getCheckout(): Int {
-        return cart.value!!.sumOf { cartItem ->
-            cartItem.cant * ItemRepository.itemList.find { it.id == cartItem.itemId }!!.price
-        }
-
+    fun getCheckout(): Double {
+        return totalAmount.value!!
     }
-
 
     fun cleanCart() {
         CartRepository.cleanCart()
@@ -52,5 +50,4 @@ class CheckoutScreenViewModel : ViewModel() {
     fun getQty(itemId: Int): Int? {
         return cart.value?.find { it.itemId == itemId }?.cant
     }
-
 }
