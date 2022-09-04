@@ -1,15 +1,29 @@
 package com.example.proyecto_final_de_onboarding.checkoutscreen
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
-import com.example.proyecto_final_de_onboarding.data.CartRepository
-import com.example.proyecto_final_de_onboarding.data.CartRepository.cart
-import com.example.proyecto_final_de_onboarding.data.ItemRepository
-import com.example.proyecto_final_de_onboarding.data.ItemRepository.storeItems
+import com.example.proyecto_final_de_onboarding.data.ItemsRepository
+import com.example.proyecto_final_de_onboarding.data.getCartRepository
+import com.example.proyecto_final_de_onboarding.database.getDatabase
 
-class CheckoutScreenViewModel : ViewModel() {
+class CheckoutScreenViewModel(application: Application) : ViewModel() {
+
+    private val cartRepository = getCartRepository(getDatabase(application))
+    private val itemsRepository = ItemsRepository(getDatabase(application), cartRepository)
+
+    private val storeItems =
+        Transformations.map(itemsRepository.storeItems) { repository ->
+            repository.sortedBy { it.kind }
+        }
+
+    private val _cart = Transformations.map(cartRepository.cart){ it }
+    private val cart: LiveData<List<CartItem>>
+        get() = _cart
 
     val screenList: LiveData<List<ScreenListItem.ScreenItem>> =
         Transformations.map(cart) { getScreenList() }
@@ -29,7 +43,7 @@ class CheckoutScreenViewModel : ViewModel() {
         val cartList = cart.value
         val screenList = mutableListOf<ScreenListItem.ScreenItem>()
         for (item in cartList!!) {
-            ItemRepository.itemList.find { it.id == item.itemId }
+            itemsRepository.storeItems.value?.find { it.id == item.itemId }
                 ?.let { ScreenListItem.ScreenItem(it, item.cant) }?.let { screenList.add(it) }
         }
         return screenList
@@ -40,14 +54,24 @@ class CheckoutScreenViewModel : ViewModel() {
     }
 
     fun cleanCart() {
-        CartRepository.cleanCart()
+        cartRepository.cleanCart()
     }
 
     fun itemQtyChanged(itemId: Int, newQty: Int) {
-        CartRepository.editQuantity(itemId, newQty)
+        cartRepository.editQuantity(itemId, newQty)
     }
 
     fun getQty(itemId: Int): Int? {
         return cart.value?.find { it.itemId == itemId }?.cant
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(CheckoutScreenViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return CheckoutScreenViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
     }
 }

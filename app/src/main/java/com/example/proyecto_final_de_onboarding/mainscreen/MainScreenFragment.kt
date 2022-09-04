@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -29,9 +30,9 @@ class MainScreenFragment : Fragment() {
     }
 
     private lateinit var binding: FragmentMainScreenBinding
-
     private val viewModel: MainScreenViewModel by lazy {
-        ViewModelProvider(this)[MainScreenViewModel::class.java]
+        val activity = requireNotNull(this.activity)
+        ViewModelProvider(this, MainScreenViewModel.Factory(activity.application))[MainScreenViewModel::class.java]
     }
 
 
@@ -83,6 +84,12 @@ class MainScreenFragment : Fragment() {
                 hideKeyboard()
                 true
             } else false
+        }
+
+        viewModel.networkError.observe(viewLifecycleOwner){
+            if (it){
+                Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
+            }
         }
 
         cartButton.setOnClickListener {

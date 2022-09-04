@@ -7,13 +7,30 @@ import androidx.room.*
 @Dao
 interface ItemDao{
     @Query("select * from databaseitem")
-    fun getItems(): LiveData<List<DataBaseItem>>
+    fun getItems(): LiveData<List<DatabaseItem>>
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll( items: List<DataBaseItem>)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    fun insertAll( items: List<DatabaseItem>): List<Long>
+
+    @Update
+    fun update(items: List<DatabaseItem>)
+
+    @Transaction
+    fun upsert(items: List<DatabaseItem>){
+        val insertResult: List<Long> = insertAll(items)
+        val updatedList = mutableListOf<DatabaseItem>()
+        for ((index, res) in insertResult.withIndex()){
+            if (res.toInt() == -1){
+                updatedList.add(items[index])
+            }
+        }
+        if (updatedList.isNotEmpty()){
+            update(updatedList)
+        }
+    }
 }
 
-@Database(entities = [DataBaseItem::class], version = 1)
+@Database(entities = [DatabaseItem::class], version = 1)
 abstract class ItemsDatabase: RoomDatabase(){
     abstract val itemDao: ItemDao
 }
@@ -25,7 +42,7 @@ fun getDatabase(context: Context): ItemsDatabase{
         if (!::INSTANCE.isInitialized) {
             INSTANCE = Room.databaseBuilder(context.applicationContext,
                 ItemsDatabase::class.java,
-                "videos").build()
+                "items").build()
         }
     }
     return INSTANCE

@@ -1,19 +1,35 @@
 package com.example.proyecto_final_de_onboarding.mainscreen
 
+import android.app.Application
+import android.util.Log
 import androidx.lifecycle.*
+import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
-import com.example.proyecto_final_de_onboarding.data.CartRepository
-import com.example.proyecto_final_de_onboarding.data.CartRepository.cart
-import com.example.proyecto_final_de_onboarding.data.ItemRepository.storeItems
+import com.example.proyecto_final_de_onboarding.data.ItemsRepository
+import com.example.proyecto_final_de_onboarding.data.getCartRepository
+import com.example.proyecto_final_de_onboarding.database.getDatabase
+import kotlinx.coroutines.launch
 
-class MainScreenViewModel : ViewModel() {
+class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val cartRepository = getCartRepository(getDatabase(application))
+    private val itemsRepository = ItemsRepository(getDatabase(application), cartRepository)
+
+    private val _cart = Transformations.map(cartRepository.cart) { it }
+    private val cart: LiveData<List<CartItem>>
+        get() = _cart
+
+    private val _networkError = MutableLiveData<Boolean>(false)
+    val networkError: LiveData<Boolean>
+        get() = _networkError
+
     private val _query = MutableLiveData("")
 
     private val itemList =
-        Transformations.map(storeItems) { repository ->
-            repository.sortedBy { it.kind }
+        Transformations.map(itemsRepository.storeItems) {
+            it.sortedBy { item -> item.kind }
         }
 
     val showCartCircle: LiveData<Boolean> =
@@ -31,10 +47,11 @@ class MainScreenViewModel : ViewModel() {
         screenItemsList.addSource(_query) {
             screenItemsList.value = onInputChanged()
         }
+        refreshDataFromRepository()
     }
 
     val displayList: LiveData<List<ScreenListItem>> = Transformations.map(screenItemsList) { list ->
-        val entireList = itemList.value!!
+        val entireList = itemList.value ?: listOf()
         val flattenedList: MutableList<ScreenListItem> =
             list.groupBy { item -> entireList.find { storeItem -> storeItem.id == item.id }!!.kind }.values.toList()
                 .flatten().toMutableList()
@@ -57,7 +74,7 @@ class MainScreenViewModel : ViewModel() {
 
     private fun onInputChanged(): List<ScreenListItem.ScreenItem> {
         val query: String = _query.value!!
-        val entireList = itemList.value!!
+        val entireList = itemList.value ?: listOf()
 
         return entireList.filter { item ->
             when (query) {
@@ -74,15 +91,35 @@ class MainScreenViewModel : ViewModel() {
     }
 
     fun onAddItem(itemId: Int) {
-        CartRepository.addItem(itemId)
+        cartRepository.addItem(itemId)
     }
 
     fun onRemoveItem(itemId: Int) {
-        CartRepository.removeItem(itemId)
+        cartRepository.removeItem(itemId)
     }
 
     fun onQueryChanged(query: String) {
         _query.value = query
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MainScreenViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return MainScreenViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewmodel")
+        }
+    }
+
+    private fun refreshDataFromRepository() {
+        viewModelScope.launch {
+            try {
+                itemsRepository.refreshItems()
+            } catch (networkError: Exception) {
+                Log.e("refreshItems", "error", networkError)
+            }
+        }
     }
 
 }

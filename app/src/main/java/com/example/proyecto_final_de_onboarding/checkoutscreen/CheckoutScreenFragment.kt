@@ -19,7 +19,11 @@ import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScre
 
 class CheckoutScreenFragment : Fragment() {
     private val viewModel: CheckoutScreenViewModel by lazy {
-        ViewModelProvider(this)[CheckoutScreenViewModel::class.java]
+        val activity = requireNotNull(activity)
+        ViewModelProvider(
+            this,
+            CheckoutScreenViewModel.Factory(activity.application)
+        )[CheckoutScreenViewModel::class.java]
     }
 
     override fun onCreateView(
@@ -65,12 +69,13 @@ class CheckoutScreenFragment : Fragment() {
             adapter.submitList(it)
 
         }
-        viewModel.totalAmount.observe(viewLifecycleOwner){
-            totalAmount.text = "$"+ it.toString()
+
+        viewModel.totalAmount.observe(viewLifecycleOwner) {
+            totalAmount.text = "$" + it.toString()
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
-                checkoutButton.isEnabled = it
+            checkoutButton.isEnabled = it
         }
         binding.checkoutButton.setOnClickListener {
             val message = "Total is " + viewModel.getCheckout().toString()
