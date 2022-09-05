@@ -14,6 +14,9 @@ interface ItemDao{
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll( items: List<Item>)//: List<Long>
 
+    @Query("DELETE FROM item")
+    fun emptyTable()
+
 //    @Update
 //    fun update(items: List<Item>)
 //
@@ -57,6 +60,15 @@ interface CartDao{
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll( items: List<CartItem>)
+
+    @Query("DELETE FROM cartItem WHERE itemId = :itemId")
+    fun removeFromCartDB(itemId: Int)
+
+    @Query("DELETE FROM cartItem")
+    fun emptyTable()
+
+//    @Query("DELETE FROM cartItem WHERE NOT EXISTS (SELECT * FROM Item WHERE items.id=cartitem.itemId)")
+//    fun removeIfNotInStore(items: ItemDao)
 }
 
 @Database(entities = [CartItem::class], version = 1)

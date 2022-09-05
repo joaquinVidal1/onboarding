@@ -43,32 +43,38 @@ class CartRepository(private val cartDatabase: CartDatabase) {
         val updatedCart: List<CartItem>
         val itemToRemove = _cart.value?.find { it.itemId == id }
         if (itemToRemove?.cant == 1) {
-            updatedCart = _cart.value?.toMutableList()?.apply { remove(itemToRemove) }!!
+            withContext(Dispatchers.IO) {
+                cartDatabase.cartDao.removeFromCartDB(itemToRemove.itemId)
+            }
         } else {
             updatedCart =
                 _cart.value!!.toMutableList().apply {
                     find { it.itemId == id }
                         ?.apply { cant = cant.minus(1) }
                 }
+            updateCart(updatedCart)
         }
-        updateCart(updatedCart)
     }
 
     suspend fun editQuantity(id: Int, qty: Int) {
         val updatedCart: List<CartItem>
         val itemToEdit = _cart.value!!.find { it.itemId == id }
         if (qty == 0) {
-            updatedCart = _cart.value?.toMutableList()?.apply { remove(itemToEdit) } ?: listOf()
+            withContext(Dispatchers.IO) {
+                cartDatabase.cartDao.removeFromCartDB(itemToEdit!!.itemId)
+            }
         } else {
             updatedCart = _cart.value.apply {
                 _cart.value!!.find { it.itemId == id }!!.cant = qty
             } ?: listOf()
+            updateCart(updatedCart)
         }
-        updateCart(updatedCart)
     }
 
     suspend fun cleanCart() {
-        updateCart(listOf())
+        withContext(Dispatchers.IO) {
+            cartDatabase.cartDao.emptyTable()
+        }
     }
 
     fun getQty(itemId: Int) =
