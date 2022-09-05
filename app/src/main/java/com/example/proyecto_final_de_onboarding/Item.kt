@@ -1,11 +1,15 @@
 package com.example.proyecto_final_de_onboarding
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
 enum class Kind(val header: String) {
     Fruit("Fruits"),
     Veggie("Veggies")
 }
-
+@Entity
 data class Item(
+    @PrimaryKey
     val id: Int,
     val name: String,
     val price: Double,

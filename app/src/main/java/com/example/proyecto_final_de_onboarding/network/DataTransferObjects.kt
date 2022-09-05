@@ -1,8 +1,6 @@
 package com.example.proyecto_final_de_onboarding.network
 
 import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.Kind
-import com.example.proyecto_final_de_onboarding.database.DatabaseItem
 import com.example.proyecto_final_de_onboarding.getFromString
 import com.squareup.moshi.JsonClass
 
@@ -19,8 +17,8 @@ data class NetworkItem(
     val listImageUrl: String
 )
 
-    fun NetworkItem.asDatabaseModel(): DatabaseItem {
-        return DatabaseItem(
+    fun NetworkItem.asDomainModel(): Item {
+        return Item(
             id = id,
             name = name,
             price = price,
@@ -31,30 +29,30 @@ data class NetworkItem(
     }
 
 
-fun NetworkItemContainer.asDomainModel(): List<Item> {
-    return items.map {
-        Item(
-            id = it.id,
-            name = it.name,
-            price = it.price,
-            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString() ),
-            mainImage = it.listImageUrl,
-            checkoutImage = it.checkoutImageUrl
-        )
-    }
-}
-
-
-fun NetworkItemContainer.asDatabaseModel(): List<DatabaseItem>{
-    return items.map {
-        DatabaseItem(
-            id = it.id,
-            name = it.name,
-            price = it.price,
-            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString()),
-            mainImage = it.listImageUrl,
-            checkoutImage = it.checkoutImageUrl)
-    }
-}
-
-
+//fun NetworkItemContainer.asDomainModel(): List<Item> {
+//    return items.map {
+//        Item(
+//            id = it.id,
+//            name = it.name,
+//            price = it.price,
+//            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString() ),
+//            mainImage = it.listImageUrl,
+//            checkoutImage = it.checkoutImageUrl
+//        )
+//    }
+//}
+//
+//
+//fun NetworkItemContainer.asDatabaseModel(): List<DatabaseItem>{
+//    return items.map {
+//        DatabaseItem(
+//            id = it.id,
+//            name = it.name,
+//            price = it.price,
+//            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString()),
+//            mainImage = it.listImageUrl,
+//            checkoutImage = it.checkoutImageUrl)
+//    }
+//}
+//
+//

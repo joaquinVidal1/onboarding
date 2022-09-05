@@ -9,15 +9,16 @@ import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
-import com.example.proyecto_final_de_onboarding.database.getDatabase
+import com.example.proyecto_final_de_onboarding.database.getCartDatabase
+import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val cartRepository = getCartRepository(getDatabase(application))
-    private val itemsRepository = ItemsRepository(getDatabase(application), cartRepository)
+    private val cartRepository = getCartRepository(getCartDatabase(application))
+    private val itemsRepository = ItemsRepository(getItemsDatabase(application))
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>
@@ -93,11 +94,15 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun onAddItem(itemId: Int) {
-        cartRepository.addItem(itemId)
+        viewModelScope.launch {
+            cartRepository.addItem(itemId)
+        }
     }
 
     fun onRemoveItem(itemId: Int) {
-        cartRepository.removeItem(itemId)
+        viewModelScope.launch {
+            cartRepository.removeItem(itemId)
+        }
     }
 
     fun onQueryChanged(query: String) {

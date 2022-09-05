@@ -6,14 +6,16 @@ import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
-import com.example.proyecto_final_de_onboarding.database.getDatabase
+import com.example.proyecto_final_de_onboarding.database.getCartDatabase
+import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
+import kotlinx.coroutines.launch
 import java.math.RoundingMode
 import java.text.DecimalFormat
 
 class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
-    private val cartRepository = getCartRepository(getDatabase(application))
-    private val itemsRepository = ItemsRepository(getDatabase(application), cartRepository)
+    private val cartRepository = getCartRepository(getCartDatabase(application))
+    private val itemsRepository = ItemsRepository(getItemsDatabase(application))
 
     private val storeItems =
         Transformations.map(itemsRepository.storeItems) {
@@ -70,11 +72,15 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
     }
 
     fun cleanCart() {
-        cartRepository.cleanCart()
+        viewModelScope.launch {
+            cartRepository.cleanCart()
+        }
     }
 
     fun itemQtyChanged(itemId: Int, newQty: Int) {
-        cartRepository.editQuantity(itemId, newQty)
+        viewModelScope.launch {
+            cartRepository.editQuantity(itemId, newQty)
+        }
     }
 
     fun getQty(itemId: Int): Int? {

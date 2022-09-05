@@ -1,3 +1,10 @@
 package com.example.proyecto_final_de_onboarding
 
-data class CartItem(val itemId: Int, var cant: Int)
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity
+data class CartItem(
+    @PrimaryKey
+    val itemId: Int,
+    var cant: Int)
