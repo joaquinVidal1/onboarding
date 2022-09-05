@@ -42,9 +42,9 @@ class CheckoutScreenAdapter(
         fun bind(item: ScreenListItem.ScreenItem, entireItemClickListener: EntireItemListener) {
             binding.entireItem.setOnClickListener { entireItemClickListener.onClick(item.item) }
             if (item.item.checkoutImage == null) {
-                binding.itemImage.setImageResource(item.item.mainImage)
+                //binding.itemImage. = item.item.mainImage
             } else {
-                binding.itemImage.setImageResource(item.item.checkoutImage)
+               // binding.itemImage.setImageResource(item.item.checkoutImage)
             }
             binding.itemName.text = item.item.name
             val itemPriceText = "$" + item.item.price.toString()

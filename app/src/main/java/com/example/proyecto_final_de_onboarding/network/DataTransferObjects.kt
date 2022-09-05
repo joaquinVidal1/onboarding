@@ -13,9 +13,9 @@ data class NetworkItem(
     val id: Int,
     val name: String,
     val price: Double,
-    val mainImage: Int?,
-    val kind: Kind,
-    val checkoutImage: Int?
+    val category: String,
+    val checkoutImageUrl: String,
+    val listImageUrl: String
 )
 
 fun NetworkItemContainer.asDomainModel(): List<Item> {
@@ -24,9 +24,9 @@ fun NetworkItemContainer.asDomainModel(): List<Item> {
             id = it.id,
             name = it.name,
             price = it.price,
-            kind = it.kind,
-            mainImage = it.mainImage?: 0,
-            checkoutImage = it.checkoutImage
+            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString() ),
+            mainImage = it.listImageUrl,
+            checkoutImage = it.checkoutImageUrl
         )
     }
 }
@@ -38,9 +38,9 @@ fun NetworkItemContainer.asDatabaseModel(): List<DatabaseItem>{
             id = it.id,
             name = it.name,
             price = it.price,
-            kind = it.kind,
-            mainImage = it.mainImage ?: 0,
-            checkoutImage = it.checkoutImage ?: 0)
+            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString()),
+            mainImage = it.listImageUrl,
+            checkoutImage = it.checkoutImageUrl)
     }
 }
 

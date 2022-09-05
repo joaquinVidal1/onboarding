@@ -14,8 +14,8 @@ data class DatabaseItem constructor(
     val name: String,
     val price: Double,
     val kind: Kind,
-    val mainImage: Int,
-    val checkoutImage: Int,
+    val mainImage: String,
+    val checkoutImage: String,
     var qty: Int =0
 )
 

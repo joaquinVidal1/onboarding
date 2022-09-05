@@ -8,12 +8,12 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Headers
+import retrofit2.http.Header
 
 interface ItemService {
-    @Headers({ "Content-Type: application/json;charset=UTF-8"})
     @GET("/products")
-    suspend fun getItems(): NetworkItemContainer
+    suspend fun getItems(@Header("AUTHORIZATION") auth : String = "Bearer 0a41c523-fa00-418a-a585-7dd1fc5f18e4"
+    ): NetworkItemContainer
 }
 
 object ItemNetwork {

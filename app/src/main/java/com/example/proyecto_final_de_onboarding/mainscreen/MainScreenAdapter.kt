@@ -48,7 +48,7 @@ class MainScreenAdapter(
             }
             binding.entireButtonAdd.setOnClickListener { addClickListener.onClick(item.item) }
             binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
-            binding.itemImage.setImageResource(item.item.mainImage)
+            //binding.itemImage.setImageResource(item.item.mainImage)
             binding.itemName.text = item.item.name
             ("$" + item.item.price.toString()).also { binding.itemPrice.text = it }
             binding.cantText.text = item.cant.toString()
