@@ -11,6 +11,8 @@ import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemMainScreenBinding
 import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBinding
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 
 private const val ITEM_VIEW_TYPE_SECTION_CONTENT = 1
@@ -29,7 +31,6 @@ class MainScreenAdapter(
     class RemoveUnitListener(private val clickListener: (itemId: Int) -> Unit) {
         fun onClick(item: Item) = clickListener(item.id)
     }
-
 
     class ViewHolder private constructor(val binding: ListItemMainScreenBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -50,9 +51,15 @@ class MainScreenAdapter(
             binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
             //binding.itemImage.setImageResource(item.item.mainImage)
             binding.itemName.text = item.item.name
-            ("$" + item.item.price.toString()).also { binding.itemPrice.text = it }
+            binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)
             binding.cantText.text = item.cant.toString()
             binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.item) }
+        }
+
+        private fun getRoundedPrice(price: Double): String{
+            val df = DecimalFormat("#.##")
+            df.roundingMode = RoundingMode.DOWN
+            return df.format(price)
         }
 
         companion object {

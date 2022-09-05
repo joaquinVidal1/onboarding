@@ -68,10 +68,11 @@ class CheckoutScreenFragment : Fragment() {
         viewModel.screenList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
 
+
         }
 
-        viewModel.totalAmount.observe(viewLifecycleOwner) {
-            totalAmount.text = "$" + it.toString()
+        viewModel.totalAmountText.observe(viewLifecycleOwner) {
+            totalAmount.text = "$" + it
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {

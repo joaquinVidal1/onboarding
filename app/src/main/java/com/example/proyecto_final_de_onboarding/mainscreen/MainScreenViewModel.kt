@@ -11,6 +11,8 @@ import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
 import com.example.proyecto_final_de_onboarding.database.getDatabase
 import kotlinx.coroutines.launch
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -120,6 +122,12 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
                 Log.e("refreshItems", "error", networkError)
             }
         }
+    }
+
+    fun getRoundedPrice(price: Double): String{
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+        return df.format(price)
     }
 
 }

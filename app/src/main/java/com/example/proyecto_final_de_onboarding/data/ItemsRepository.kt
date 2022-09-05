@@ -18,7 +18,7 @@ class ItemsRepository(
     suspend fun refreshItems() {
         withContext(Dispatchers.IO) {
             val itemList = ItemNetwork.items.getItems()
-            val databaseList = itemList.asDatabaseModel()
+            val databaseList = itemList.map { it.asDatabaseModel()}
             databaseList.forEach { dataBaseItem ->
                 dataBaseItem.qty = cartRepository.getQty(dataBaseItem.id)
             }

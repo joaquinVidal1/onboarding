@@ -1,15 +1,14 @@
 package com.example.proyecto_final_de_onboarding.checkoutscreen
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.*
 import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
 import com.example.proyecto_final_de_onboarding.database.getDatabase
+import java.math.RoundingMode
+import java.text.DecimalFormat
 
 class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
@@ -17,26 +16,43 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
     private val itemsRepository = ItemsRepository(getDatabase(application), cartRepository)
 
     private val storeItems =
-        Transformations.map(itemsRepository.storeItems) { repository ->
-            repository.sortedBy { it.kind }
+        Transformations.map(itemsRepository.storeItems) {
+            it ?: listOf()
         }
 
     private val _cart = Transformations.map(cartRepository.cart){ it }
     private val cart: LiveData<List<CartItem>>
         get() = _cart
 
-    val screenList: LiveData<List<ScreenListItem.ScreenItem>> =
-        Transformations.map(cart) { getScreenList() }
+    val screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
+
+    init {
+        screenList.addSource(storeItems) {
+            screenList.value = getScreenList()
+        }
+        screenList.addSource(cart) {
+            screenList.value = getScreenList()
+        }
+    }
 
     val showCheckoutButton: LiveData<Boolean> =
-        Transformations.map(cart) { it.isNotEmpty() }
+        Transformations.map(screenList) { it.isNotEmpty() }
 
-    private fun getItemPrice(itemId: Int) = storeItems.value?.find { it.id == itemId }!!.price
+    private fun getDisplayPrice(price: Double) : String{
+        val df = DecimalFormat("#.##")
+        df.roundingMode = RoundingMode.DOWN
+        return df.format(price)
+    }
 
-    val totalAmount: LiveData<Double> =
-        Transformations.map(cart) {
-            it.sumOf { item -> item.cant * getItemPrice(item.itemId) }
+    private val totalAmount: LiveData<Double> =
+        Transformations.map(screenList) {
+            it.sumOf { item -> item.cant * item.item.price}
         }
+
+    val totalAmountText: LiveData<String> =
+            Transformations.map(totalAmount){
+                getDisplayPrice(it)
+            }
 
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
@@ -49,8 +65,8 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
         return screenList
     }
 
-    fun getCheckout(): Double {
-        return totalAmount.value!!
+    fun getCheckout(): String {
+        return getDisplayPrice(totalAmount.value!!)
     }
 
     fun cleanCart() {

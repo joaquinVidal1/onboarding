@@ -3,6 +3,7 @@ package com.example.proyecto_final_de_onboarding.network
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.database.DatabaseItem
+import com.example.proyecto_final_de_onboarding.getFromString
 import com.squareup.moshi.JsonClass
 
 @JsonClass(generateAdapter = true)
@@ -17,6 +18,18 @@ data class NetworkItem(
     val checkoutImageUrl: String,
     val listImageUrl: String
 )
+
+    fun NetworkItem.asDatabaseModel(): DatabaseItem {
+        return DatabaseItem(
+            id = id,
+            name = name,
+            price = price,
+            kind = getFromString(category),
+            mainImage = listImageUrl,
+            checkoutImage = checkoutImageUrl
+        )
+    }
+
 
 fun NetworkItemContainer.asDomainModel(): List<Item> {
     return items.map {

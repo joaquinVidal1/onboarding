@@ -52,7 +52,9 @@ class CartRepository(database: ItemsDatabase) {
         if (qty == 0) {
             _cart.value = _cart.value?.toMutableList()?.apply { remove(itemToEdit) }
         } else {
-            itemToEdit?.cant = qty
+            _cart.value = _cart.value.apply {
+                _cart.value!!.find { it.itemId == id }!!.cant = qty
+            }
         }
     }
 

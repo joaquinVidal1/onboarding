@@ -5,7 +5,6 @@ enum class Kind(val header: String) {
     Veggie("Veggies")
 }
 
-
 data class Item(
     val id: Int,
     val name: String,
@@ -14,6 +13,16 @@ data class Item(
     val kind: Kind,
     val checkoutImage: String
 )
+
+fun getFromString(kind : String): Kind{
+    return if ((kind=="fruit") || (kind =="Fruit") || (kind =="fruits") || (kind =="Fruits")) {
+        Kind.Fruit
+    }else{
+        Kind.Veggie
+    }
+
+}
+
 
 
 

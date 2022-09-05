@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
+import kotlin.math.roundToInt
 
 class CheckoutScreenAdapter(
     private val entireItemListener: EntireItemListener,
@@ -47,8 +48,8 @@ class CheckoutScreenAdapter(
                // binding.itemImage.setImageResource(item.item.checkoutImage)
             }
             binding.itemName.text = item.item.name
-            val itemPriceText = "$" + item.item.price.toString()
-            binding.itemPrice.text = itemPriceText
+            val roundedPrice = (item.item.price * 100.0).roundToInt() / 100.0
+            binding.itemPrice.text = roundedPrice.toString()
             var itemCantText = "${item.cant} unit"
             if (item.cant > 1) {
                 itemCantText = "${item.cant} units"

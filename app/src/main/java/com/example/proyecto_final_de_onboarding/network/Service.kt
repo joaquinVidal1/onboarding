@@ -13,7 +13,7 @@ import retrofit2.http.Header
 interface ItemService {
     @GET("/products")
     suspend fun getItems(@Header("AUTHORIZATION") auth : String = "Bearer 0a41c523-fa00-418a-a585-7dd1fc5f18e4"
-    ): NetworkItemContainer
+    ): List<NetworkItem>
 }
 
 object ItemNetwork {
