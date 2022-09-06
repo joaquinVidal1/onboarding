@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
+import com.example.proyecto_final_de_onboarding.getRoundedPrice
 
 
 class CheckoutScreenFragment : Fragment() {
@@ -71,15 +72,15 @@ class CheckoutScreenFragment : Fragment() {
 
         }
 
-        viewModel.totalAmountText.observe(viewLifecycleOwner) {
-            totalAmount.text = "$" + it
+        viewModel.totalAmount.observe(viewLifecycleOwner) {
+            totalAmount.text = "$" + getRoundedPrice(it)
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
             checkoutButton.isEnabled = it
         }
         binding.checkoutButton.setOnClickListener {
-            val message = "Total is " + viewModel.getCheckout().toString()
+            val message = "Total is " + viewModel.getCheckout()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             viewModel.cleanCart()
             this.findNavController().popBackStack()

@@ -20,7 +20,7 @@ class ItemsRepository(
             database.itemDao.emptyTable()
             val itemList = ItemNetwork.items.getItems()
             database.itemDao.insertAll(itemList.map { it.asDomainModel()})
-            //cartDatabase.cartDao.removeIfNotInStore(database.itemDao) HACER
+            cartDatabase.cartDao.removeIfNotInStore()
         }
     }
 

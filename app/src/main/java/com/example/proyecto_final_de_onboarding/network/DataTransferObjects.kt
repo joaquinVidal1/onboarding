@@ -28,31 +28,3 @@ data class NetworkItem(
         )
     }
 
-
-//fun NetworkItemContainer.asDomainModel(): List<Item> {
-//    return items.map {
-//        Item(
-//            id = it.id,
-//            name = it.name,
-//            price = it.price,
-//            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString() ),
-//            mainImage = it.listImageUrl,
-//            checkoutImage = it.checkoutImageUrl
-//        )
-//    }
-//}
-//
-//
-//fun NetworkItemContainer.asDatabaseModel(): List<DatabaseItem>{
-//    return items.map {
-//        DatabaseItem(
-//            id = it.id,
-//            name = it.name,
-//            price = it.price,
-//            kind = Kind.valueOf(it.category.subSequence(0,1).toString().uppercase() + it.category.subSequence(1,it.category.length).toString()),
-//            mainImage = it.listImageUrl,
-//            checkoutImage = it.checkoutImageUrl)
-//    }
-//}
-//
-//

@@ -8,13 +8,13 @@ import com.example.proyecto_final_de_onboarding.Item
 
 @Dao
 interface ItemDao{
-    @Query("select * from item")
+    @Query("select * from itemsTable")
     fun getItems(): LiveData<List<Item>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll( items: List<Item>)//: List<Long>
 
-    @Query("DELETE FROM item")
+    @Query("DELETE FROM itemsTable")
     fun emptyTable()
 
 //    @Update
@@ -55,20 +55,20 @@ fun getItemsDatabase(context: Context): ItemsDatabase{
 
 @Dao
 interface CartDao{
-    @Query("select * from cartItem")
+    @Query("select * from cartTable")
     fun getCartItems(): LiveData<List<CartItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll( items: List<CartItem>)
 
-    @Query("DELETE FROM cartItem WHERE itemId = :itemId")
+    @Query("DELETE FROM cartTable WHERE itemId = :itemId")
     fun removeFromCartDB(itemId: Int)
 
-    @Query("DELETE FROM cartItem")
+    @Query("DELETE FROM cartTable")
     fun emptyTable()
 
-//    @Query("DELETE FROM cartItem WHERE NOT EXISTS (SELECT * FROM Item WHERE items.id=cartitem.itemId)")
-//    fun removeIfNotInStore(items: ItemDao)
+    @Query("DELETE FROM cartTable WHERE itemId NOT in (SELECT ItemId FROM itemsTable WHERE id=cartTable.itemId)")
+    fun removeIfNotInStore()
 }
 
 @Database(entities = [CartItem::class], version = 1)

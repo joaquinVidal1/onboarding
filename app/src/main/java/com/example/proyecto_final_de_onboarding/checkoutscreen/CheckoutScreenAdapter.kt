@@ -5,10 +5,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.proyecto_final_de_onboarding.Item
+import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
-import kotlin.math.roundToInt
+import com.example.proyecto_final_de_onboarding.getRoundedPrice
 
 class CheckoutScreenAdapter(
     private val entireItemListener: EntireItemListener,
@@ -42,14 +44,12 @@ class CheckoutScreenAdapter(
 
         fun bind(item: ScreenListItem.ScreenItem, entireItemClickListener: EntireItemListener) {
             binding.entireItem.setOnClickListener { entireItemClickListener.onClick(item.item) }
-            if (item.item.checkoutImage == null) {
-                //binding.itemImage. = item.item.mainImage
-            } else {
-               // binding.itemImage.setImageResource(item.item.checkoutImage)
-            }
+            Glide.with(binding.itemImage.context)
+                .load(item.item.mainImage)
+                .placeholder(R.mipmap.placeholder)
+                .into(binding.itemImage)
             binding.itemName.text = item.item.name
-            val roundedPrice = (item.item.price * 100.0).roundToInt() / 100.0
-            binding.itemPrice.text = roundedPrice.toString()
+            binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)
             var itemCantText = "${item.cant} unit"
             if (item.cant > 1) {
                 itemCantText = "${item.cant} units"

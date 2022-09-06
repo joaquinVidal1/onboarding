@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
+import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemMainScreenBinding
 import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBinding
@@ -49,7 +51,10 @@ class MainScreenAdapter(
             }
             binding.entireButtonAdd.setOnClickListener { addClickListener.onClick(item.item) }
             binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
-            //binding.itemImage.setImageResource(item.item.mainImage)
+            Glide.with(binding.itemImage.context)
+                .load(item.item.mainImage)
+                .placeholder(R.mipmap.placeholder)
+                .into(binding.itemImage)
             binding.itemName.text = item.item.name
             binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)
             binding.cantText.text = item.cant.toString()
@@ -59,6 +64,7 @@ class MainScreenAdapter(
         private fun getRoundedPrice(price: Double): String{
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.DOWN
+            df.minimumFractionDigits = 2
             return df.format(price)
         }
 

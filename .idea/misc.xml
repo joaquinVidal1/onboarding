@@ -12,10 +12,13 @@
         <entry key="app/src/main/res/drawable/checkout_button.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/checkout_item_image_shape.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.323" />
+        <entry key="app/src/main/res/drawable/ic_launcher.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/ic_launcher_round.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/img.xml" value="0.323" />
         <entry key="app/src/main/res/drawable/indicator_dot_selected.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/indicator_dot_unselected.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/placeholder_background.xml" value="0.1275" />
         <entry key="app/src/main/res/drawable/search_field.xml" value="0.175" />
         <entry key="app/src/main/res/font/.xml" value="0.2201795639162035" />
         <entry key="app/src/main/res/font/sf_proext.xml" value="0.21932449764856776" />
@@ -30,6 +33,7 @@
         <entry key="app/src/main/res/layout/list_kind_main_screen.xml" value="0.36057078043619795" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2985" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2985" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/placeholder.xml" value="0.1275" />
       </map>
     </option>
   </component>

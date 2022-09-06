@@ -8,9 +8,8 @@ import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
 import com.example.proyecto_final_de_onboarding.database.getCartDatabase
 import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
+import com.example.proyecto_final_de_onboarding.getRoundedPrice
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
@@ -40,22 +39,16 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
     val showCheckoutButton: LiveData<Boolean> =
         Transformations.map(screenList) { it.isNotEmpty() }
 
-    private fun getDisplayPrice(price: Double) : String{
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.DOWN
-        return df.format(price)
-    }
+//    private fun getDisplayPrice(price: Double) : String{
+//        val df = DecimalFormat("#.##")
+//        df.roundingMode = RoundingMode.DOWN
+//        return df.format(price)
+//    }
 
-    private val totalAmount: LiveData<Double> =
+    val totalAmount: LiveData<Double> =
         Transformations.map(screenList) {
             it.sumOf { item -> item.cant * item.item.price}
         }
-
-    val totalAmountText: LiveData<String> =
-            Transformations.map(totalAmount){
-                getDisplayPrice(it)
-            }
-
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
         val cartList = cart.value
@@ -68,7 +61,7 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
     }
 
     fun getCheckout(): String {
-        return getDisplayPrice(totalAmount.value!!)
+        return getRoundedPrice(totalAmount.value!!)
     }
 
     fun cleanCart() {
