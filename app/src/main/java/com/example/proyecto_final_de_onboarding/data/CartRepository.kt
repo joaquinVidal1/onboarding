@@ -3,20 +3,13 @@ package com.example.proyecto_final_de_onboarding.data
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.proyecto_final_de_onboarding.CartItem
-import com.example.proyecto_final_de_onboarding.database.CartDatabase
+import com.example.proyecto_final_de_onboarding.database.ItemsDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CartRepository(private val cartDatabase: CartDatabase) {
-//    private val cartList: LiveData<List<CartItem>> =
-//        Transformations.map(cartDatabase.cartDao.getCartItems()) {
-//            it
-//        }
-
-    //  private val itemsRepository = ItemsRepository()
-
+class CartRepository(private val database: ItemsDatabase) {
     private val _cart =
-        Transformations.map(cartDatabase.cartDao.getCartItems()) {
+        Transformations.map(database.cartDao.getCartItems()) {
             it ?: listOf()
         }
     val cart: LiveData<List<CartItem>>
@@ -44,7 +37,7 @@ class CartRepository(private val cartDatabase: CartDatabase) {
         val itemToRemove = _cart.value?.find { it.itemId == id }
         if (itemToRemove?.cant == 1) {
             withContext(Dispatchers.IO) {
-                cartDatabase.cartDao.removeFromCartDB(itemToRemove.itemId)
+                database.cartDao.removeFromCartDB(itemToRemove.itemId)
             }
         } else {
             updatedCart =
@@ -61,7 +54,7 @@ class CartRepository(private val cartDatabase: CartDatabase) {
         val itemToEdit = _cart.value!!.find { it.itemId == id }
         if (qty == 0) {
             withContext(Dispatchers.IO) {
-                cartDatabase.cartDao.removeFromCartDB(itemToEdit!!.itemId)
+                database.cartDao.removeFromCartDB(itemToEdit!!.itemId)
             }
         } else {
             updatedCart = _cart.value.apply {
@@ -73,7 +66,7 @@ class CartRepository(private val cartDatabase: CartDatabase) {
 
     suspend fun cleanCart() {
         withContext(Dispatchers.IO) {
-            cartDatabase.cartDao.emptyTable()
+            database.cartDao.emptyTable()
         }
     }
 
@@ -82,7 +75,7 @@ class CartRepository(private val cartDatabase: CartDatabase) {
 
     private suspend fun updateCart(cart: List<CartItem>) {
         withContext(Dispatchers.IO) {
-            cartDatabase.cartDao.insertAll(cart)
+            database.cartDao.insertAll(cart)
         }
     }
 
@@ -90,9 +83,9 @@ class CartRepository(private val cartDatabase: CartDatabase) {
 
 private lateinit var INSTANCE: CartRepository
 
-fun getCartRepository(CartDatabase: CartDatabase): CartRepository {
+fun getCartRepository(itemsDatabase: ItemsDatabase): CartRepository {
     if (!::INSTANCE.isInitialized) {
-        INSTANCE = CartRepository(CartDatabase)
+        INSTANCE = CartRepository(itemsDatabase)
     }
     return INSTANCE
 }

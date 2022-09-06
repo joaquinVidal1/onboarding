@@ -16,28 +16,12 @@ interface ItemDao{
 
     @Query("DELETE FROM itemsTable")
     fun emptyTable()
-
-//    @Update
-//    fun update(items: List<Item>)
-//
-//    @Transaction
-//    fun upsert(items: List<Item>){
-//        val insertResult: List<Long> = insertAll(items)
-//        val updatedList = mutableListOf<Item>()
-//        for ((index, res) in insertResult.withIndex()){
-//            if (res.toInt() == -1){
-//                updatedList.add(items[index])
-//            }
-//        }
-//        if (updatedList.isNotEmpty()){
-//            update(updatedList)
-//        }
-//    }
 }
 
-@Database(entities = [Item::class], version = 1)
+@Database(entities = [Item::class, CartItem::class], version = 1)
 abstract class ItemsDatabase: RoomDatabase(){
     abstract val itemDao: ItemDao
+    abstract val cartDao: CartDao
 }
 
 private lateinit var ITEMDBINSTANCE: ItemsDatabase
@@ -59,7 +43,7 @@ interface CartDao{
     fun getCartItems(): LiveData<List<CartItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll( items: List<CartItem>)
+    fun insertAll(items: List<CartItem>)
 
     @Query("DELETE FROM cartTable WHERE itemId = :itemId")
     fun removeFromCartDB(itemId: Int)
@@ -67,24 +51,7 @@ interface CartDao{
     @Query("DELETE FROM cartTable")
     fun emptyTable()
 
-    @Query("DELETE FROM cartTable WHERE itemId NOT in (SELECT ItemId FROM itemsTable WHERE id=cartTable.itemId)")
+    @Query("DELETE FROM cartTable WHERE cartTable.itemId NOT IN (SELECT id FROM itemsTable)")
     fun removeIfNotInStore()
 }
 
-@Database(entities = [CartItem::class], version = 1)
-abstract class CartDatabase: RoomDatabase() {
-    abstract val cartDao: CartDao
-}
-
-private lateinit var CARTDBINSTANCE: CartDatabase
-
-fun getCartDatabase(context: Context): CartDatabase{
-    synchronized(CartDatabase::class.java) {
-        if (!::CARTDBINSTANCE.isInitialized) {
-            CARTDBINSTANCE = Room.databaseBuilder(context.applicationContext,
-                CartDatabase::class.java,
-                "cartItem").build()
-        }
-    }
-    return CARTDBINSTANCE
-}

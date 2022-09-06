@@ -6,15 +6,14 @@ import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
-import com.example.proyecto_final_de_onboarding.database.getCartDatabase
 import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
 import com.example.proyecto_final_de_onboarding.getRoundedPrice
 import kotlinx.coroutines.launch
 
 class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
-    private val cartRepository = getCartRepository(getCartDatabase(application))
-    private val itemsRepository = ItemsRepository(getItemsDatabase(application), getCartDatabase(application))
+    private val cartRepository = getCartRepository(getItemsDatabase(application))
+    private val itemsRepository = ItemsRepository(getItemsDatabase(application))
 
     private val storeItems =
         Transformations.map(itemsRepository.storeItems) {

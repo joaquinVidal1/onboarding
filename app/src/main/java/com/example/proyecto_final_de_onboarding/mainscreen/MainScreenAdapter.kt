@@ -53,7 +53,7 @@ class MainScreenAdapter(
             binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
             Glide.with(binding.itemImage.context)
                 .load(item.item.mainImage)
-                .placeholder(R.mipmap.placeholder)
+                .placeholder(R.mipmap.placeholder_round)
                 .into(binding.itemImage)
             binding.itemName.text = item.item.name
             binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)
@@ -61,7 +61,7 @@ class MainScreenAdapter(
             binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.item) }
         }
 
-        private fun getRoundedPrice(price: Double): String{
+        private fun getRoundedPrice(price: Double): String {
             val df = DecimalFormat("#.##")
             df.roundingMode = RoundingMode.DOWN
             df.minimumFractionDigits = 2
@@ -82,7 +82,6 @@ class MainScreenAdapter(
         fun bind(kind: Kind) {
             binding.kindHeader.text = kind.header
         }
-
 
         companion object {
             fun from(parent: ViewGroup): TextViewHolder {

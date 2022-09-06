@@ -38,15 +38,14 @@ class CheckoutScreenAdapter(
         fun onClick(item: Item) = clickListener(item.id)
     }
 
-
     class ViewHolder private constructor(val binding: ListItemCheckoutScreenBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ScreenListItem.ScreenItem, entireItemClickListener: EntireItemListener) {
             binding.entireItem.setOnClickListener { entireItemClickListener.onClick(item.item) }
-            Glide.with(binding.itemImage.context)
-                .load(item.item.mainImage)
-                .placeholder(R.mipmap.placeholder)
+            Glide.with(binding.entireItem.context)
+                .load(item.item.checkoutImage)
+                .placeholder(R.drawable.placeholder)
                 .into(binding.itemImage)
             binding.itemName.text = item.item.name
             binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)

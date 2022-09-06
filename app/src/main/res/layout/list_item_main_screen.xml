@@ -35,8 +35,6 @@
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/item_name"
-            app:layout_constraintHorizontal_bias="0.166"
             app:layout_constraintStart_toStartOf="@id/item_name"
             app:layout_constraintTop_toTopOf="@id/item_name"
             tools:text="$40" />

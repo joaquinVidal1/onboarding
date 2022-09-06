@@ -9,7 +9,6 @@ import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
-import com.example.proyecto_final_de_onboarding.database.getCartDatabase
 import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
 import kotlinx.coroutines.launch
 import java.math.RoundingMode
@@ -17,8 +16,8 @@ import java.text.DecimalFormat
 
 class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val cartRepository = getCartRepository(getCartDatabase(application))
-    private val itemsRepository = ItemsRepository(getItemsDatabase(application), getCartDatabase(application))
+    private val cartRepository = getCartRepository(getItemsDatabase(application))
+    private val itemsRepository = ItemsRepository(getItemsDatabase(application))
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>

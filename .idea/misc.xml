@@ -9,6 +9,7 @@
         <entry key="app/src/main/res/drawable/border.xml" value="0.1425" />
         <entry key="app/src/main/res/drawable/border_button_add.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/border_button_add_quant.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/checkoutPlaceholder_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/checkout_button.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/checkout_item_image_shape.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/circle.xml" value="0.323" />
@@ -31,6 +32,7 @@
         <entry key="app/src/main/res/layout/list_item_checkout_screen.xml" value="0.2636505126953125" />
         <entry key="app/src/main/res/layout/list_item_main_screen.xml" value="0.4301712036132813" />
         <entry key="app/src/main/res/layout/list_kind_main_screen.xml" value="0.36057078043619795" />
+        <entry key="app/src/main/res/mipmap-anydpi-v26/checkout_placeholder.xml" value="0.1035" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2985" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2985" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/placeholder.xml" value="0.1275" />
