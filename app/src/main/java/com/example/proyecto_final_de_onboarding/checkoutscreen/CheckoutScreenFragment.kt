@@ -61,15 +61,12 @@ class CheckoutScreenFragment : Fragment() {
                 builder.setTitle(getString(R.string.dialog_title))
                 builder.setView(numberPicker)
                 builder.show()
-
             }
         )
 
         cartItemsList.adapter = adapter
         viewModel.screenList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
-
-
         }
 
         viewModel.totalAmount.observe(viewLifecycleOwner) {

@@ -17,13 +17,17 @@ class ItemsRepository(
         withContext(Dispatchers.IO) {
             database.itemDao.emptyTable()
             val itemList = ItemNetwork.items.getItems()
-            database.itemDao.insertAll(itemList.map { it.asDomainModel()})
+            database.itemDao.insertAll(itemList.map { it.asDomainModel() })
             database.cartDao.removeIfNotInStore()
         }
     }
 
     val storeItems: LiveData<List<Item>> = Transformations.map(database.itemDao.getItems()) {
         it ?: listOf()
+    }
+
+    fun getItem(itemId: Int): Item? {
+        return storeItems.value?.find { it.id == itemId }
     }
 
 }

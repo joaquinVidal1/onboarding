@@ -20,7 +20,7 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
             it ?: listOf()
         }
 
-    private val _cart = Transformations.map(cartRepository.cart){ it }
+    private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>
         get() = _cart
 
@@ -38,25 +38,28 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
     val showCheckoutButton: LiveData<Boolean> =
         Transformations.map(screenList) { it.isNotEmpty() }
 
-//    private fun getDisplayPrice(price: Double) : String{
-//        val df = DecimalFormat("#.##")
-//        df.roundingMode = RoundingMode.DOWN
-//        return df.format(price)
-//    }
-
     val totalAmount: LiveData<Double> =
         Transformations.map(screenList) {
-            it.sumOf { item -> item.cant * item.item.price}
+            it.sumOf { item -> item.cant * item.item.price }
         }
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
-        val cartList = cart.value
-        val screenList = mutableListOf<ScreenListItem.ScreenItem>()
-        for (item in cartList!!) {
-            itemsRepository.storeItems.value?.find { it.id == item.itemId }
-                ?.let { ScreenListItem.ScreenItem(it, item.cant) }?.let { screenList.add(it) }
+        val cartList = cart.value ?: listOf()
+        val withNullList = cartList.map { item ->
+            val newItem = itemsRepository.getItem(item.itemId)
+            if (newItem != null) {
+                ScreenListItem.ScreenItem(newItem, item.cant)
+            }else{
+                null
+            }
         }
-        return screenList
+        val resultList: MutableList<ScreenListItem.ScreenItem> = mutableListOf()
+        for (item in withNullList){
+            if (item != null){
+                resultList.add(item)
+            }
+        }
+        return resultList
     }
 
     fun getCheckout(): String {
@@ -85,7 +88,7 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
                 @Suppress("UNCHECKED_CAST")
                 return CheckoutScreenViewModel(app) as T
             }
-            throw IllegalArgumentException("Unable to construct viewmodel")
+            throw IllegalArgumentException("Unable to construct viewModel")
         }
     }
 }

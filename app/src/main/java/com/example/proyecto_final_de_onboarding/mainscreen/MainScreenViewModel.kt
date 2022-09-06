@@ -53,13 +53,12 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     val displayList: LiveData<List<ScreenListItem>> = Transformations.map(screenItemsList) { list ->
-        val entireList = itemList.value ?: listOf()
         val flattenedList: MutableList<ScreenListItem> =
-            list.groupBy { item -> entireList.find { storeItem -> storeItem.id == item.id }!!.kind }.values.toList()
+            list.groupBy { item -> item.item.kind }.values.toList()
                 .flatten().toMutableList()
         Kind.values().forEach { kind ->
             val index =
-                flattenedList.indexOfFirst { item -> entireList.find { storeItem -> storeItem.id == item.id }?.kind == kind }
+                flattenedList.indexOfFirst { item -> item.getScreenItemKind() == kind }
             if (index >= 0) {
                 flattenedList.add(index, ScreenListItem.ScreenHeader(kind))
             }
@@ -128,7 +127,7 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun getRoundedPrice(price: Double): String{
+    fun getRoundedPrice(price: Double): String {
         val df = DecimalFormat("#.##")
         df.roundingMode = RoundingMode.DOWN
         return df.format(price)

@@ -46,9 +46,11 @@ class CheckoutScreenAdapter(
             Glide.with(binding.entireItem.context)
                 .load(item.item.checkoutImage)
                 .placeholder(R.drawable.placeholder)
+                .centerCrop()
                 .into(binding.itemImage)
             binding.itemName.text = item.item.name
-            binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)
+            val itemPrice = "$${getRoundedPrice(item.item.price)}"
+            binding.itemPrice.text = itemPrice
             var itemCantText = "${item.cant} unit"
             if (item.cant > 1) {
                 itemCantText = "${item.cant} units"
