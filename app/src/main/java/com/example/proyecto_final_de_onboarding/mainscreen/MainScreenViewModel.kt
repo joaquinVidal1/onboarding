@@ -59,7 +59,7 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
                 .flatten().toMutableList()
         Kind.values().forEach { kind ->
             val index =
-                list.indexOfFirst { item -> entireList.find { storeItem -> storeItem.id == item.id }!!.kind == kind }
+                flattenedList.indexOfFirst { item -> entireList.find { storeItem -> storeItem.id == item.id }?.kind == kind }
             if (index >= 0) {
                 flattenedList.add(index, ScreenListItem.ScreenHeader(kind))
             }

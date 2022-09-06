@@ -53,7 +53,7 @@ class MainScreenAdapter(
             binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
             Glide.with(binding.itemImage.context)
                 .load(item.item.mainImage)
-                .placeholder(R.mipmap.placeholder_round)
+                .placeholder(R.drawable.placeholder)
                 .into(binding.itemImage)
             binding.itemName.text = item.item.name
             binding.itemPrice.text = "$" + getRoundedPrice(item.item.price)
