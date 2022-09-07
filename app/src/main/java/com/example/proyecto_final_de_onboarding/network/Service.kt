@@ -12,7 +12,8 @@ import retrofit2.http.Header
 
 interface ItemService {
     @GET("/products")
-    suspend fun getItems(@Header("AUTHORIZATION") auth : String = "Bearer 0a41c523-fa00-418a-a585-7dd1fc5f18e4"
+    suspend fun getItems(
+        @Header("AUTHORIZATION") auth: String = "Bearer 0a41c523-fa00-418a-a585-7dd1fc5f18e4"
     ): List<NetworkItem>
 }
 
@@ -38,16 +39,4 @@ object ItemNetwork {
             .client(client.build())
             .build()
     }
-}
-
-sealed class Response<out T> {
-    object Loading: Response<Nothing>()
-
-    data class Success<out T>(
-        val data: T
-    ): Response<T>()
-
-    data class Error(
-        val message: String
-    ): Response<Nothing>()
 }

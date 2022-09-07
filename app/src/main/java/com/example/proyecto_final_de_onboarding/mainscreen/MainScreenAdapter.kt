@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 import com.example.proyecto_final_de_onboarding.R
-import com.example.proyecto_final_de_onboarding.ScreenListItem
+import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemMainScreenBinding
 import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBinding
 import java.math.RoundingMode

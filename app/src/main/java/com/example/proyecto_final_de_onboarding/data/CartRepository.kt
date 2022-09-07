@@ -2,14 +2,26 @@ package com.example.proyecto_final_de_onboarding.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.proyecto_final_de_onboarding.CartItem
-import com.example.proyecto_final_de_onboarding.database.ItemsDatabase
+import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
+import com.example.proyecto_final_de_onboarding.database.CartDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class CartRepository(private val database: ItemsDatabase) {
+class CartRepository private constructor(private val cartDao: CartDao) {
+
+    companion object {
+        private lateinit var INSTANCE: CartRepository
+
+        fun getCartRepository(cartDao: CartDao): CartRepository {
+            if (!::INSTANCE.isInitialized) {
+                INSTANCE = CartRepository(cartDao)
+            }
+            return INSTANCE
+        }
+    }
+
     private val _cart =
-        Transformations.map(database.cartDao.getCartItems()) {
+        Transformations.map(cartDao.getCartItems()) {
             it ?: listOf()
         }
     val cart: LiveData<List<CartItem>>
@@ -36,7 +48,7 @@ class CartRepository(private val database: ItemsDatabase) {
         val itemToRemove = _cart.value?.find { it.itemId == id }
         if (itemToRemove?.cant == 1) {
             withContext(Dispatchers.IO) {
-                database.cartDao.removeFromCartDB(itemToRemove.itemId)
+                cartDao.removeFromCartDB(itemToRemove.itemId)
             }
         } else {
             updatedCart =
@@ -53,7 +65,7 @@ class CartRepository(private val database: ItemsDatabase) {
         val itemToEdit = _cart.value!!.find { it.itemId == id }
         if (qty == 0) {
             withContext(Dispatchers.IO) {
-                database.cartDao.removeFromCartDB(itemToEdit!!.itemId)
+                cartDao.removeFromCartDB(itemToEdit!!.itemId)
             }
         } else {
             updatedCart = _cart.value.apply {
@@ -65,23 +77,14 @@ class CartRepository(private val database: ItemsDatabase) {
 
     suspend fun cleanCart() {
         withContext(Dispatchers.IO) {
-            database.cartDao.emptyTable()
+            cartDao.emptyTable()
         }
     }
 
     private suspend fun updateCart(cart: List<CartItem>) {
         withContext(Dispatchers.IO) {
-            database.cartDao.insertAll(cart)
+            cartDao.insertAll(cart)
         }
     }
 
-}
-
-private lateinit var INSTANCE: CartRepository
-
-fun getCartRepository(itemsDatabase: ItemsDatabase): CartRepository {
-    if (!::INSTANCE.isInitialized) {
-        INSTANCE = CartRepository(itemsDatabase)
-    }
-    return INSTANCE
 }

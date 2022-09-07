@@ -2,18 +2,18 @@ package com.example.proyecto_final_de_onboarding.checkoutscreen
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.CartItem
-import com.example.proyecto_final_de_onboarding.ScreenListItem
+import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
+import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
+import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
-import com.example.proyecto_final_de_onboarding.data.getCartRepository
-import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
+import com.example.proyecto_final_de_onboarding.database.MyStoreDatabase.Companion.getMyStoreDatabase
 import com.example.proyecto_final_de_onboarding.getRoundedPrice
 import kotlinx.coroutines.launch
 
 class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
-    private val cartRepository = getCartRepository(getItemsDatabase(application))
-    private val itemsRepository = ItemsRepository(getItemsDatabase(application))
+    private val cartRepository = CartRepository.getCartRepository(getMyStoreDatabase(application).cartDao)
+    private val itemsRepository = ItemsRepository(getMyStoreDatabase(application).itemDao, getMyStoreDatabase(application).cartDao)
 
     private val storeItems =
         Transformations.map(itemsRepository.storeItems) {

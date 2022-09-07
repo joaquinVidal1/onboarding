@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding
+package com.example.proyecto_final_de_onboarding.domain.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

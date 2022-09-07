@@ -2,19 +2,21 @@ package com.example.proyecto_final_de_onboarding.mainscreen
 
 import android.app.Application
 import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.CartItem
+import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
 import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.Kind
-import com.example.proyecto_final_de_onboarding.ScreenListItem
+import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
+import com.example.proyecto_final_de_onboarding.data.CartRepository.Companion.getCartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
-import com.example.proyecto_final_de_onboarding.data.getCartRepository
-import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
+import com.example.proyecto_final_de_onboarding.database.MyStoreDatabase.Companion.getMyStoreDatabase
 import kotlinx.coroutines.launch
 
 class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val cartRepository = getCartRepository(getItemsDatabase(application))
-    private val itemsRepository = ItemsRepository(getItemsDatabase(application))
+    private val cartRepository = getCartRepository(getMyStoreDatabase(application).cartDao)
+    private val itemsRepository = ItemsRepository(
+        getMyStoreDatabase(application).itemDao,
+        getMyStoreDatabase(application).cartDao
+    )
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>
@@ -31,7 +33,7 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
         Transformations.map(cart) { it.isNotEmpty() }
 
     val networkError: LiveData<Boolean> =
-        Transformations.map(itemsRepository.networkError) {it}
+        Transformations.map(itemsRepository.networkError) { it }
 
     private val screenItemsList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
 
@@ -49,18 +51,16 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     val displayList: LiveData<List<ScreenListItem>> = Transformations.map(screenItemsList) { list ->
-        val flattenedList: MutableList<ScreenListItem> =
-            list.groupBy { item -> item.item.kind }.values.toList()
-                .flatten().toMutableList()
-        Kind.values().forEach { kind ->
-            val index =
-                flattenedList.indexOfFirst { item -> item.getScreenItemKind() == kind }
-            if (index >= 0) {
-                flattenedList.add(index, ScreenListItem.ScreenHeader(kind))
-            }
+        val resultList = mutableListOf<ScreenListItem>()
+        val mapByKind =
+            list.groupBy { item -> item.item.kind }
+        mapByKind.keys.forEach { kind ->
+            resultList.add(ScreenListItem.ScreenHeader(kind))
+            resultList.addAll(mapByKind[kind]?.sortedBy { it.item.name }.orEmpty())
         }
-        flattenedList
+        resultList
     }
+
 
     private fun shouldBeAdded(query: String, item: Item) =
         item.kind.name.lowercase().contains(query) || item.name.lowercase()
@@ -103,16 +103,6 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
         _query.value = query
     }
 
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(MainScreenViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return MainScreenViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewModel")
-        }
-    }
-
     private fun refreshDataFromRepository() {
         viewModelScope.launch {
             itemsRepository.refreshItems()
@@ -121,6 +111,16 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun networkErrorHandled() {
         itemsRepository.networkErrorHandled()
+    }
+
+    class Factory(val app: Application) : ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            if (modelClass.isAssignableFrom(MainScreenViewModel::class.java)) {
+                @Suppress("UNCHECKED_CAST")
+                return MainScreenViewModel(app) as T
+            }
+            throw IllegalArgumentException("Unable to construct viewModel")
+        }
     }
 
 }
