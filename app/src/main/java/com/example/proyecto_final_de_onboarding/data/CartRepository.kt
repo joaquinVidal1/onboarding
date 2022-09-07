@@ -19,7 +19,6 @@ class CartRepository(private val database: ItemsDatabase) {
         val updatedCart: List<CartItem>
         val itemToAdd = _cart.value?.find { it.itemId == id }
         if (itemToAdd != null) {
-            //           itemToAdd.cant.plus(1)
             updatedCart =
                 _cart.value!!.toMutableList().apply {
                     find { it.itemId == id }
@@ -69,9 +68,6 @@ class CartRepository(private val database: ItemsDatabase) {
             database.cartDao.emptyTable()
         }
     }
-
-    fun getQty(itemId: Int) =
-        cart.value?.find { it.itemId == itemId }?.cant ?: 0
 
     private suspend fun updateCart(cart: List<CartItem>) {
         withContext(Dispatchers.IO) {

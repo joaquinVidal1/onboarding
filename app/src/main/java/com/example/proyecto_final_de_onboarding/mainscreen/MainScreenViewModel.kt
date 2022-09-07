@@ -1,7 +1,6 @@
 package com.example.proyecto_final_de_onboarding.mainscreen
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.proyecto_final_de_onboarding.CartItem
 import com.example.proyecto_final_de_onboarding.Item
@@ -11,8 +10,6 @@ import com.example.proyecto_final_de_onboarding.data.ItemsRepository
 import com.example.proyecto_final_de_onboarding.data.getCartRepository
 import com.example.proyecto_final_de_onboarding.database.getItemsDatabase
 import kotlinx.coroutines.launch
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -23,10 +20,6 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
     private val cart: LiveData<List<CartItem>>
         get() = _cart
 
-    private val _networkError = MutableLiveData<Boolean>(false)
-    val networkError: LiveData<Boolean>
-        get() = _networkError
-
     private val _query = MutableLiveData("")
 
     private val itemList =
@@ -36,6 +29,9 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     val showCartCircle: LiveData<Boolean> =
         Transformations.map(cart) { it.isNotEmpty() }
+
+    val networkError: LiveData<Boolean> =
+        Transformations.map(itemsRepository.networkError) {it}
 
     private val screenItemsList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
 
@@ -113,24 +109,18 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
                 @Suppress("UNCHECKED_CAST")
                 return MainScreenViewModel(app) as T
             }
-            throw IllegalArgumentException("Unable to construct viewmodel")
+            throw IllegalArgumentException("Unable to construct viewModel")
         }
     }
 
     private fun refreshDataFromRepository() {
         viewModelScope.launch {
-            try {
-                itemsRepository.refreshItems()
-            } catch (networkError: Exception) {
-                Log.e("refreshItems", "error", networkError)
-            }
+            itemsRepository.refreshItems()
         }
     }
 
-    fun getRoundedPrice(price: Double): String {
-        val df = DecimalFormat("#.##")
-        df.roundingMode = RoundingMode.DOWN
-        return df.format(price)
+    fun networkErrorHandled() {
+        itemsRepository.networkErrorHandled()
     }
 
 }

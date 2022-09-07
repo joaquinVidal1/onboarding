@@ -45,21 +45,10 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
         val cartList = cart.value ?: listOf()
-        val withNullList = cartList.map { item ->
-            val newItem = itemsRepository.getItem(item.itemId)
-            if (newItem != null) {
-                ScreenListItem.ScreenItem(newItem, item.cant)
-            }else{
-                null
-            }
+        return cartList.mapNotNull { cartItem ->
+            val repoItem = itemsRepository.getItem(cartItem.itemId)
+            repoItem?.let { ScreenListItem.ScreenItem(it, cartItem.cant) }
         }
-        val resultList: MutableList<ScreenListItem.ScreenItem> = mutableListOf()
-        for (item in withNullList){
-            if (item != null){
-                resultList.add(item)
-            }
-        }
-        return resultList
     }
 
     fun getCheckout(): String {

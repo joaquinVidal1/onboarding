@@ -53,7 +53,6 @@ class MainScreenFragment : Fragment() {
             it?.let {
                 adapter.submitList(it)
             }
-
         }
 
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
@@ -89,6 +88,7 @@ class MainScreenFragment : Fragment() {
         viewModel.networkError.observe(viewLifecycleOwner){
             if (it){
                 Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
+                viewModel.networkErrorHandled()
             }
         }
 

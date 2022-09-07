@@ -7,7 +7,6 @@ sealed class ScreenListItem(val id: Int) {
         override fun getScreenItemKind(): Kind {
             return kind
         }
-
     }
 
     data class ScreenItem(val item: Item, val cant: Int = 0) : ScreenListItem(item.id) {

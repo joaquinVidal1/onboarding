@@ -1,6 +1,7 @@
 package com.example.proyecto_final_de_onboarding.data
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.database.ItemsDatabase
@@ -12,13 +13,20 @@ import kotlinx.coroutines.withContext
 class ItemsRepository(
     private val database: ItemsDatabase,
 ) {
+    private val _networkError = MutableLiveData(false)
+    val networkError: LiveData<Boolean>
+        get() = _networkError
 
     suspend fun refreshItems() {
         withContext(Dispatchers.IO) {
-            database.itemDao.emptyTable()
-            val itemList = ItemNetwork.items.getItems()
-            database.itemDao.insertAll(itemList.map { it.asDomainModel() })
-            database.cartDao.removeIfNotInStore()
+            try {
+                val itemList = ItemNetwork.items.getItems()
+                database.itemDao.emptyTable()
+                database.itemDao.insertAll(itemList.map { it.asDomainModel() })
+                database.cartDao.removeIfNotInStore()
+            } catch (networkError: Exception) {
+                _networkError.postValue(true)
+            }
         }
     }
 
@@ -28,6 +36,10 @@ class ItemsRepository(
 
     fun getItem(itemId: Int): Item? {
         return storeItems.value?.find { it.id == itemId }
+    }
+
+    fun networkErrorHandled() {
+        _networkError.value = false
     }
 
 }
