@@ -11,7 +11,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainScreenViewModel @Inject constructor(val cartRepository: CartRepository, val itemsRepository: ItemsRepository) : ViewModel() {
+class MainScreenViewModel @Inject constructor(
+    private val cartRepository: CartRepository,
+    private val itemsRepository: ItemsRepository
+) : ViewModel() {
 
 //    @Inject lateinit var cartRepository: CartRepository
 //    @Inject lateinit var itemsRepository: ItemsRepository

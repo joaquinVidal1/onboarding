@@ -11,7 +11,6 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyecto_final_de_onboarding.R
@@ -21,16 +20,17 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class CheckoutScreenFragment : Fragment() {
-    //@Inject lateinit var viewModelFactory: CheckoutScreenViewModelFactory
+
+    private val viewModel: CheckoutScreenViewModel by viewModels()
 
 //    private val viewModel: CheckoutScreenViewModel by viewModels()
-    private val viewModel: CheckoutScreenViewModel by lazy {
-        val activity = requireNotNull(activity)
-        ViewModelProvider(
-            this,
-            CheckoutScreenViewModel.Factory(activity.application)
-        )[CheckoutScreenViewModel::class.java]
-    }
+//    private val viewModel: CheckoutScreenViewModel by lazy {
+//        val activity = requireNotNull(activity)
+//        ViewModelProvider(
+//            this,
+//            CheckoutScreenViewModel.Factory(activity.application)
+//        )[CheckoutScreenViewModel::class.java]
+//    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //viewModel = ViewModelProvider(this, viewModelFactory)[CheckoutScreenViewModel::class.java]

@@ -31,14 +31,14 @@ class MainScreenFragment : Fragment() {
     }
     //@Inject
     //lateinit var viewModelFactory: MainScreenViewModelFactory
-    //@Inject lateinit var viewModel: MainScreenViewModel
+    private val viewModel: MainScreenViewModel by viewModels()
 
     private lateinit var binding: FragmentMainScreenBinding
 //    private val viewModel: MainScreenViewModel by lazy {
 //        val activity = requireNotNull(this.activity)
 //        ViewModelProvider(this, MainScreenViewModel.Factory(activity.application))[MainScreenViewModel::class.java]
 //    }
-    private val viewModel: MainScreenViewModel by viewModels()
+ //   private val viewModel: MainScreenViewModel by viewModels()
 override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     //viewModel = ViewModelProvider(this, viewModelFactory)[MainScreenViewModel::class.java]
