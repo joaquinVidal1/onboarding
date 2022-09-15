@@ -12,18 +12,6 @@ import javax.inject.Singleton
 @Singleton
 class CartRepository @Inject constructor(private val cartDao: CartDao) {
 
-    //@Inject lateinit var cartDao: CartDao
-//    companion object {
-//        private lateinit var INSTANCE: CartRepository
-//
-//        fun getCartRepository(cartDao: CartDao): CartRepository {
-//            if (!::INSTANCE.isInitialized) {
-//                INSTANCE = CartRepository(cartDao)
-//            }
-//            return INSTANCE
-//        }
-//    }
-
     private val _cart =
         Transformations.map(cartDao.getCartItems()) {
             it ?: listOf()

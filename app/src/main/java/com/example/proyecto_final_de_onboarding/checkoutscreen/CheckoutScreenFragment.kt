@@ -23,19 +23,6 @@ class CheckoutScreenFragment : Fragment() {
 
     private val viewModel: CheckoutScreenViewModel by viewModels()
 
-//    private val viewModel: CheckoutScreenViewModel by viewModels()
-//    private val viewModel: CheckoutScreenViewModel by lazy {
-//        val activity = requireNotNull(activity)
-//        ViewModelProvider(
-//            this,
-//            CheckoutScreenViewModel.Factory(activity.application)
-//        )[CheckoutScreenViewModel::class.java]
-//    }
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        //viewModel = ViewModelProvider(this, viewModelFactory)[CheckoutScreenViewModel::class.java]
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,7 +66,8 @@ class CheckoutScreenFragment : Fragment() {
         }
 
         viewModel.totalAmount.observe(viewLifecycleOwner) {
-            totalAmount.text = "$" + getRoundedPrice(it)
+            val roundedPrice = "$" + getRoundedPrice(it)
+            totalAmount.text = roundedPrice
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {

@@ -16,8 +16,6 @@ class ItemsRepository @Inject constructor(
     private val itemDao: ItemDao,
     private val cartDao: CartDao
 ) {
-//    @Inject lateinit var itemDao: ItemDao
-//    @Inject lateinit var cartDao: CartDao
     private val _networkError = MutableLiveData(false)
     val networkError: LiveData<Boolean>
         get() = _networkError

@@ -17,17 +17,17 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext appContext: Context): MyStoreDatabase{
+    fun provideDatabase(@ApplicationContext appContext: Context): MyStoreDatabase {
         return MyStoreDatabase.getMyStoreDatabase(appContext)
     }
 
     @Provides
-    fun provideCartDao(database: MyStoreDatabase): CartDao{
+    fun provideCartDao(database: MyStoreDatabase): CartDao {
         return database.cartDao
     }
 
     @Provides
-    fun provideItemDao(database: MyStoreDatabase): ItemDao{
+    fun provideItemDao(database: MyStoreDatabase): ItemDao {
         return database.itemDao
     }
 }

@@ -29,21 +29,9 @@ class MainScreenFragment : Fragment() {
     companion object {
         private const val NUM_PAGES = 4
     }
-    //@Inject
-    //lateinit var viewModelFactory: MainScreenViewModelFactory
+
     private val viewModel: MainScreenViewModel by viewModels()
-
     private lateinit var binding: FragmentMainScreenBinding
-//    private val viewModel: MainScreenViewModel by lazy {
-//        val activity = requireNotNull(this.activity)
-//        ViewModelProvider(this, MainScreenViewModel.Factory(activity.application))[MainScreenViewModel::class.java]
-//    }
- //   private val viewModel: MainScreenViewModel by viewModels()
-override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
-    //viewModel = ViewModelProvider(this, viewModelFactory)[MainScreenViewModel::class.java]
-}
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -94,8 +82,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
             } else false
         }
 
-        viewModel.networkError.observe(viewLifecycleOwner){
-            if (it){
+        viewModel.networkError.observe(viewLifecycleOwner) {
+            if (it) {
                 Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
                 viewModel.networkErrorHandled()
             }

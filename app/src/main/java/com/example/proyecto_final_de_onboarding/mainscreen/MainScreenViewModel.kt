@@ -16,14 +16,6 @@ class MainScreenViewModel @Inject constructor(
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {
 
-//    @Inject lateinit var cartRepository: CartRepository
-//    @Inject lateinit var itemsRepository: ItemsRepository
-//    private val cartRepository = getCartRepository(getMyStoreDatabase(application.applicationContext).cartDao)
-//    private val itemsRepository = ItemsRepository(
-//        getMyStoreDatabase(application).itemDao,
-//        getMyStoreDatabase(application).cartDao
-//    )
-
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>
         get() = _cart

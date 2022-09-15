@@ -20,5 +20,4 @@ interface ItemDao {
         emptyTable()
         insertAll(items)
     }
-
 }
