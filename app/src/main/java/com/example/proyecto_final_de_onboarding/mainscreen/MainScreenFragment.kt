@@ -14,26 +14,35 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 import com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment
+import dagger.hilt.android.AndroidEntryPoint
 
-
+@AndroidEntryPoint
 class MainScreenFragment : Fragment() {
 
     companion object {
         private const val NUM_PAGES = 4
     }
+    //@Inject
+    //lateinit var viewModelFactory: MainScreenViewModelFactory
+    //@Inject lateinit var viewModel: MainScreenViewModel
 
     private lateinit var binding: FragmentMainScreenBinding
-    private val viewModel: MainScreenViewModel by lazy {
-        val activity = requireNotNull(this.activity)
-        ViewModelProvider(this, MainScreenViewModel.Factory(activity.application))[MainScreenViewModel::class.java]
-    }
+//    private val viewModel: MainScreenViewModel by lazy {
+//        val activity = requireNotNull(this.activity)
+//        ViewModelProvider(this, MainScreenViewModel.Factory(activity.application))[MainScreenViewModel::class.java]
+//    }
+    private val viewModel: MainScreenViewModel by viewModels()
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    //viewModel = ViewModelProvider(this, viewModelFactory)[MainScreenViewModel::class.java]
+}
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -2,23 +2,27 @@ package com.example.proyecto_final_de_onboarding.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
 import com.example.proyecto_final_de_onboarding.database.CartDao
+import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class CartRepository private constructor(private val cartDao: CartDao) {
+@Singleton
+class CartRepository @Inject constructor(private val cartDao: CartDao) {
 
-    companion object {
-        private lateinit var INSTANCE: CartRepository
-
-        fun getCartRepository(cartDao: CartDao): CartRepository {
-            if (!::INSTANCE.isInitialized) {
-                INSTANCE = CartRepository(cartDao)
-            }
-            return INSTANCE
-        }
-    }
+    //@Inject lateinit var cartDao: CartDao
+//    companion object {
+//        private lateinit var INSTANCE: CartRepository
+//
+//        fun getCartRepository(cartDao: CartDao): CartRepository {
+//            if (!::INSTANCE.isInitialized) {
+//                INSTANCE = CartRepository(cartDao)
+//            }
+//            return INSTANCE
+//        }
+//    }
 
     private val _cart =
         Transformations.map(cartDao.getCartItems()) {

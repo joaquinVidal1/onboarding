@@ -16,7 +16,7 @@ interface ItemDao {
     fun emptyTable()
 
     @Transaction
-    fun emptyAndInsert(items: List<Item>){
+    fun emptyAndInsert(items: List<Item>) {
         emptyTable()
         insertAll(items)
     }

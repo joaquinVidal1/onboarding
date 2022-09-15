@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.R
-import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
+import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
 import com.example.proyecto_final_de_onboarding.getRoundedPrice
 
 class CheckoutScreenAdapter(
@@ -45,7 +45,7 @@ class CheckoutScreenAdapter(
             binding.entireItem.setOnClickListener { entireItemClickListener.onClick(item.item) }
             Glide.with(binding.entireItem.context)
                 .load(item.item.checkoutImage)
-                .placeholder(R.drawable.placeholder)
+                .placeholder(R.mipmap.main_placeholder)
                 .centerCrop()
                 .into(binding.itemImage)
             binding.itemName.text = item.item.name

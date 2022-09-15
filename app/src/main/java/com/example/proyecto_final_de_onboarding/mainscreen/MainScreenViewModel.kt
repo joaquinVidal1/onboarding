@@ -1,22 +1,25 @@
 package com.example.proyecto_final_de_onboarding.mainscreen
 
-import android.app.Application
 import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
 import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
-import com.example.proyecto_final_de_onboarding.data.CartRepository.Companion.getCartRepository
+import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
-import com.example.proyecto_final_de_onboarding.database.MyStoreDatabase.Companion.getMyStoreDatabase
+import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
+import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class MainScreenViewModel(application: Application) : AndroidViewModel(application) {
+@HiltViewModel
+class MainScreenViewModel @Inject constructor(val cartRepository: CartRepository, val itemsRepository: ItemsRepository) : ViewModel() {
 
-    private val cartRepository = getCartRepository(getMyStoreDatabase(application).cartDao)
-    private val itemsRepository = ItemsRepository(
-        getMyStoreDatabase(application).itemDao,
-        getMyStoreDatabase(application).cartDao
-    )
+//    @Inject lateinit var cartRepository: CartRepository
+//    @Inject lateinit var itemsRepository: ItemsRepository
+//    private val cartRepository = getCartRepository(getMyStoreDatabase(application.applicationContext).cartDao)
+//    private val itemsRepository = ItemsRepository(
+//        getMyStoreDatabase(application).itemDao,
+//        getMyStoreDatabase(application).cartDao
+//    )
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>
@@ -111,16 +114,6 @@ class MainScreenViewModel(application: Application) : AndroidViewModel(applicati
 
     fun networkErrorHandled() {
         itemsRepository.networkErrorHandled()
-    }
-
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(MainScreenViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return MainScreenViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewModel")
-        }
     }
 
 }

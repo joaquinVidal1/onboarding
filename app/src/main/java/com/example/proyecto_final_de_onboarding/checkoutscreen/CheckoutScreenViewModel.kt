@@ -1,19 +1,23 @@
 package com.example.proyecto_final_de_onboarding.checkoutscreen
 
-import android.app.Application
 import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
-import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
 import com.example.proyecto_final_de_onboarding.data.CartRepository
 import com.example.proyecto_final_de_onboarding.data.ItemsRepository
-import com.example.proyecto_final_de_onboarding.database.MyStoreDatabase.Companion.getMyStoreDatabase
+import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
+import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
 import com.example.proyecto_final_de_onboarding.getRoundedPrice
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class CheckoutScreenViewModel(application: Application) : ViewModel() {
+@HiltViewModel
+class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: ItemsRepository, private val cartRepository: CartRepository) : ViewModel() {
 
-    private val cartRepository = CartRepository.getCartRepository(getMyStoreDatabase(application).cartDao)
-    private val itemsRepository = ItemsRepository(getMyStoreDatabase(application).itemDao, getMyStoreDatabase(application).cartDao)
+//    @Inject lateinit var cartRepository: CartRepository
+//    @Inject lateinit var itemsRepository: ItemsRepository
+
+//    private val cartRepository = CartRepository.getCartRepository(getMyStoreDatabase(application).cartDao)
+//    private val itemsRepository = ItemsRepository(getMyStoreDatabase(application).itemDao, getMyStoreDatabase(application).cartDao)
 
     private val storeItems =
         Transformations.map(itemsRepository.storeItems) {
@@ -69,15 +73,5 @@ class CheckoutScreenViewModel(application: Application) : ViewModel() {
 
     fun getQty(itemId: Int): Int? {
         return cart.value?.find { it.itemId == itemId }?.cant
-    }
-
-    class Factory(val app: Application) : ViewModelProvider.Factory {
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(CheckoutScreenViewModel::class.java)) {
-                @Suppress("UNCHECKED_CAST")
-                return CheckoutScreenViewModel(app) as T
-            }
-            throw IllegalArgumentException("Unable to construct viewModel")
-        }
     }
 }

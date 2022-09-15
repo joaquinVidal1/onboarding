@@ -10,11 +10,14 @@ import com.example.proyecto_final_de_onboarding.network.ItemNetwork
 import com.example.proyecto_final_de_onboarding.network.asDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-class ItemsRepository(
+class ItemsRepository @Inject constructor(
     private val itemDao: ItemDao,
     private val cartDao: CartDao
 ) {
+//    @Inject lateinit var itemDao: ItemDao
+//    @Inject lateinit var cartDao: CartDao
     private val _networkError = MutableLiveData(false)
     val networkError: LiveData<Boolean>
         get() = _networkError
