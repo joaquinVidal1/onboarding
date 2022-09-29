@@ -8,6 +8,7 @@
         <entry key="app/src/main/res/drawable/add_button.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/border.xml" value="0.1425" />
         <entry key="app/src/main/res/drawable/border_button_add.xml" value="0.175" />
+        <entry key="app/src/main/res/drawable/border_button_add_qty.xml" value="0.1995" />
         <entry key="app/src/main/res/drawable/border_button_add_quant.xml" value="0.175" />
         <entry key="app/src/main/res/drawable/checkoutPlaceholder_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/checkout_button.xml" value="0.175" />
