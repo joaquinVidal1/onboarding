@@ -13,10 +13,12 @@ import javax.inject.Inject
 @HiltViewModel
 class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: ItemsRepository, private val cartRepository: CartRepository) : ViewModel() {
 
-    private val storeItems =
-        Transformations.map(itemsRepository.storeItems) {
-            it ?: listOf()
-        }
+    // TODO lo mismo que antes, lo que está comentado no es necesario
+    private val storeItems = itemsRepository.storeItems
+//    private val storeItems =
+//        Transformations.map(itemsRepository.storeItems) {
+//            it ?: listOf()
+//        }
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>

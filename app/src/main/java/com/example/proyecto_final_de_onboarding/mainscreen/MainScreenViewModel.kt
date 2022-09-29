@@ -16,9 +16,11 @@ class MainScreenViewModel @Inject constructor(
     private val itemsRepository: ItemsRepository
 ) : ViewModel() {
 
-    private val _cart = Transformations.map(cartRepository.cart) { it }
-    private val cart: LiveData<List<CartItem>>
-        get() = _cart
+    private val cart = cartRepository.cart
+    // TODO esto que está comentado era innecesario, la separación entre cart y _cart se hace cuando vos tenés que exponer ese valor hacia afuera del ViewModel
+//    private val _cart = Transformations.map(cartRepository.cart) { it }
+//    private val cart: LiveData<List<CartItem>>
+//        get() = _cart
 
     private val _query = MutableLiveData("")
 
@@ -68,6 +70,7 @@ class MainScreenViewModel @Inject constructor(
         cart.value?.find { cartItem -> itemId == cartItem.itemId }?.cant ?: 0
 
     private fun onInputChanged(): List<ScreenListItem.ScreenItem> {
+        // TODO personalmente no me gusta usar force unwraps a menos que sea aboslutamente necesario, perfectamente podés hacer _query.value?.let{ ... }
         val query: String = _query.value!!
         val entireList = itemList.value ?: listOf()
 

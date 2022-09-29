@@ -29,9 +29,7 @@ class CheckoutScreenAdapter(
             newItem: ScreenListItem.ScreenItem
         ): Boolean {
             return oldItem.id == newItem.id
-
         }
-
     }
 
     class EntireItemListener(private val clickListener: (itemId: Int) -> Unit) {
@@ -51,7 +49,7 @@ class CheckoutScreenAdapter(
             binding.itemName.text = item.item.name
             val itemPrice = "$${getRoundedPrice(item.item.price)}"
             binding.itemPrice.text = itemPrice
-            var itemCantText = "${item.cant} unit"
+            var itemCantText = "${item.cant} unit" // TODO string resource con placeholder
             if (item.cant > 1) {
                 itemCantText = "${item.cant} units"
             }

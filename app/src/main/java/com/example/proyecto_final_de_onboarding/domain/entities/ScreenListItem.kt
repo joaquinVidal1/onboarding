@@ -6,7 +6,8 @@ import com.example.proyecto_final_de_onboarding.Kind
 sealed class ScreenListItem(val id: Int) {
     abstract fun getScreenItemKind(): Kind
 
-    data class ScreenHeader(val kind: Kind) : ScreenListItem(Int.MAX_VALUE) {
+    // TODO está bueno que todo tenga su id único, por eso kind.ordinal.times(-1)
+    data class ScreenHeader(val kind: Kind) : ScreenListItem(kind.ordinal.times(-1)) {
         override fun getScreenItemKind(): Kind {
             return kind
         }

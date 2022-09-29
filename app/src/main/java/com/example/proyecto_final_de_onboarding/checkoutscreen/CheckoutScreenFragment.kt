@@ -74,10 +74,10 @@ class CheckoutScreenFragment : Fragment() {
             checkoutButton.isEnabled = it
         }
         binding.checkoutButton.setOnClickListener {
-            val message = "Total is " + viewModel.getCheckout()
+            val message = "Total is " + viewModel.getCheckout() // TODO string resource con placeholders
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             viewModel.cleanCart()
-            this.findNavController().popBackStack()
+            this.findNavController().popBackStack() // TODO mejor usar navigateUp()
         }
         return binding.root
     }

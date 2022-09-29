@@ -57,7 +57,7 @@ class MainScreenAdapter(
                 .centerInside()
                 .into(binding.itemImage)
             binding.itemName.text = item.item.name
-            val roundedPrice = "$" + getRoundedPrice(item.item.price)
+            val roundedPrice = "$" + getRoundedPrice(item.item.price) // TODO probá usando string con placeholders
             binding.itemPrice.text = roundedPrice
             binding.cantText.text = item.cant.toString()
             binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.item) }
@@ -126,18 +126,23 @@ class MainScreenAdapter(
 
     class MainScreenDiffCallback : DiffUtil.ItemCallback<ScreenListItem>() {
         override fun areContentsTheSame(oldItem: ScreenListItem, newItem: ScreenListItem): Boolean =
-            if (oldItem is ScreenListItem.ScreenHeader && newItem is ScreenListItem.ScreenHeader) {
-                oldItem.kind == newItem.kind
-            } else {
-                if (oldItem is ScreenListItem.ScreenItem && newItem is ScreenListItem.ScreenItem) {
-                    (oldItem.id == newItem.id) && (oldItem.cant == newItem.cant)
-                } else {
-                    false //when one is header and other is item
-                }
-            }
+            // TODO basta con esto
+            oldItem == newItem
+//            if (oldItem is ScreenListItem.ScreenHeader && newItem is ScreenListItem.ScreenHeader) {
+//                oldItem.kind == newItem.kind
+//            } else {
+//                if (oldItem is ScreenListItem.ScreenItem && newItem is ScreenListItem.ScreenItem) {
+//                    (oldItem.id == newItem.id) && (oldItem.cant == newItem.cant)
+//                } else {
+//                    false //when one is header and other is item
+//                }
+//            }
 
         override fun areItemsTheSame(oldItem: ScreenListItem, newItem: ScreenListItem): Boolean {
-            return oldItem == newItem
+            // TODO lo que está comentado acá abajo está mal, no hace lo que debería hacer areItemsTheSame
+            // return oldItem == newItem
+            // TODO esto debería hacer
+            return oldItem.id == newItem.id
         }
     }
 }

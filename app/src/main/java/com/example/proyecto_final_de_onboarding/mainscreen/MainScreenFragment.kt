@@ -98,6 +98,7 @@ class MainScreenFragment : Fragment() {
         viewPageIndicator.setUpWithViewPager2(carrousel)
         carrousel.setPageTransformer(ZoomOutPageTransformer())
 
+        // TODO sacar código comentado
         //funcion que se llama al cambiar de pagina en el banner,
         // la dejo para ya tenerlo si en algun momento la preciso
 //        val pageChangeCallback = object : ViewPager2.OnPageChangeCallback(){
