@@ -35,7 +35,7 @@ object ItemNetwork {
 
         return Retrofit.Builder()
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .baseUrl("https://mobile-api.inhouse.decemberlabs.com")
+            .baseUrl("https://api.ecommerce.inhouse.decemberlabs.com")
             .client(client.build())
             .build()
     }

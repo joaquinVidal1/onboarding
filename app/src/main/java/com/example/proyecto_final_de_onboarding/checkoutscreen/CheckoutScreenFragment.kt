@@ -24,8 +24,7 @@ class CheckoutScreenFragment : Fragment() {
     private val viewModel: CheckoutScreenViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         val binding: FragmentCheckoutScreenBinding = DataBindingUtil.inflate(
@@ -41,24 +40,22 @@ class CheckoutScreenFragment : Fragment() {
         }
         binding.lifecycleOwner = this
         cartItemsList.layoutManager = GridLayoutManager(activity, 2)
-        val adapter = CheckoutScreenAdapter(
-            CheckoutScreenAdapter.EntireItemListener { itemId ->
-                val builder = AlertDialog.Builder(context)
-                val numberPicker = NumberPicker(context)
-                numberPicker.minValue = 0
-                numberPicker.maxValue = 500
-                numberPicker.wrapSelectorWheel = false
-                numberPicker.value = viewModel.getQty(itemId)!!
-                builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
-                    viewModel.itemQtyChanged(itemId, numberPicker.value)
+        val adapter = CheckoutScreenAdapter(CheckoutScreenAdapter.EntireItemListener { itemId ->
+            val builder = AlertDialog.Builder(context)
+            val numberPicker = NumberPicker(context)
+            numberPicker.minValue = 0
+            numberPicker.maxValue = 500
+            numberPicker.wrapSelectorWheel = false
+            numberPicker.value = viewModel.getQty(itemId)!!
+            builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                viewModel.itemQtyChanged(itemId, numberPicker.value)
 
-                }
-                builder.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-                builder.setTitle(getString(R.string.dialog_title))
-                builder.setView(numberPicker)
-                builder.show()
             }
-        )
+            builder.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+            builder.setTitle(getString(R.string.dialog_title))
+            builder.setView(numberPicker)
+            builder.show()
+        })
 
         cartItemsList.adapter = adapter
         viewModel.screenList.observe(viewLifecycleOwner) {
@@ -74,10 +71,10 @@ class CheckoutScreenFragment : Fragment() {
             checkoutButton.isEnabled = it
         }
         binding.checkoutButton.setOnClickListener {
-            val message = "Total is " + viewModel.getCheckout() // TODO string resource con placeholders
+            val message = String.format(resources.getString(R.string.checkout_text), viewModel)
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             viewModel.cleanCart()
-            this.findNavController().popBackStack() // TODO mejor usar navigateUp()
+            this.findNavController().navigateUp()
         }
         return binding.root
     }

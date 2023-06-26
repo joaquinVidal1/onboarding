@@ -22,6 +22,7 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
     suspend fun addItem(id: Int) {
         val updatedCart: List<CartItem>
         // TODO podrías concatenar _cart.value?.find { it.itemId == id }?.let{ ... }, hilando fino va a mejorar la sintaxis cuando estés más familiarizado con Kotlin en general
+        //pero como manejaria el caso en el que es null?
         val itemToAdd = _cart.value?.find { it.itemId == id }
         if (itemToAdd != null) {
             updatedCart =
@@ -39,7 +40,6 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
         val updatedCart: List<CartItem>
         val itemToRemove = _cart.value?.find { it.itemId == id }
         if (itemToRemove?.cant == 1) {
-            // TODO no es necesario hacer el withContext, revisá a ver si te das cuenta porqué
             withContext(Dispatchers.IO) {
                 cartDao.removeFromCartDB(itemToRemove.itemId)
             }
@@ -57,7 +57,6 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
         val updatedCart: List<CartItem>
         val itemToEdit = _cart.value!!.find { it.itemId == id }
         if (qty == 0) {
-            // TODO no es necesario hacer el withContext, revisá a ver si te das cuenta porqué
             withContext(Dispatchers.IO) {
                 cartDao.removeFromCartDB(itemToEdit!!.itemId)
             }
@@ -69,15 +68,11 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
         }
     }
 
-    suspend fun cleanCart() {
-        // TODO no es necesario hacer el withContext, revisá a ver si te das cuenta porqué
-        withContext(Dispatchers.IO) {
+    fun cleanCart() {
             cartDao.emptyTable()
-        }
     }
 
     private suspend fun updateCart(cart: List<CartItem>) {
-        // TODO no es necesario hacer el withContext, revisá a ver si te das cuenta porqué
         withContext(Dispatchers.IO) {
             cartDao.insertAll(cart)
         }

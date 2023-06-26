@@ -23,5 +23,6 @@
     <string name="button_add">button add</string>
     <string name="button_remove">button remove</string>
     <string name="item_image">Item image</string>
+    <string name="checkout_text">Total is %1$s</string>
     />
 </resources>
