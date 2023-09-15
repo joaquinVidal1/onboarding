@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.database
+package com.example.proyecto_final_de_onboarding.data.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

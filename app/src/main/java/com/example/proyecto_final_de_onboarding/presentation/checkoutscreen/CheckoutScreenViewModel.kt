@@ -1,10 +1,10 @@
-package com.example.proyecto_final_de_onboarding.checkoutscreen
+package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
 import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.data.CartRepository
-import com.example.proyecto_final_de_onboarding.data.ItemsRepository
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
-import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
+import com.example.proyecto_final_de_onboarding.data.repository.CartRepository
+import com.example.proyecto_final_de_onboarding.data.repository.ItemsRepository
+import com.example.proyecto_final_de_onboarding.domain.model.CartItem
+import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 import com.example.proyecto_final_de_onboarding.getRoundedPrice
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

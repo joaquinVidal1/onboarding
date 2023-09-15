@@ -1,11 +1,14 @@
-package com.example.proyecto_final_de_onboarding.mainscreen
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.data.CartRepository
-import com.example.proyecto_final_de_onboarding.data.ItemsRepository
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
-import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
+import com.example.proyecto_final_de_onboarding.data.repository.CartRepository
+import com.example.proyecto_final_de_onboarding.data.repository.ItemsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -112,7 +115,3 @@ class MainScreenViewModel @Inject constructor(
     }
 
 }
-
-
-
-

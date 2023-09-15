@@ -1,9 +1,9 @@
 package com.example.proyecto_final_de_onboarding.di
 
 import android.content.Context
-import com.example.proyecto_final_de_onboarding.database.CartDao
-import com.example.proyecto_final_de_onboarding.database.ItemDao
-import com.example.proyecto_final_de_onboarding.database.MyStoreDatabase
+import com.example.proyecto_final_de_onboarding.data.db.CartDao
+import com.example.proyecto_final_de_onboarding.data.db.ItemDao
+import com.example.proyecto_final_de_onboarding.data.db.MyStoreDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

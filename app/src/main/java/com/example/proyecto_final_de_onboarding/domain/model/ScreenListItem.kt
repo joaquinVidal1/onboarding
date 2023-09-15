@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.domain.entities
+package com.example.proyecto_final_de_onboarding.domain.model
 
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind

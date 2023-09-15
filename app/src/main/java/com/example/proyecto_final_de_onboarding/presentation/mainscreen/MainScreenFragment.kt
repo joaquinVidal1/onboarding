@@ -1,11 +1,10 @@
-package com.example.proyecto_final_de_onboarding.mainscreen
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
 import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
-import android.view.KeyEvent.KEYCODE_ENTER
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
-import com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -76,7 +74,7 @@ class MainScreenFragment : Fragment() {
 
         })
         itemSearch.setOnKeyListener { _, keyCode, keyEvent -> //If the keyEvent is a key-down event on the "enter" button
-            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KEYCODE_ENTER) {
+            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
                 hideKeyboard()
                 true
             } else false
@@ -91,7 +89,7 @@ class MainScreenFragment : Fragment() {
 
         cartButton.setOnClickListener {
             this.findNavController()
-                .navigate(actionMainScreenFragmentToCheckoutScreenFragment())
+                .navigate(com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
             itemSearch.setText("")
         }
         carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
@@ -164,7 +162,3 @@ class MainScreenFragment : Fragment() {
 
 
 }
-
-
-
-

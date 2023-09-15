@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.checkoutscreen
+package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
 
 import android.app.AlertDialog

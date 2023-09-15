@@ -1,11 +1,11 @@
-package com.example.proyecto_final_de_onboarding.database
+package com.example.proyecto_final_de_onboarding.data.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
+import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 
 @Database(entities = [Item::class, CartItem::class], version = 1, exportSchema = false)
 abstract class MyStoreDatabase : RoomDatabase() {
@@ -18,7 +18,7 @@ abstract class MyStoreDatabase : RoomDatabase() {
 
         fun getMyStoreDatabase(context: Context): MyStoreDatabase {
             synchronized(this) {
-                if (!::MYSTOREDBINSTANCE.isInitialized) {
+                if (!Companion::MYSTOREDBINSTANCE.isInitialized) {
                     MYSTOREDBINSTANCE = Room.databaseBuilder(
                         context.applicationContext,
                         MyStoreDatabase::class.java,

@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.network
+package com.example.proyecto_final_de_onboarding.data.network
 
 import com.example.proyecto_final_de_onboarding.BuildConfig
 import com.squareup.moshi.Moshi
@@ -7,21 +7,10 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Header
 
-interface ItemService {
-    @GET("/products")
-    suspend fun getItems(
-        @Header("AUTHORIZATION") auth: String = "Bearer 0a41c523-fa00-418a-a585-7dd1fc5f18e4"
-    ): List<NetworkItem>
-}
+object RetrofitFactory {
 
-object ItemNetwork {
-
-    val items = getBuilder().create(ItemService::class.java)
-
-    private fun getBuilder(): Retrofit {
+    fun getBuilder(): Retrofit {
         val client = OkHttpClient.Builder()
         if (BuildConfig.DEBUG) {
             val logging = HttpLoggingInterceptor()

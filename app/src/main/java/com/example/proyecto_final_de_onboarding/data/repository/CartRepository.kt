@@ -1,9 +1,9 @@
-package com.example.proyecto_final_de_onboarding.data
+package com.example.proyecto_final_de_onboarding.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
-import com.example.proyecto_final_de_onboarding.database.CartDao
-import com.example.proyecto_final_de_onboarding.domain.entities.CartItem
+import com.example.proyecto_final_de_onboarding.data.db.CartDao
+import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

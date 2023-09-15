@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.checkoutscreen
+package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
-import com.example.proyecto_final_de_onboarding.domain.entities.ScreenListItem
+import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 import com.example.proyecto_final_de_onboarding.getRoundedPrice
 
 class CheckoutScreenAdapter(

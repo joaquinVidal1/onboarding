@@ -1,9 +1,8 @@
-package com.example.proyecto_final_de_onboarding.mainscreen
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -96,10 +95,10 @@ class ViewPagerIndicator @JvmOverloads constructor(
             ?: throw IllegalArgumentException("PagerAdapter cannot be null.")
 
         if (adapter.itemCount <= 1) {
-            visibility = View.INVISIBLE
+            visibility = INVISIBLE
             return
         } else {
-            visibility = View.VISIBLE
+            visibility = VISIBLE
         }
 
         addDots(adapter.itemCount)

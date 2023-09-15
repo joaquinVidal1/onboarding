@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.mainscreen
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -51,5 +51,3 @@ class FeatureCarrouselFragment : Fragment() {
     }
 
 }
-
-
