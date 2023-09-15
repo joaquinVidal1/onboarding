@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.presentation.mainscreen
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen.components
 
 import android.content.Context
 import android.graphics.drawable.Drawable

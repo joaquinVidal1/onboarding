@@ -7,7 +7,6 @@ import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.data.db.CartDao
 import com.example.proyecto_final_de_onboarding.data.db.ItemDao
 import com.example.proyecto_final_de_onboarding.data.network.ProductsService
-import com.example.proyecto_final_de_onboarding.network.asDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

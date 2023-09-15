@@ -19,6 +19,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.FeatureCarrouselFragment
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.MainScreenAdapter
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.ZoomOutPageTransformer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -89,23 +92,12 @@ class MainScreenFragment : Fragment() {
 
         cartButton.setOnClickListener {
             this.findNavController()
-                .navigate(com.example.proyecto_final_de_onboarding.mainscreen.MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
+                .navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
             itemSearch.setText("")
         }
         carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
         viewPageIndicator.setUpWithViewPager2(carrousel)
         carrousel.setPageTransformer(ZoomOutPageTransformer())
-
-        //funcion que se llama al cambiar de pagina en el banner,
-        // la dejo para ya tenerlo si en algun momento la preciso
-//        val pageChangeCallback = object : ViewPager2.OnPageChangeCallback(){
-//            override fun onPageSelected(position: Int) {
-//                super.onPageSelected(position)
-//                si queres hacer algo dependiendo de la pagina va aca
-//            }
-//        }
-//
-//        binding.carrousel.registerOnPageChangeCallback(pageChangeCallback)
 
     }
 
@@ -116,8 +108,7 @@ class MainScreenFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -152,8 +143,7 @@ class MainScreenFragment : Fragment() {
                 )
 
                 putString(
-                    FeatureCarrouselFragment.ARG_DESCRIPTION,
-                    getString(R.string.product_of_the_month)
+                    FeatureCarrouselFragment.ARG_DESCRIPTION, getString(R.string.product_of_the_month)
                 )
             }
             return fragment

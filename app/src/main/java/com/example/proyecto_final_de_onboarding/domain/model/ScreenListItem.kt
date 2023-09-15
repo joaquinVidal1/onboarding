@@ -4,6 +4,7 @@ import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.Kind
 
 sealed class ScreenListItem(val id: Int) {
+
     abstract fun getScreenItemKind(): Kind
 
     data class ScreenHeader(val kind: Kind) : ScreenListItem(Int.MAX_VALUE) {

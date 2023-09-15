@@ -9,6 +9,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.Item
 import com.example.proyecto_final_de_onboarding.data.repository.CartRepository
 import com.example.proyecto_final_de_onboarding.data.repository.ItemsRepository
+import com.example.proyecto_final_de_onboarding.domain.model.CartItem
+import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
