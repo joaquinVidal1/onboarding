@@ -1,7 +1,6 @@
 package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
@@ -17,26 +16,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CheckoutScreenViewModel @Inject constructor(
-    private val itemsRepository: ProductsRepositoryImpl, private val cartRepository: CartRepositoryImpl
+
 ) : ViewModel() {
 
-//    private val storeItems =
-//        Transformations.map(itemsRepository.storeItems) {
-//            it ?: listOf()
-//        }
-
     private val _cart = MutableLiveData<List<CartItem>>()
-    private val cart: LiveData<List<CartItem>>
-        get() = _cart
 
-    val screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
-
-    init {
-//        screenList.addSource(storeItems) {
-//            screenList.value = getScreenList()
-//        }
-        screenList.addSource(cart) {
-            screenList.value = getScreenList()
+    val screenList = _cart.map { cart ->
+        cart.map { cartItem ->
+            ScreenListItem.ScreenItem(
+                itemsRepository.getItem(cartItem.productId),
+                cant = cartItem.cant
+            )
         }
     }
 
@@ -46,13 +36,13 @@ class CheckoutScreenViewModel @Inject constructor(
         it.sumOf { item -> item.cant * item.item.price }
     }
 
-    private fun getScreenList(): List<ScreenListItem.ScreenItem> {
-        val cartList = cart.value ?: listOf()
-        return cartList.mapNotNull { cartItem ->
-            val repoItem = itemsRepository.getItem(cartItem.productId)
-            repoItem.let { ScreenListItem.ScreenItem(it, cartItem.cant) }
-        }
-    }
+//    private fun getScreenList(): List<ScreenListItem.ScreenItem> {
+//        val cartList = cart.value ?: listOf()
+//        return cartList.map { cartItem ->
+//            val repoItem = itemsRepository.getItem(cartItem.productId)
+//            repoItem.let { ScreenListItem.ScreenItem(it, cartItem.cant) }
+//        }
+//    }
 
     fun getCheckout(): String {
         return getRoundedPrice(totalAmount.value!!)
@@ -70,7 +60,7 @@ class CheckoutScreenViewModel @Inject constructor(
         }
     }
 
-    fun getQty(itemId: Int): Int? {
-        return cart.value?.find { it.productId == itemId }?.cant
+    fun getQty(itemId: Int): Int {
+        return _cart.value?.find { it.productId == itemId }?.cant ?: 0
     }
 }

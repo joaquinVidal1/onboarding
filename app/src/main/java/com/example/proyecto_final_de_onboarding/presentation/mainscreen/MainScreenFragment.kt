@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -33,6 +34,16 @@ class MainScreenFragment : Fragment() {
     private val viewModel: MainScreenViewModel by viewModels()
     private lateinit var binding: FragmentMainScreenBinding
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        lifecycle.addObserver(viewModel)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(viewModel)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
@@ -52,7 +63,7 @@ class MainScreenFragment : Fragment() {
             }
         }
 
-        viewModel.products.observe(viewLifecycleOwner){}
+        viewModel.products.observe(viewLifecycleOwner) {}
 
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
             if (it) {
@@ -84,12 +95,10 @@ class MainScreenFragment : Fragment() {
             } else false
         }
 
-//        viewModel.networkError.observe(viewLifecycleOwner) {
-//            if (it) {
-//                Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
-//                viewModel.networkErrorHandled()
-//            }
-//        }
+        viewModel.error.observe(viewLifecycleOwner) {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+
+        }
 
         cartButton.setOnClickListener {
             this.findNavController()

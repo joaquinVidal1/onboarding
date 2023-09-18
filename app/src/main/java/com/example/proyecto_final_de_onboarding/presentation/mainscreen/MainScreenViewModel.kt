@@ -1,5 +1,7 @@
 package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,7 +31,7 @@ class MainScreenViewModel @Inject constructor(
     private val addProductToCart: AddProductToCartUseCase,
     private val removeProductFromCart: RemoveProductFromCartUseCase,
     private val getCartUseCase: GetCartUseCase
-) : ViewModel() {
+) : ViewModel(), DefaultLifecycleObserver {
 
     private val _cart = MutableLiveData<List<CartItem>>()
     private val cart: LiveData<List<CartItem>>
@@ -58,7 +60,10 @@ class MainScreenViewModel @Inject constructor(
         screenItemsList.addSource(_query) {
             screenItemsList.value = onInputChanged()
         }
+    }
 
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
         getCart()
     }
 
@@ -83,7 +88,7 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch {
             addProductToCart(AddProductToCartUseCase.Params(productId = productId)).let {
                 if (it is Result.Success) {
-                    _cart.value = it.value ?: listOf()
+                    _cart.value = it.value
                 } else {
                     _error.value = (it as Result.Error).message ?: "Error"
                 }
@@ -95,7 +100,7 @@ class MainScreenViewModel @Inject constructor(
         viewModelScope.launch {
             removeProductFromCart(RemoveProductFromCartUseCase.Params(productId = productId)).let {
                 if (it is Result.Success) {
-                    _cart.value = it.value ?: listOf()
+                    _cart.value = it.value
                 } else {
                     _error.value = (it as Result.Error).message ?: "Error"
                 }
