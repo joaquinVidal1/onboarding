@@ -1,22 +1,26 @@
 package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
-import androidx.lifecycle.*
-import com.example.proyecto_final_de_onboarding.data.repository.CartRepository
-import com.example.proyecto_final_de_onboarding.data.repository.ItemsRepository
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
+import androidx.lifecycle.Transformations
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.proyecto_final_de_onboarding.data.repository.CartRepositoryImpl
+import com.example.proyecto_final_de_onboarding.data.repository.ProductsRepositoryImpl
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
-import com.example.proyecto_final_de_onboarding.getRoundedPrice
+import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: ItemsRepository, private val cartRepository: CartRepository) : ViewModel() {
+class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: ProductsRepositoryImpl, private val cartRepository: CartRepositoryImpl) : ViewModel() {
 
-    private val storeItems =
-        Transformations.map(itemsRepository.storeItems) {
-            it ?: listOf()
-        }
+//    private val storeItems =
+//        Transformations.map(itemsRepository.storeItems) {
+//            it ?: listOf()
+//        }
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
     private val cart: LiveData<List<CartItem>>
@@ -25,9 +29,9 @@ class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: I
     val screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
 
     init {
-        screenList.addSource(storeItems) {
-            screenList.value = getScreenList()
-        }
+//        screenList.addSource(storeItems) {
+//            screenList.value = getScreenList()
+//        }
         screenList.addSource(cart) {
             screenList.value = getScreenList()
         }

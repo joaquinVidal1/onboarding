@@ -1,7 +1,7 @@
 package com.example.proyecto_final_de_onboarding.data.network.model
 
-import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.getFromString
+import com.example.proyecto_final_de_onboarding.domain.model.Product
+import com.example.proyecto_final_de_onboarding.domain.model.getFromString
 
 data class NetworkItem(
     val id: Int,
@@ -12,8 +12,8 @@ data class NetworkItem(
     val listImageUrl: String
 ) {
 
-    fun asDomainModel(): Item {
-        return Item(
+    fun asDomainModel(): Product {
+        return Product(
             id = id,
             name = name,
             price = price,

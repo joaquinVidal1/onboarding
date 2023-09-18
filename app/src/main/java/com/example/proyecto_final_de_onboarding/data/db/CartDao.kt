@@ -21,6 +21,6 @@ interface CartDao {
     @Query("DELETE FROM cartTable")
     fun emptyTable()
 
-    @Query("DELETE FROM cartTable WHERE cartTable.itemId NOT IN (SELECT id FROM itemsTable)")
+    @Query("DELETE FROM cartTable WHERE cartTable.itemId NOT IN (SELECT id FROM productsTable)")
     fun removeIfNotInStore()
 }

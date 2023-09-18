@@ -15,7 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
-import com.example.proyecto_final_de_onboarding.getRoundedPrice
+import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

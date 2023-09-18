@@ -4,12 +4,12 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.example.proyecto_final_de_onboarding.Item
+import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 
-@Database(entities = [Item::class, CartItem::class], version = 1, exportSchema = false)
+@Database(entities = [Product::class, CartItem::class], version = 1, exportSchema = false)
 abstract class MyStoreDatabase : RoomDatabase() {
-    abstract val itemDao: ItemDao
+    abstract val itemDao: ProductsDao
     abstract val cartDao: CartDao
 
     companion object {

@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding
+package com.example.proyecto_final_de_onboarding.domain.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -10,8 +10,8 @@ enum class Kind(val header: String) {
     Veggie("Veggies")
 }
 
-@Entity(tableName = "itemsTable")
-data class Item(
+@Entity(tableName = "productsTable")
+data class Product(
     @PrimaryKey
     val id: Int,
     val name: String,

@@ -6,11 +6,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.proyecto_final_de_onboarding.Item
+import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
-import com.example.proyecto_final_de_onboarding.getRoundedPrice
+import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 
 class CheckoutScreenAdapter(
     private val entireItemListener: EntireItemListener,
@@ -35,7 +35,7 @@ class CheckoutScreenAdapter(
     }
 
     class EntireItemListener(private val clickListener: (itemId: Int) -> Unit) {
-        fun onClick(item: Item) = clickListener(item.id)
+        fun onClick(item: Product) = clickListener(item.id)
     }
 
     class ViewHolder private constructor(val binding: ListItemCheckoutScreenBinding) :

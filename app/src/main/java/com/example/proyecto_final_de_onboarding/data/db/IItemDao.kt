@@ -1,23 +1,25 @@
 package com.example.proyecto_final_de_onboarding.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.proyecto_final_de_onboarding.Item
+import com.example.proyecto_final_de_onboarding.domain.model.Product
 
 @Dao
-interface ItemDao {
-    @Query("select * from itemsTable")
-    fun getItems(): LiveData<List<Item>>
+interface ProductsDao {
+    @Query("select * from productsTable")
+    fun getItems(): List<Product>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAll(items: List<Item>)
+    fun insertAll(products: List<Product>)
 
-    @Query("DELETE FROM itemsTable")
+    @Query("DELETE FROM productsTable")
     fun emptyTable()
 
     @Transaction
-    fun emptyAndInsert(items: List<Item>) {
+    fun emptyAndInsert(products: List<Product>) {
         emptyTable()
-        insertAll(items)
+        insertAll(products)
     }
+
+    @Query("SELECT * FROM productsTable WHERE id = :productId")
+    fun getItem(productId: Int): Product
 }

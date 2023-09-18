@@ -6,10 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.proyecto_final_de_onboarding.Item
-import com.example.proyecto_final_de_onboarding.data.repository.CartRepository
-import com.example.proyecto_final_de_onboarding.data.repository.ItemsRepository
+import com.example.proyecto_final_de_onboarding.data.repository.CartRepositoryImpl
+import com.example.proyecto_final_de_onboarding.data.repository.ProductsRepositoryImpl
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
+import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -17,8 +17,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenViewModel @Inject constructor(
-    private val cartRepository: CartRepository,
-    private val itemsRepository: ItemsRepository
+    private val cartRepository: CartRepositoryImpl,
+    private val itemsRepository: ProductsRepositoryImpl
 ) : ViewModel() {
 
     private val _cart = Transformations.map(cartRepository.cart) { it }
@@ -27,23 +27,23 @@ class MainScreenViewModel @Inject constructor(
 
     private val _query = MutableLiveData("")
 
-    private val itemList =
-        Transformations.map(itemsRepository.storeItems) {
-            it.sortedBy { item -> item.kind }
-        }
+//    private val itemList =
+//        Transformations.map(itemsRepository.storeItems) {
+//            it.sortedBy { item -> item.kind }
+//        }
 
     val showCartCircle: LiveData<Boolean> =
         Transformations.map(cart) { it.isNotEmpty() }
 
-    val networkError: LiveData<Boolean> =
-        Transformations.map(itemsRepository.networkError) { it }
+//    val networkError: LiveData<Boolean> =
+//        Transformations.map(itemsRepository.networkError) { it }
 
     private val screenItemsList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
 
     init {
-        screenItemsList.addSource(itemList) {
-            screenItemsList.value = onInputChanged()
-        }
+//        screenItemsList.addSource(itemList) {
+//            screenItemsList.value = onInputChanged()
+//        }
         screenItemsList.addSource(cart) {
             screenItemsList.value = onInputChanged()
         }
@@ -65,7 +65,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
 
-    private fun shouldBeAdded(query: String, item: Item) =
+    private fun shouldBeAdded(query: String, item: Product) =
         item.kind.name.lowercase().contains(query) || item.name.lowercase()
             .contains(query)
 
@@ -74,19 +74,20 @@ class MainScreenViewModel @Inject constructor(
 
     private fun onInputChanged(): List<ScreenListItem.ScreenItem> {
         val query: String = _query.value!!
-        val entireList = itemList.value ?: listOf()
-
-        return entireList.filter { item ->
-            when (query) {
-                "" -> true
-                else -> shouldBeAdded(query, item)
-            }
-        }.map { item ->
-            ScreenListItem.ScreenItem(
-                item,
-                getItemQty(item.id)
-            )
-        }
+//        val entireList = itemList.value ?: listOf()
+//
+//        return entireList.filter { item ->
+//            when (query) {
+//                "" -> true
+//                else -> shouldBeAdded(query, item)
+//            }
+//        }.map { item ->
+//            ScreenListItem.ScreenItem(
+//                item,
+//                getItemQty(item.id)
+//            )
+//        }
+        return listOf()
 
     }
 
@@ -113,7 +114,7 @@ class MainScreenViewModel @Inject constructor(
     }
 
     fun networkErrorHandled() {
-        itemsRepository.networkErrorHandled()
+//        itemsRepository.networkErrorHandled()
     }
 
 }

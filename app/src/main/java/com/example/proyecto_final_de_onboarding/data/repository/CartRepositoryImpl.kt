@@ -4,18 +4,18 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.Transformations
 import com.example.proyecto_final_de_onboarding.data.db.CartDao
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
+import com.example.proyecto_final_de_onboarding.domain.repository.CartRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class CartRepository @Inject constructor(private val cartDao: CartDao) {
+class CartRepositoryImpl @Inject constructor(private val cartDao: CartDao) : CartRepository {
 
-    private val _cart =
-        Transformations.map(cartDao.getCartItems()) {
-            it ?: listOf()
-        }
+    private val _cart = Transformations.map(cartDao.getCartItems()) {
+        it ?: listOf()
+    }
     val cart: LiveData<List<CartItem>>
         get() = _cart
 
@@ -23,12 +23,10 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
         val updatedCart: List<CartItem>
         val itemToAdd = _cart.value?.find { it.itemId == id }
         if (itemToAdd != null) {
-            updatedCart =
-                _cart.value!!.toMutableList().apply {
-                    find { it.itemId == id }
-                        ?.apply { cant = cant.plus(1) }
+            updatedCart = _cart.value!!.toMutableList().apply {
+                find { it.itemId == id }?.apply { cant = cant.plus(1) }
 
-                }
+            }
         } else {
             updatedCart = _cart.value?.toMutableList()?.apply { add(CartItem(id, 1)) } ?: listOf()
         }
@@ -43,11 +41,9 @@ class CartRepository @Inject constructor(private val cartDao: CartDao) {
                 cartDao.removeFromCartDB(itemToRemove.itemId)
             }
         } else {
-            updatedCart =
-                _cart.value!!.toMutableList().apply {
-                    find { it.itemId == id }
-                        ?.apply { cant = cant.minus(1) }
-                }
+            updatedCart = _cart.value!!.toMutableList().apply {
+                find { it.itemId == id }?.apply { cant = cant.minus(1) }
+            }
             updateCart(updatedCart)
         }
     }

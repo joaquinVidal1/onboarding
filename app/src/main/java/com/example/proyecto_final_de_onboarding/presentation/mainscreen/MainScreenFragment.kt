@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -83,12 +82,12 @@ class MainScreenFragment : Fragment() {
             } else false
         }
 
-        viewModel.networkError.observe(viewLifecycleOwner) {
-            if (it) {
-                Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
-                viewModel.networkErrorHandled()
-            }
-        }
+//        viewModel.networkError.observe(viewLifecycleOwner) {
+//            if (it) {
+//                Toast.makeText(context, "Network error", Toast.LENGTH_SHORT).show()
+//                viewModel.networkErrorHandled()
+//            }
+//        }
 
         cartButton.setOnClickListener {
             this.findNavController()

@@ -2,7 +2,7 @@ package com.example.proyecto_final_de_onboarding.di
 
 import android.content.Context
 import com.example.proyecto_final_de_onboarding.data.db.CartDao
-import com.example.proyecto_final_de_onboarding.data.db.ItemDao
+import com.example.proyecto_final_de_onboarding.data.db.ProductsDao
 import com.example.proyecto_final_de_onboarding.data.db.MyStoreDatabase
 import dagger.Module
 import dagger.Provides
@@ -27,7 +27,7 @@ object DatabaseModule {
     }
 
     @Provides
-    fun provideItemDao(database: MyStoreDatabase): ItemDao {
+    fun provideItemDao(database: MyStoreDatabase): ProductsDao {
         return database.itemDao
     }
 }
