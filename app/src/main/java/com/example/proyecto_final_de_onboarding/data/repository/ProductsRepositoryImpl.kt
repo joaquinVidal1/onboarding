@@ -13,14 +13,6 @@ class ProductsRepositoryImpl @Inject constructor(
     private val productsDao: ProductsDao, private val cartDao: CartDao, private val productsService: ProductsService
 ) : ProductsRepository {
 
-    suspend fun refreshItems() {
-        withContext(Dispatchers.IO) {
-            val productsList = productsService.getProducts()
-            productsDao.emptyAndInsert(productsList.map { it.asDomainModel() })
-            cartDao.removeIfNotInStore()
-        }
-    }
-
     fun getItem(productId: Int): Product {
         return productsDao.getItem(productId)
     }
@@ -28,6 +20,14 @@ class ProductsRepositoryImpl @Inject constructor(
     override suspend fun getProducts(): List<Product> {
         return withContext(Dispatchers.IO) {
             productsDao.getItems()
+        }
+    }
+
+    override suspend fun refreshProducts() {
+        withContext(Dispatchers.IO) {
+            val productsList = productsService.getProducts()
+            productsDao.emptyAndInsert(productsList.map { it.asDomainModel() })
+            cartDao.removeIfNotInStore()
         }
     }
 

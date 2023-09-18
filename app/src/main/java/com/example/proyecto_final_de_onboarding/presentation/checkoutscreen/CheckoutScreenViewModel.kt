@@ -2,8 +2,9 @@ package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.data.repository.CartRepositoryImpl
 import com.example.proyecto_final_de_onboarding.data.repository.ProductsRepositoryImpl
@@ -15,14 +16,16 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: ProductsRepositoryImpl, private val cartRepository: CartRepositoryImpl) : ViewModel() {
+class CheckoutScreenViewModel @Inject constructor(
+    private val itemsRepository: ProductsRepositoryImpl, private val cartRepository: CartRepositoryImpl
+) : ViewModel() {
 
 //    private val storeItems =
 //        Transformations.map(itemsRepository.storeItems) {
 //            it ?: listOf()
 //        }
 
-    private val _cart = Transformations.map(cartRepository.cart) { it }
+    private val _cart = MutableLiveData<List<CartItem>>()
     private val cart: LiveData<List<CartItem>>
         get() = _cart
 
@@ -37,19 +40,17 @@ class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: P
         }
     }
 
-    val showCheckoutButton: LiveData<Boolean> =
-        Transformations.map(screenList) { it.isNotEmpty() }
+    val showCheckoutButton: LiveData<Boolean> = screenList.map { it.isNotEmpty() }
 
-    val totalAmount: LiveData<Double> =
-        Transformations.map(screenList) {
-            it.sumOf { item -> item.cant * item.item.price }
-        }
+    val totalAmount: LiveData<Double> = screenList.map {
+        it.sumOf { item -> item.cant * item.item.price }
+    }
 
     private fun getScreenList(): List<ScreenListItem.ScreenItem> {
         val cartList = cart.value ?: listOf()
         return cartList.mapNotNull { cartItem ->
-            val repoItem = itemsRepository.getItem(cartItem.itemId)
-            repoItem?.let { ScreenListItem.ScreenItem(it, cartItem.cant) }
+            val repoItem = itemsRepository.getItem(cartItem.productId)
+            repoItem.let { ScreenListItem.ScreenItem(it, cartItem.cant) }
         }
     }
 
@@ -65,11 +66,11 @@ class CheckoutScreenViewModel @Inject constructor(private val itemsRepository: P
 
     fun itemQtyChanged(itemId: Int, newQty: Int) {
         viewModelScope.launch {
-            cartRepository.editQuantity(itemId, newQty)
+//            cartRepository.editQuantity(itemId, newQty)
         }
     }
 
     fun getQty(itemId: Int): Int? {
-        return cart.value?.find { it.itemId == itemId }?.cant
+        return cart.value?.find { it.productId == itemId }?.cant
     }
 }

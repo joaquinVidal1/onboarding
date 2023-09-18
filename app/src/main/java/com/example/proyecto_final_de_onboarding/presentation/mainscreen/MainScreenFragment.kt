@@ -52,6 +52,8 @@ class MainScreenFragment : Fragment() {
             }
         }
 
+        viewModel.products.observe(viewLifecycleOwner){}
+
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
             if (it) {
                 cartDot.visibility = View.VISIBLE
