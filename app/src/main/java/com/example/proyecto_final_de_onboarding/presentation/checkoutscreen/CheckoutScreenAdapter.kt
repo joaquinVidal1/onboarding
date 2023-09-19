@@ -49,17 +49,14 @@ class CheckoutScreenAdapter(
         fun bind(item: ScreenListItem.ScreenItem) {
             binding.entireItem.setOnClickListener { onItemPressed(item) }
 
-            Glide.with(binding.entireItem.context).load(item.product.checkoutImage).placeholder(R.mipmap.main_placeholder)
-                .centerCrop().into(binding.itemImage)
+            Glide.with(binding.entireItem.context).load(item.product.checkoutImage)
+                .placeholder(R.mipmap.main_placeholder).centerCrop().into(binding.itemImage)
 
             binding.itemName.text = item.product.name
 
-//            TODO use placeholders
-            val itemPrice = "$${getRoundedPrice(item.product.price)}"
-            binding.itemPrice.text = itemPrice
-
-            val itemCantText = if (item.quantity == 1) "${item.quantity} unit" else "${item.quantity} units"
-            binding.itemCant.text = itemCantText
+            val context = binding.root.context
+            binding.itemPrice.text = context.getString(R.string.price, getRoundedPrice(item.product.price))
+            binding.itemCant.text = context.resources.getQuantityString(R.plurals.unit, item.quantity, item.quantity)
         }
 
     }

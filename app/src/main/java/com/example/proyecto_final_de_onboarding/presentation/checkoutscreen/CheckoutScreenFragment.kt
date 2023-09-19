@@ -68,10 +68,9 @@ class CheckoutScreenFragment : Fragment() {
             this.findNavController().popBackStack()
         }
 
-//        TODO use placeholders
         binding.checkoutButton.setOnClickListener {
-            val message = "Total is " + viewModel.getCheckout()
-            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, getString(R.string.checkout_message, viewModel.getCheckout()), Toast.LENGTH_SHORT)
+                .show()
             viewModel.cleanCart()
             this.findNavController().popBackStack()
         }
@@ -83,8 +82,7 @@ class CheckoutScreenFragment : Fragment() {
         }
 
         viewModel.totalAmount.observe(viewLifecycleOwner) {
-            val roundedPrice = "$ ${getRoundedPrice(it)}"
-            binding.totalAmount.text = roundedPrice
+            binding.totalAmount.text = getString(R.string.price, getRoundedPrice(it))
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
