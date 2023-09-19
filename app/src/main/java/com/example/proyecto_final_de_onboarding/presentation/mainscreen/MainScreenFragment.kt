@@ -33,6 +33,7 @@ class MainScreenFragment : Fragment() {
 
     private val viewModel: MainScreenViewModel by viewModels()
     private lateinit var binding: FragmentMainScreenBinding
+    private lateinit var adapter: MainScreenAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,17 +47,42 @@ class MainScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
-            viewModel.onAddItem(itemId)
-        }, MainScreenAdapter.RemoveUnitListener { itemId -> viewModel.onRemoveItem(itemId) })
-        val itemsList = binding.itemsList
-        val cartDot = binding.cartDot
-        val cartButton = binding.cartButton
-        val itemSearch = binding.itemSearch
-        val carrousel = binding.carrousel
-        val viewPageIndicator = binding.viewPageIndicator
 
-        itemsList.adapter = adapter
+        setUpAdapter()
+        setUpObservers()
+        setUpListeners()
+        setUpCarrousel()
+    }
+
+    private fun setUpListeners() {
+        binding.itemSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                viewModel.onQueryChanged(binding.itemSearch.text.toString())
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
+        })
+
+        binding.itemSearch.setOnKeyListener { _, keyCode, keyEvent -> //If the keyEvent is a key-down event on the "enter" button
+            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
+                hideKeyboard()
+                true
+            } else false
+        }
+
+        binding.cartButton.setOnClickListener {
+            this.findNavController()
+                .navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
+            binding.itemSearch.setText("")
+        }
+    }
+
+    private fun setUpObservers() {
         viewModel.displayList.observe(viewLifecycleOwner) {
             it?.let {
                 adapter.submitList(it)
@@ -66,6 +92,8 @@ class MainScreenFragment : Fragment() {
         viewModel.products.observe(viewLifecycleOwner) {}
 
         viewModel.showCartCircle.observe(viewLifecycleOwner) {
+            val cartDot = binding.cartDot
+            val cartButton = binding.cartButton
             if (it) {
                 cartDot.visibility = View.VISIBLE
                 cartButton.isEnabled = true
@@ -74,46 +102,32 @@ class MainScreenFragment : Fragment() {
                 cartButton.isEnabled = false
             }
         }
-        val manager = LinearLayoutManager(activity)
-        itemsList.layoutManager = manager
-        itemSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                viewModel.onQueryChanged(itemSearch.text.toString())
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
-        itemSearch.setOnKeyListener { _, keyCode, keyEvent -> //If the keyEvent is a key-down event on the "enter" button
-            if (keyEvent.action == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_ENTER) {
-                hideKeyboard()
-                true
-            } else false
-        }
 
         viewModel.error.observe(viewLifecycleOwner) {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
 
         }
+    }
 
-        cartButton.setOnClickListener {
-            this.findNavController()
-                .navigate(MainScreenFragmentDirections.actionMainScreenFragmentToCheckoutScreenFragment())
-            itemSearch.setText("")
-        }
-        carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
-        viewPageIndicator.setUpWithViewPager2(carrousel)
-        carrousel.setPageTransformer(ZoomOutPageTransformer())
 
+    private fun setUpAdapter() {
+        adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
+            viewModel.onAddItem(itemId)
+        }, MainScreenAdapter.RemoveUnitListener { itemId -> viewModel.onRemoveItem(itemId) })
+        binding.itemsList.adapter = adapter
+        binding.itemsList.layoutManager = LinearLayoutManager(activity)
     }
 
     private fun hideKeyboard() {
         val manager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(view?.windowToken, 0)
+    }
+
+    private fun setUpCarrousel() {
+        val carrousel = binding.carrousel
+        carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
+        binding.viewPageIndicator.setUpWithViewPager2(carrousel)
+        carrousel.setPageTransformer(ZoomOutPageTransformer())
     }
 
 
