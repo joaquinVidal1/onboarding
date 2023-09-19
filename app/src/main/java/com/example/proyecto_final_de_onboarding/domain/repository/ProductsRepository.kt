@@ -6,4 +6,6 @@ interface ProductsRepository {
     suspend fun getProducts(): List<Product>
 
     suspend fun refreshProducts()
+
+    suspend fun getProduct(productId: Int): Product
 }

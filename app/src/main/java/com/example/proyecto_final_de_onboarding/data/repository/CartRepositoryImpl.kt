@@ -26,7 +26,7 @@ class CartRepositoryImpl @Inject constructor(private val cartDao: CartDao) : Car
 //        }
 //    }
 
-    suspend fun cleanCart() {
+    override suspend fun emptyCart() {
         withContext(Dispatchers.IO) {
             cartDao.emptyTable()
         }
@@ -52,7 +52,7 @@ class CartRepositoryImpl @Inject constructor(private val cartDao: CartDao) : Car
     }
 
     override suspend fun getCart(): List<CartItem> {
-        return withContext(Dispatchers.IO){
+        return withContext(Dispatchers.IO) {
             cartDao.getCartItems()
         }
     }

@@ -13,7 +13,7 @@ class ProductsRepositoryImpl @Inject constructor(
     private val productsDao: ProductsDao, private val cartDao: CartDao, private val productsService: ProductsService
 ) : ProductsRepository {
 
-    fun getItem(productId: Int): Product {
+    override suspend fun getProduct(productId: Int): Product {
         return productsDao.getItem(productId)
     }
 
