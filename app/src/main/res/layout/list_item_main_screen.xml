@@ -53,30 +53,32 @@
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/view_button_add"
-            android:layout_width="0dp"
+            android:layout_width="120dp"
             android:layout_height="0dp"
+            android:layout_marginVertical="10dp"
+            android:layout_marginEnd="12dp"
             android:minHeight="48dp"
-            android:layout_marginStart="250dp"
             android:paddingTop="8dp"
             android:paddingBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="@id/item_price"
+            app:layout_constraintBottom_toBottomOf="@id/item_image"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/item_name">
+            app:layout_constraintTop_toTopOf="@id/item_image">
 
             <Button
                 android:id="@+id/entire_button_add"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:background="@drawable/border_button_add"
                 android:fontFamily="@font/sf_pro_text"
                 android:gravity="center"
+                android:visibility="gone"
                 android:minHeight="48dp"
+                android:paddingHorizontal="40dp"
                 android:text="@string/add"
                 android:textAlignment="center"
                 android:textAllCaps="false"
                 android:textColor="@color/color_add_button"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 tools:ignore="TouchTargetSizeCheck" />
 
@@ -84,7 +86,8 @@
                 android:id="@+id/button_add_qty"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/border_button_add_qty">
+                android:background="@drawable/border_button_add_qty"
+                android:visibility="visible">
 
                 <ImageButton
                     android:id="@+id/button_add"
