@@ -35,6 +35,12 @@ class CheckoutScreenViewModel @Inject constructor(
 
     private val cart = MutableLiveData<List<CartItem>>()
 
+    private val _screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
+    val screenList: LiveData<List<ScreenListItem.ScreenItem>> = _screenList
+
+    private val _error = SingleLiveEvent<String>()
+    val error: LiveData<String> = _error
+
     private val products = liveData<List<Product>> {
         getProductsUseCase(Unit).let {
             if (it is Result.Success) it.value else {
@@ -43,13 +49,6 @@ class CheckoutScreenViewModel @Inject constructor(
             }
         }
     }
-    
-
-    private val _screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
-    val screenList: LiveData<List<ScreenListItem.ScreenItem>> = _screenList
-
-    private val _error = SingleLiveEvent<String>()
-    val error: LiveData<String> = _error
 
     val showCheckoutButton: LiveData<Boolean> = screenList.map { it.isNotEmpty() }
 

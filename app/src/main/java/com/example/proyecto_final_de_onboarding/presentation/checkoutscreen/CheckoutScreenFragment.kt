@@ -22,6 +22,8 @@ import dagger.hilt.android.AndroidEntryPoint
 class CheckoutScreenFragment : Fragment() {
 
     private val viewModel: CheckoutScreenViewModel by viewModels()
+    private lateinit var binding: FragmentCheckoutScreenBinding
+    private lateinit var adapter: CheckoutScreenAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,64 +35,80 @@ class CheckoutScreenFragment : Fragment() {
         lifecycle.removeObserver(viewModel)
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val binding: FragmentCheckoutScreenBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_checkout_screen, container, false
-        )
-        val backButton = binding.backButton
-        val checkoutButton = binding.checkoutButton
-        val totalAmount = binding.totalAmount
-        val cartItemsList = binding.cartItemsList
+        setUpListeners()
+        setUpAdapter()
+        setUpObservers()
+    }
 
-        backButton.setOnClickListener {
+    private fun setUpAdapter() {
+        adapter = CheckoutScreenAdapter(CheckoutScreenAdapter.EntireItemListener { itemId ->
+            val builder = AlertDialog.Builder(context)
+            val numberPicker = NumberPicker(context)
+            numberPicker.minValue = 0
+            numberPicker.maxValue = 500
+            numberPicker.wrapSelectorWheel = false
+            numberPicker.value = viewModel.getQty(itemId)
+            builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                viewModel.itemQtyChanged(itemId, numberPicker.value)
+
+            }
+            builder.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+            builder.setTitle(getString(R.string.dialog_title))
+            builder.setView(numberPicker)
+            builder.show()
+        })
+
+        binding.cartItemsList.also {
+            it.adapter = adapter
+            it.layoutManager = GridLayoutManager(activity, 2)
+        }
+
+    }
+
+    private fun setUpListeners() {
+
+        binding.backButton.setOnClickListener {
             this.findNavController().popBackStack()
         }
-        binding.lifecycleOwner = this
-        cartItemsList.layoutManager = GridLayoutManager(activity, 2)
-        val adapter = CheckoutScreenAdapter(
-            CheckoutScreenAdapter.EntireItemListener { itemId ->
-                val builder = AlertDialog.Builder(context)
-                val numberPicker = NumberPicker(context)
-                numberPicker.minValue = 0
-                numberPicker.maxValue = 500
-                numberPicker.wrapSelectorWheel = false
-                numberPicker.value = viewModel.getQty(itemId)!!
-                builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
-                    viewModel.itemQtyChanged(itemId, numberPicker.value)
 
-                }
-                builder.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-                builder.setTitle(getString(R.string.dialog_title))
-                builder.setView(numberPicker)
-                builder.show()
-            }
-        )
-
-        cartItemsList.adapter = adapter
-        viewModel.screenList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
-        }
-
-        viewModel.totalAmount.observe(viewLifecycleOwner) {
-            val roundedPrice = "$" + getRoundedPrice(it)
-            totalAmount.text = roundedPrice
-        }
-
-        viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
-            checkoutButton.isEnabled = it
-        }
         binding.checkoutButton.setOnClickListener {
             val message = "Total is " + viewModel.getCheckout()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
             viewModel.cleanCart()
             this.findNavController().popBackStack()
         }
+    }
+
+    private fun setUpObservers() {
+        viewModel.screenList.observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
+
+        viewModel.totalAmount.observe(viewLifecycleOwner) {
+            val roundedPrice = "$ ${getRoundedPrice(it)}"
+            binding.totalAmount.text = roundedPrice
+        }
+
+        viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
+            binding.checkoutButton.isEnabled = it
+        }
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_checkout_screen, container, false
+        )
         return binding.root
+
     }
 
 }
+
+
 
