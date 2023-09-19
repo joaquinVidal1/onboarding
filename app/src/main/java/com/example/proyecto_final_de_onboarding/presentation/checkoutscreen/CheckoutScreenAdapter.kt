@@ -54,6 +54,7 @@ class CheckoutScreenAdapter(
 
             binding.itemName.text = item.item.name
 
+//            TODO use placeholders
             val itemPrice = "$${getRoundedPrice(item.item.price)}"
             binding.itemPrice.text = itemPrice
 

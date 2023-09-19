@@ -110,4 +110,8 @@ class CheckoutScreenViewModel @Inject constructor(
             ScreenListItem.ScreenItem(item = it, cant = this.quantity)
         }
     }
+
+    fun onProductPressed(product: ScreenListItem.ScreenItem) {
+
+    }
 }

@@ -54,8 +54,7 @@ class CheckoutScreenFragment : Fragment() {
     }
 
     private fun setUpAdapter() {
-        adapter = CheckoutScreenAdapter(CheckoutScreenAdapter.EntireItemListener { itemId ->
-            })
+        adapter = CheckoutScreenAdapter { viewModel.onProductPressed(it) }
 
         binding.cartItemsList.also {
             it.adapter = adapter
@@ -69,6 +68,7 @@ class CheckoutScreenFragment : Fragment() {
             this.findNavController().popBackStack()
         }
 
+//        TODO use placeholders
         binding.checkoutButton.setOnClickListener {
             val message = "Total is " + viewModel.getCheckout()
             Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
@@ -89,6 +89,14 @@ class CheckoutScreenFragment : Fragment() {
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
             binding.checkoutButton.isEnabled = it
+        }
+
+        viewModel.error.observe(viewLifecycleOwner) {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT)
+        }
+
+        viewModel.showEditQtyDialog(viewLifecycleOwner) {
+            showEditQuantityDialog(it)
         }
     }
 
