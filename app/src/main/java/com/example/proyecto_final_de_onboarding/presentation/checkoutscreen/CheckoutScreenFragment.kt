@@ -79,7 +79,7 @@ class CheckoutScreenFragment : Fragment() {
 
     private fun setUpObservers() {
         viewModel.screenList.observe(viewLifecycleOwner) {
-            adapter.submitList(it)
+            it?.let { adapter.submitList(it) }
         }
 
         viewModel.totalAmount.observe(viewLifecycleOwner) {
@@ -92,7 +92,7 @@ class CheckoutScreenFragment : Fragment() {
         }
 
         viewModel.error.observe(viewLifecycleOwner) {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT)
+            Toast.makeText(context, getString(it), Toast.LENGTH_SHORT).show()
         }
 
         viewModel.showEditQtyDialog.observe(viewLifecycleOwner) {

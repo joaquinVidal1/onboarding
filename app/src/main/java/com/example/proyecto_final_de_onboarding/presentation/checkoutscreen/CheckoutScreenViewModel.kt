@@ -1,12 +1,11 @@
 package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
@@ -21,35 +20,35 @@ import com.example.proyecto_final_de_onboarding.domain.usecase.GetCartUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.GetProductsUseCase
 import com.example.proyecto_final_de_onboarding.domain.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CheckoutScreenViewModel @Inject constructor(
-    @ApplicationContext private val context: Application,
     private val emptyCartUseCase: EmptyCartUseCase,
     private val getCartUseCase: GetCartUseCase,
     private val getProductsUseCase: GetProductsUseCase,
-) : AndroidViewModel(context), DefaultLifecycleObserver {
+) : ViewModel(), DefaultLifecycleObserver {
 
     private val cart = MutableLiveData<List<CartItem>>()
 
     private val _screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
     val screenList: LiveData<List<ScreenListItem.ScreenItem>> = _screenList
 
-    private val _error = SingleLiveEvent<String>()
-    val error: LiveData<String> = _error
+    private val _error = SingleLiveEvent<Int>()
+    val error: LiveData<Int> = _error
 
     private val _showEditQtyDialog = SingleLiveEvent<CartItem>()
     val showEditQtyDialog: LiveData<CartItem> = _showEditQtyDialog
 
     private val products = liveData<List<Product>> {
         getProductsUseCase(Unit).let {
-            if (it is Result.Success) it.value else {
-                _error.value = context.getString(R.string.unable_to_get_products)
-                listOf()
-            }
+            emit(
+                if (it is Result.Success) it.value else {
+                    _error.value = R.string.unable_to_get_products
+                    listOf()
+                }
+            )
         }
     }
 
@@ -61,11 +60,11 @@ class CheckoutScreenViewModel @Inject constructor(
 
     init {
         _screenList.addSource(cart) {
-            _screenList.value = cart.value?.mapNotNull { it.getScreenItem() }
+            _screenList.value = cart.value?.mapNotNull { it.getScreenItem() } ?: listOf()
         }
 
         _screenList.addSource(products) {
-            _screenList.value = cart.value?.mapNotNull { it.getScreenItem() }
+            _screenList.value = cart.value?.mapNotNull { it.getScreenItem() } ?: listOf()
         }
     }
 
@@ -100,7 +99,7 @@ class CheckoutScreenViewModel @Inject constructor(
                 if (cart is Result.Success) {
                     cart.value
                 } else {
-                    _error.value = (cart as Result.Error).message ?: context.getString(R.string.unable_to_get_cart)
+                    _error.value = R.string.unable_to_get_cart
                     listOf()
                 }
             }
