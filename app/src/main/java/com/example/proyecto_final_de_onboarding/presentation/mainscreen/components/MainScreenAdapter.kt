@@ -42,25 +42,25 @@ class MainScreenAdapter(
             addClickListener: AddUnitListener,
             removeClickListener: RemoveUnitListener
         ) {
-            if (item.cant == 0) {
+            if (item.quantity == 0) {
                 binding.buttonAddQty.visibility = View.GONE
                 binding.entireButtonAdd.visibility = View.VISIBLE
             } else {
                 binding.entireButtonAdd.visibility = View.GONE
                 binding.buttonAddQty.visibility = View.VISIBLE
             }
-            binding.entireButtonAdd.setOnClickListener { addClickListener.onClick(item.item) }
-            binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.item) }
+            binding.entireButtonAdd.setOnClickListener { addClickListener.onClick(item.product) }
+            binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.product) }
             Glide.with(binding.itemImage.context)
-                .load(item.item.mainImage)
+                .load(item.product.mainImage)
                 .placeholder(R.mipmap.main_placeholder)
                 .centerInside()
                 .into(binding.itemImage)
-            binding.itemName.text = item.item.name
-            val roundedPrice = "$" + getRoundedPrice(item.item.price)
+            binding.itemName.text = item.product.name
+            val roundedPrice = "$" + getRoundedPrice(item.product.price)
             binding.itemPrice.text = roundedPrice
-            binding.cantText.text = item.cant.toString()
-            binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.item) }
+            binding.cantText.text = item.quantity.toString()
+            binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.product) }
         }
 
         private fun getRoundedPrice(price: Double): String {

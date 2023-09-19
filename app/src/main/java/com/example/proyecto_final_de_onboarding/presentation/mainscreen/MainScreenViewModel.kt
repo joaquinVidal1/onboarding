@@ -68,8 +68,8 @@ class MainScreenViewModel @Inject constructor(
     }
 
     val displayList: LiveData<List<ScreenListItem>> = screenItemsList.map { list ->
-        list.groupBy { item -> item.item.kind }.entries.map { kind ->
-            listOf<ScreenListItem>(ScreenListItem.ScreenHeader(kind.key)) + kind.value.sortedBy { it.item.name }
+        list.groupBy { item -> item.product.kind }.entries.map { kind ->
+            listOf<ScreenListItem>(ScreenListItem.ScreenHeader(kind.key)) + kind.value.sortedBy { it.product.name }
         }.flatten()
     }
 

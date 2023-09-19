@@ -95,12 +95,12 @@ class CheckoutScreenFragment : Fragment() {
             Toast.makeText(context, it, Toast.LENGTH_SHORT)
         }
 
-        viewModel.showEditQtyDialog(viewLifecycleOwner) {
+        viewModel.showEditQtyDialog.observe(viewLifecycleOwner) {
             showEditQuantityDialog(it)
         }
     }
 
-    fun showEditQuantityDialog(cartItem: CartItem) {
+    private fun showEditQuantityDialog(cartItem: CartItem) {
         val numberPicker = NumberPicker(context).apply {
             minValue = 0
             maxValue = 500

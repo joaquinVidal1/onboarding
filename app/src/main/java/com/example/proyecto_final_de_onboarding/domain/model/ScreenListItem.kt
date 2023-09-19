@@ -10,9 +10,9 @@ sealed class ScreenListItem(val id: Int) {
         }
     }
 
-    data class ScreenItem(val item: Product, val cant: Int = 0) : ScreenListItem(item.id) {
+    data class ScreenItem(val product: Product, val quantity: Int = 0) : ScreenListItem(product.id) {
         override fun getScreenItemKind(): Kind {
-            return item.kind
+            return product.kind
         }
     }
 }

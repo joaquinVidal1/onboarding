@@ -41,6 +41,9 @@ class CheckoutScreenViewModel @Inject constructor(
     private val _error = SingleLiveEvent<String>()
     val error: LiveData<String> = _error
 
+    private val _showEditQtyDialog = SingleLiveEvent<CartItem>()
+    val showEditQtyDialog: LiveData<CartItem> = _showEditQtyDialog
+
     private val products = liveData<List<Product>> {
         getProductsUseCase(Unit).let {
             if (it is Result.Success) it.value else {
@@ -53,7 +56,7 @@ class CheckoutScreenViewModel @Inject constructor(
     val showCheckoutButton: LiveData<Boolean> = screenList.map { it.isNotEmpty() }
 
     val totalAmount: LiveData<Double> = screenList.map {
-        it.sumOf { item -> item.cant * item.item.price }
+        it.sumOf { item -> item.quantity * item.product.price }
     }
 
     init {
@@ -107,11 +110,12 @@ class CheckoutScreenViewModel @Inject constructor(
 
     private fun CartItem.getScreenItem(): ScreenListItem.ScreenItem? {
         return products.value?.firstOrNull { it.id == this.productId }?.let {
-            ScreenListItem.ScreenItem(item = it, cant = this.quantity)
+            ScreenListItem.ScreenItem(product = it, quantity = this.quantity)
         }
     }
 
     fun onProductPressed(product: ScreenListItem.ScreenItem) {
-
+        _showEditQtyDialog.value = CartItem(productId = product.id, quantity = product.quantity)
     }
+
 }
