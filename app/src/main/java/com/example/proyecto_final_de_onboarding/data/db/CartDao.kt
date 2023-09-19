@@ -18,8 +18,8 @@ interface CartDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertAll(items: List<CartItem>)
 
-    @Query("DELETE FROM cartTable WHERE productId = :itemId")
-    fun removeFromCartDB(itemId: Int)
+    @Query("DELETE FROM cartTable WHERE productId = :productId")
+    fun removeFromCartDB(productId: Int)
 
     @Query("DELETE FROM cartTable")
     fun emptyTable()
@@ -56,7 +56,11 @@ interface CartDao {
 
     @Transaction
     suspend fun editProductQuantity(cartItem: CartItem): List<CartItem> {
-        insertProduct(cartItem)
+        if (cartItem.quantity > 0) {
+            insertProduct(cartItem)
+        } else {
+            removeFromCartDB(cartItem.productId)
+        }
         return getCartItems()
     }
 }

@@ -9,7 +9,6 @@ import com.bumptech.glide.Glide
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.ListItemCheckoutScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
-import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 
 class CheckoutScreenAdapter(
     private val onItemPressed: (ScreenListItem.ScreenItem) -> Unit,
@@ -55,7 +54,7 @@ class CheckoutScreenAdapter(
             binding.itemName.text = item.product.name
 
             val context = binding.root.context
-            binding.itemPrice.text = context.getString(R.string.price, getRoundedPrice(item.product.price))
+            binding.itemPrice.text = context.getString(R.string.price, item.product.roundedPrice)
             binding.itemCant.text = context.resources.getQuantityString(R.plurals.unit, item.quantity, item.quantity)
         }
 

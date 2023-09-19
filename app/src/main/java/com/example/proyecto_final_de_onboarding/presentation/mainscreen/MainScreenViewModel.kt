@@ -34,27 +34,30 @@ class MainScreenViewModel @Inject constructor(
 ) : ViewModel(), DefaultLifecycleObserver {
 
     private val _cart = MutableLiveData<List<CartItem>>()
-    private val cart: LiveData<List<CartItem>>
-        get() = _cart
-
     private val _query = MutableLiveData("")
 
     val products: LiveData<List<Product>> = liveData {
         emit(refreshData())
     }
 
-    val showCartCircle: LiveData<Boolean> = cart.map { it.isNotEmpty() }
+    val showCartCircle: LiveData<Boolean> = _cart.map { it.isNotEmpty() }
 
     private val _error = SingleLiveEvent<String>()
     val error: LiveData<String> = _error
 
     private val screenItemsList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
 
+    val displayList: LiveData<List<ScreenListItem>> = screenItemsList.map { list ->
+        list.groupBy { item -> item.product.kind }.entries.map { kind ->
+            listOf<ScreenListItem>(ScreenListItem.ScreenHeader(kind.key)) + kind.value.sortedBy { it.product.name }
+        }.flatten()
+    }
+
     init {
         screenItemsList.addSource(products) {
             screenItemsList.value = onInputChanged()
         }
-        screenItemsList.addSource(cart) {
+        screenItemsList.addSource(_cart) {
             screenItemsList.value = onInputChanged()
         }
         screenItemsList.addSource(_query) {
@@ -67,13 +70,7 @@ class MainScreenViewModel @Inject constructor(
         getCart()
     }
 
-    val displayList: LiveData<List<ScreenListItem>> = screenItemsList.map { list ->
-        list.groupBy { item -> item.product.kind }.entries.map { kind ->
-            listOf<ScreenListItem>(ScreenListItem.ScreenHeader(kind.key)) + kind.value.sortedBy { it.product.name }
-        }.flatten()
-    }
-
-    private fun getItemQty(itemId: Int) = cart.value?.find { cartItem -> itemId == cartItem.productId }?.quantity ?: 0
+    private fun getItemQty(itemId: Int) = _cart.value?.find { cartItem -> itemId == cartItem.productId }?.quantity ?: 0
 
     private fun onInputChanged(): List<ScreenListItem.ScreenItem> = products.value?.filter {
         it.matchesQuery(_query.value)

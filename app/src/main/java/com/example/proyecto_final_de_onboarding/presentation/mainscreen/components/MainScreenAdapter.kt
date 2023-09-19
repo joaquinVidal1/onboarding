@@ -7,14 +7,12 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.proyecto_final_de_onboarding.domain.model.Product
-import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.ListItemMainScreenBinding
 import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBinding
+import com.example.proyecto_final_de_onboarding.domain.model.Kind
+import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
-import java.math.RoundingMode
-import java.text.DecimalFormat
 
 
 private const val ITEM_VIEW_TYPE_SECTION_CONTENT = 1
@@ -57,17 +55,9 @@ class MainScreenAdapter(
                 .centerInside()
                 .into(binding.itemImage)
             binding.itemName.text = item.product.name
-            val roundedPrice = "$" + getRoundedPrice(item.product.price)
-            binding.itemPrice.text = roundedPrice
+            binding.itemPrice.text = binding.root.context.getString(R.string.price, item.product.roundedPrice)
             binding.cantText.text = item.quantity.toString()
             binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.product) }
-        }
-
-        private fun getRoundedPrice(price: Double): String {
-            val df = DecimalFormat("#.##")
-            df.roundingMode = RoundingMode.DOWN
-            df.minimumFractionDigits = 2
-            return df.format(price)
         }
 
         companion object {

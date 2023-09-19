@@ -71,7 +71,7 @@ class CheckoutScreenViewModel @Inject constructor(
     }
 
     fun getCheckout(): String {
-        return getRoundedPrice(totalAmount.value ?: 0.0)
+        return (totalAmount.value ?: 0.0).getRoundedPrice()
     }
 
     fun cleanCart() {

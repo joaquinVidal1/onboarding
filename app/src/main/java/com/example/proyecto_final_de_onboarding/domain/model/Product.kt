@@ -18,8 +18,14 @@ data class Product(
     val kind: Kind,
     val checkoutImage: String
 ) {
+
     fun matchesQuery(query: String?) =
         query.isNullOrEmpty() || this.kind.name.lowercase().contains(query) || this.name.lowercase().contains(query)
+
+    val roundedPrice: String
+        get() {
+            return price.getRoundedPrice()
+        }
 }
 
 fun getFromString(kind: String): Kind {
@@ -28,14 +34,13 @@ fun getFromString(kind: String): Kind {
     } else {
         Kind.Veggie
     }
-
 }
 
-fun getRoundedPrice(price: Double): String {
+fun Double.getRoundedPrice(): String {
     val df = DecimalFormat("#.##")
     df.roundingMode = RoundingMode.DOWN
     df.minimumFractionDigits = 2
-    return df.format(price)
+    return df.format(this)
 }
 
 

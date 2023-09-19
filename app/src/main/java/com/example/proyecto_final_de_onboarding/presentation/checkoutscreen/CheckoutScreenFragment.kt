@@ -82,7 +82,7 @@ class CheckoutScreenFragment : Fragment() {
         }
 
         viewModel.totalAmount.observe(viewLifecycleOwner) {
-            binding.totalAmount.text = getString(R.string.price, getRoundedPrice(it))
+            binding.totalAmount.text = getString(R.string.price, it.getRoundedPrice())
         }
 
         viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
