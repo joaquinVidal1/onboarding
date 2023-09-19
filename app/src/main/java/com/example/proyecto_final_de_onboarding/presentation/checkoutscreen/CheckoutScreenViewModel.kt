@@ -1,40 +1,52 @@
 package com.example.proyecto_final_de_onboarding.presentation.checkoutscreen
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.data.Result
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
+import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 import com.example.proyecto_final_de_onboarding.domain.usecase.EmptyCartUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.GetCartUseCase
-import com.example.proyecto_final_de_onboarding.domain.usecase.GetProductUseCase
+import com.example.proyecto_final_de_onboarding.domain.usecase.GetProductsUseCase
 import com.example.proyecto_final_de_onboarding.domain.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CheckoutScreenViewModel @Inject constructor(
-    private val emptyCartUseCase: EmptyCartUseCase, private val getCartUseCase: GetCartUseCase,
-    private val getProductUseCase: GetProductUseCase
-) : ViewModel(), DefaultLifecycleObserver {
+    @ApplicationContext private val context: Application,
+    private val emptyCartUseCase: EmptyCartUseCase,
+    private val getCartUseCase: GetCartUseCase,
+    private val getProductsUseCase: GetProductsUseCase,
+) : AndroidViewModel(context), DefaultLifecycleObserver {
 
-    private val _cart = MutableLiveData<List<CartItem>>()
+    private val cart = MutableLiveData<List<CartItem>>()
 
-    val screenList = _cart.map { cart ->
-        cart.map { cartItem ->
-            ScreenListItem.ScreenItem(
-                (getProductUseCase(GetProductUseCase.Params(cartItem.productId)) as Result.Success).value,
-                cant = cartItem.cant
-            )
+    private val products = liveData<List<Product>> {
+        getProductsUseCase(Unit).let {
+            if (it is Result.Success) it.value else {
+                _error.value = context.getString(R.string.unable_to_get_products)
+                listOf()
+            }
         }
     }
+    
+
+    private val _screenList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
+    val screenList: LiveData<List<ScreenListItem.ScreenItem>> = _screenList
 
     private val _error = SingleLiveEvent<String>()
     val error: LiveData<String> = _error
@@ -43,6 +55,16 @@ class CheckoutScreenViewModel @Inject constructor(
 
     val totalAmount: LiveData<Double> = screenList.map {
         it.sumOf { item -> item.cant * item.item.price }
+    }
+
+    init {
+        _screenList.addSource(cart) {
+            _screenList.value = cart.value?.mapNotNull { it.getScreenItem() }
+        }
+
+        _screenList.addSource(products) {
+            _screenList.value = cart.value?.mapNotNull { it.getScreenItem() }
+        }
     }
 
     fun getCheckout(): String {
@@ -62,7 +84,7 @@ class CheckoutScreenViewModel @Inject constructor(
     }
 
     fun getQty(itemId: Int): Int {
-        return _cart.value?.find { it.productId == itemId }?.cant ?: 0
+        return cart.value?.find { it.productId == itemId }?.cant ?: 0
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -72,15 +94,21 @@ class CheckoutScreenViewModel @Inject constructor(
 
     private fun getCart() {
         viewModelScope.launch {
-            _cart.value = getCartUseCase(Unit).let { cart ->
+            cart.value = getCartUseCase(Unit).let { cart ->
                 if (cart is Result.Success) {
                     cart.value
                 } else {
-                    _error.value = (cart as Result.Error).message ?: "Error"
+                    _error.value = (cart as Result.Error).message ?: context.getString(R.string.unable_to_get_cart)
                     listOf()
                 }
             }
 
+        }
+    }
+
+    private fun CartItem.getScreenItem(): ScreenListItem.ScreenItem? {
+        return products.value?.firstOrNull { it.id == this.productId }?.let {
+            ScreenListItem.ScreenItem(item = it, cant = this.cant)
         }
     }
 }

@@ -23,5 +23,7 @@
     <string name="button_add">button add</string>
     <string name="button_remove">button remove</string>
     <string name="item_image">Item image</string>
+    <string name="unable_to_get_products">Error getting products</string>
+    <string name="unable_to_get_cart">Error while getting cart</string>
     />
 </resources>
