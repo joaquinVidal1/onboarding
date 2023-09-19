@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
+import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,9 +31,13 @@ class CheckoutScreenFragment : Fragment() {
         lifecycle.addObserver(viewModel)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        lifecycle.removeObserver(viewModel)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_checkout_screen, container, false
+        )
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,23 +48,14 @@ class CheckoutScreenFragment : Fragment() {
         setUpObservers()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        lifecycle.removeObserver(viewModel)
+    }
+
     private fun setUpAdapter() {
         adapter = CheckoutScreenAdapter(CheckoutScreenAdapter.EntireItemListener { itemId ->
-            val builder = AlertDialog.Builder(context)
-            val numberPicker = NumberPicker(context)
-            numberPicker.minValue = 0
-            numberPicker.maxValue = 500
-            numberPicker.wrapSelectorWheel = false
-            numberPicker.value = viewModel.getQty(itemId)
-            builder.setPositiveButton(getString(R.string.confirm)) { _, _ ->
-                viewModel.itemQtyChanged(itemId, numberPicker.value)
-
-            }
-            builder.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
-            builder.setTitle(getString(R.string.dialog_title))
-            builder.setView(numberPicker)
-            builder.show()
-        })
+            })
 
         binding.cartItemsList.also {
             it.adapter = adapter
@@ -69,7 +65,6 @@ class CheckoutScreenFragment : Fragment() {
     }
 
     private fun setUpListeners() {
-
         binding.backButton.setOnClickListener {
             this.findNavController().popBackStack()
         }
@@ -97,14 +92,18 @@ class CheckoutScreenFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    fun showEditQuantityDialog(cartItem: CartItem) {
+        val numberPicker = NumberPicker(context).apply {
+            minValue = 0
+            maxValue = 500
+            wrapSelectorWheel = false
+            value = cartItem.quantity
+        }
 
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_checkout_screen, container, false
-        )
-        return binding.root
+        AlertDialog.Builder(context).setPositiveButton(getString(R.string.confirm)) { _, _ ->
+            viewModel.itemQtyChanged(cartItem.productId, numberPicker.value)
+        }.setNegativeButton(getString(R.string.cancel)) { _, _ -> }.setTitle(getString(R.string.dialog_title))
+            .setView(numberPicker).show()
 
     }
 

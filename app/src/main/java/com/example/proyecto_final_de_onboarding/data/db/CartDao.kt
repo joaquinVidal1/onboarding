@@ -37,18 +37,18 @@ interface CartDao {
     suspend fun increaseProductQuantity(productId: Int): List<CartItem> {
         val product = getCartItem(productId)
         product?.let {
-            insertProduct(CartItem(productId = productId, cant = it.cant + 1))
-        } ?: insertProduct(CartItem(productId = productId, cant = 1))
+            insertProduct(CartItem(productId = productId, quantity = it.quantity + 1))
+        } ?: insertProduct(CartItem(productId = productId, quantity = 1))
         return getCartItems()
     }
 
     @Transaction
     suspend fun decreaseProductQuantity(productId: Int): List<CartItem> {
-        getCartItem(productId)?.cant?.let { qty ->
+        getCartItem(productId)?.quantity?.let { qty ->
             if (qty == 1) {
                 removeFromCartDB(productId)
             } else {
-                insertProduct(CartItem(productId = productId, cant = qty - 1))
+                insertProduct(CartItem(productId = productId, quantity = qty - 1))
             }
         }
         return getCartItems()

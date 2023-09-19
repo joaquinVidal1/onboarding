@@ -73,7 +73,7 @@ class MainScreenViewModel @Inject constructor(
         }.flatten()
     }
 
-    private fun getItemQty(itemId: Int) = cart.value?.find { cartItem -> itemId == cartItem.productId }?.cant ?: 0
+    private fun getItemQty(itemId: Int) = cart.value?.find { cartItem -> itemId == cartItem.productId }?.quantity ?: 0
 
     private fun onInputChanged(): List<ScreenListItem.ScreenItem> = products.value?.filter {
         it.matchesQuery(_query.value)
