@@ -25,5 +25,6 @@
     <string name="item_image">Item image</string>
     <string name="unable_to_get_products">Error getting products</string>
     <string name="unable_to_get_cart">Error while getting cart</string>
+    <string name="error_updating_cart">Error while updating cart</string>
     />
 </resources>

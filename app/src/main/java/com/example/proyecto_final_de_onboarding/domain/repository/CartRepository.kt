@@ -10,4 +10,6 @@ interface CartRepository {
     suspend fun getCart(): List<CartItem>
 
     suspend fun emptyCart()
+
+    suspend fun editProductQuantity(productId: Int, qty: Int): List<CartItem>
 }

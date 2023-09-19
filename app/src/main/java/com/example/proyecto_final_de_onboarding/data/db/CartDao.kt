@@ -53,4 +53,10 @@ interface CartDao {
         }
         return getCartItems()
     }
+
+    @Transaction
+    suspend fun editProductQuantity(cartItem: CartItem): List<CartItem> {
+        insertProduct(cartItem)
+        return getCartItems()
+    }
 }

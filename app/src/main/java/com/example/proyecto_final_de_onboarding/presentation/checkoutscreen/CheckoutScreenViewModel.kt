@@ -15,6 +15,7 @@ import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
+import com.example.proyecto_final_de_onboarding.domain.usecase.EditQuantityUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.EmptyCartUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.GetCartUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.GetProductsUseCase
@@ -28,6 +29,7 @@ class CheckoutScreenViewModel @Inject constructor(
     private val emptyCartUseCase: EmptyCartUseCase,
     private val getCartUseCase: GetCartUseCase,
     private val getProductsUseCase: GetProductsUseCase,
+    private val editQuantityUseCase: EditQuantityUseCase
 ) : ViewModel(), DefaultLifecycleObserver {
 
     private val cart = MutableLiveData<List<CartItem>>()
@@ -78,9 +80,16 @@ class CheckoutScreenViewModel @Inject constructor(
         }
     }
 
-    fun itemQtyChanged(itemId: Int, newQty: Int) {
+    fun itemQtyChanged(productId: Int, newQty: Int) {
         viewModelScope.launch {
-//            cartRepository.editQuantity(itemId, newQty)
+            editQuantityUseCase(EditQuantityUseCase.Params(newQty = newQty, productId = productId)).let {
+                if (it is Result.Success) {
+                    cart.value = it.value
+                } else {
+                    _error.value = R.string.error_updating_cart
+                }
+            }
+
         }
     }
 

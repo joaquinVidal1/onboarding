@@ -11,25 +11,14 @@ import javax.inject.Singleton
 @Singleton
 class CartRepositoryImpl @Inject constructor(private val cartDao: CartDao) : CartRepository {
 
-//    suspend fun editQuantity(id: Int, qty: Int) {
-//        val updatedCart: List<CartItem>
-//        val itemToEdit = _cart.value!!.find { it.itemId == id }
-//        if (qty == 0) {
-//            withContext(Dispatchers.IO) {
-//                cartDao.removeFromCartDB(itemToEdit!!.itemId)
-//            }
-//        } else {
-//            updatedCart = _cart.value.apply {
-//                _cart.value!!.find { it.itemId == id }!!.cant = qty
-//            } ?: listOf()
-//            updateCart(updatedCart)
-//        }
-//    }
-
     override suspend fun emptyCart() {
         withContext(Dispatchers.IO) {
             cartDao.emptyTable()
         }
+    }
+
+    override suspend fun editProductQuantity(productId: Int, qty: Int): List<CartItem> {
+        return cartDao.editProductQuantity(CartItem(productId = productId, quantity = qty))
     }
 
     private suspend fun updateCart(cart: List<CartItem>) {
