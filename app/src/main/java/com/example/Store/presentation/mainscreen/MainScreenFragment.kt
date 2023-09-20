@@ -146,7 +146,6 @@ class MainScreenFragment : Fragment() {
         }
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -179,7 +178,6 @@ class MainScreenFragment : Fragment() {
                 image = R.drawable.banner_4
             )
         )
-
     }
 
 }

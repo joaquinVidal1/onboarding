@@ -9,6 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--        <androidx.viewpager2.widget.ViewPager2-->
+        <!--            android:id="@+id/carrousel"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/cartButton" />-->
+
+        <!--        <com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.ViewPagerIndicator-->
+        <!--            android:id="@+id/view_page_indicator"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            app:layout_constraintEnd_toEndOf="@+id/carrousel"-->
+        <!--            app:layout_constraintStart_toStartOf="@+id/carrousel"-->
+        <!--            app:layout_constraintTop_toBottomOf="@id/carrousel"-->
+        <!--            tools:background="@color/color_background_app"-->
+        <!--            tools:layout_height="20dp"-->
+        <!--            tools:layout_width="100dp" />-->
 
         <androidx.compose.ui.platform.ComposeView
             android:id="@+id/compose_carrousel"

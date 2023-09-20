@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ fun CarrouselBanner(
     subtitle: String,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier.wrapContentWidth()) {
+    Box(modifier) {
         Image(
             painter = painterResource(id = image), contentDescription = null
         )
@@ -38,7 +37,6 @@ fun CarrouselBanner(
                 .wrapContentHeight()
                 .align(Alignment.BottomStart)
         ) {
-
             Text(text = subtitle, color = Color.White, fontSize = 14.sp)
             Text(
                 text = title,
