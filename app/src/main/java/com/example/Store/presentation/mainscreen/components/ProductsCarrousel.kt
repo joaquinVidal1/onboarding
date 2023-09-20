@@ -1,7 +1,7 @@
 package com.example.proyecto_final_de_onboarding.presentation.mainscreen.components
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -17,17 +17,24 @@ import com.example.proyecto_final_de_onboarding.domain.CarrouselPage
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductsCarrousel(pages: List<CarrouselPage>, modifier: Modifier = Modifier) {
+fun ProductsCarrousel(
+    pages: List<CarrouselPage>, modifier: Modifier = Modifier
+) {
     val pagerState = rememberPagerState(pageCount = { pages.size })
 
     HorizontalPager(
-        state = pagerState, contentPadding = PaddingValues(horizontal = 18.dp), pageSpacing = 18.dp, modifier = modifier
+        state = pagerState, modifier = modifier
     ) { pagePosition ->
         val page = pages[pagePosition]
         CarrouselBanner(
-            image = page.image, title = page.title, subtitle = page.subtitle, modifier = Modifier.clip(
-                RoundedCornerShape(4.dp)
-            )
+            image = page.image,
+            title = page.title,
+            subtitle = page.subtitle,
+            modifier = Modifier
+                .padding(horizontal = 18.dp)
+                .clip(
+                    RoundedCornerShape(4.dp)
+                )
         )
     }
 }
@@ -39,7 +46,9 @@ fun ProductsCarrouselPreview() {
         ProductsCarrousel(
             pages = listOf(
                 CarrouselPage(
-                    title = "Brazilian Bananas", subtitle = "Product of the month", image = R.drawable.banner_1
+                    title = "Brazilian Bananas",
+                    subtitle = "Product of the month",
+                    image = R.drawable.banner_1
                 )
             ), modifier = Modifier.wrapContentSize()
         )
