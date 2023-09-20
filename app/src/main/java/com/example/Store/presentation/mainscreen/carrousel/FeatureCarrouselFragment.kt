@@ -18,6 +18,7 @@ class FeatureCarrouselFragment : Fragment() {
     }
 
     lateinit var binding: FragmentFeatureCarrouselPageBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
