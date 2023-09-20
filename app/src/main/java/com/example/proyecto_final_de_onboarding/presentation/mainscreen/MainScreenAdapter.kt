@@ -17,7 +17,7 @@ import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 class MainScreenAdapter(
     private val onAddUnitPressed: (Product) -> Unit, private val onRemoveUnitPressed: (Product) -> Unit
 ) : ListAdapter<ScreenListItem, RecyclerView.ViewHolder>(MainScreenDiffCallback()) {
-    class ViewHolder private constructor(val binding: ListItemMainScreenBinding) :
+    class ProductViewHolder private constructor(val binding: ListItemMainScreenBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
@@ -41,10 +41,10 @@ class MainScreenAdapter(
         }
 
         companion object {
-            fun from(parent: ViewGroup): ViewHolder {
+            fun from(parent: ViewGroup): ProductViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemMainScreenBinding.inflate(layoutInflater, parent, false)
-                return ViewHolder(binding)
+                return ProductViewHolder(binding)
             }
         }
     }
@@ -66,7 +66,7 @@ class MainScreenAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ITEM_VIEW_TYPE_SECTION_HEADER -> TextViewHolder.from(parent)
-            ITEM_VIEW_TYPE_SECTION_CONTENT -> ViewHolder.from(parent)
+            ITEM_VIEW_TYPE_SECTION_CONTENT -> ProductViewHolder.from(parent)
             else -> throw ClassCastException("Unknown viewType $viewType")
 
         }
@@ -74,7 +74,7 @@ class MainScreenAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is ViewHolder -> {
+            is ProductViewHolder -> {
                 val listItem = getItem(position) as ScreenListItem.ScreenItem
                 holder.bind(listItem, onAddUnitPressed, onRemoveUnitPressed)
             }
