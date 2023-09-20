@@ -24,27 +24,45 @@ import androidx.compose.ui.unit.sp
 import com.example.proyecto_final_de_onboarding.R
 
 @Composable
-fun AddButton(qty: Int, onAddUnitPressed: () -> Unit, onRemoveUnitPressed: () -> Unit, modifier: Modifier = Modifier) {
+fun AddButton(
+    qty: Int,
+    onAddUnitPressed: () -> Unit,
+    onRemoveUnitPressed: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     val buttonShape = RoundedCornerShape(50.dp)
     val textSize = 16.sp
-    
+
     if (qty == 0) {
         OutlinedButton(
             onClick = onAddUnitPressed,
             shape = buttonShape,
             contentPadding = PaddingValues(horizontal = 24.dp),
-            border = BorderStroke(color = MaterialTheme.colors.primary, width = 2.dp),
+            border = BorderStroke(
+                color = MaterialTheme.colors.primary,
+                width = 2.dp
+            ),
             modifier = modifier
         ) {
-            Text(text = stringResource(id = R.string.add), fontSize = textSize, fontWeight = FontWeight.Bold)
+            Text(
+                text = stringResource(id = R.string.add),
+                fontSize = textSize,
+                fontWeight = FontWeight.Bold
+            )
         }
     } else {
         Surface(
-            border = BorderStroke(color = colorResource(id = R.color.grey), width = 2.dp),
+            border = BorderStroke(
+                color = colorResource(id = R.color.grey),
+                width = 2.dp
+            ),
             shape = buttonShape,
             modifier = modifier
         ) {
-            Row(verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Row(
+                verticalAlignment = CenterVertically,
+                horizontalArrangement = Arrangement.Center
+            ) {
                 IconButton(onClick = onRemoveUnitPressed) {
                     Image(
                         painter = painterResource(id = R.drawable.icon_remove),
@@ -60,7 +78,10 @@ fun AddButton(qty: Int, onAddUnitPressed: () -> Unit, onRemoveUnitPressed: () ->
                 )
 
                 IconButton(onClick = onAddUnitPressed) {
-                    Image(painter = painterResource(id = R.drawable.icon_add), contentDescription = null)
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_add),
+                        contentDescription = null
+                    )
                 }
             }
 
@@ -72,6 +93,6 @@ fun AddButton(qty: Int, onAddUnitPressed: () -> Unit, onRemoveUnitPressed: () ->
 @Preview
 fun AddButtonPreview() {
     MaterialTheme {
-        AddButton(qty = 1, onAddUnitPressed = {}, onRemoveUnitPressed = {})
+        AddButton(qty = 0, onAddUnitPressed = {}, onRemoveUnitPressed = {})
     }
 }
