@@ -21,4 +21,5 @@
     <color name="color_dot_selected">#50546D</color>
     <color name="color_checkout_button">#4C2DE8</color>
     <color name="search_text_color">#9FA1B5</color>
+    <color name="grey">#F3F3F3</color>
 </resources>
