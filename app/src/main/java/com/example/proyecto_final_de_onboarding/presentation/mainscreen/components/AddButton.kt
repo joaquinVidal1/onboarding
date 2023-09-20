@@ -12,7 +12,6 @@ import androidx.compose.material.OutlinedButton
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -28,6 +27,7 @@ import com.example.proyecto_final_de_onboarding.R
 fun AddButton(qty: Int, onAddUnitPressed: () -> Unit, onRemoveUnitPressed: () -> Unit, modifier: Modifier = Modifier) {
     val buttonShape = RoundedCornerShape(50.dp)
     val textSize = 16.sp
+    
     if (qty == 0) {
         OutlinedButton(
             onClick = onAddUnitPressed,
@@ -44,7 +44,7 @@ fun AddButton(qty: Int, onAddUnitPressed: () -> Unit, onRemoveUnitPressed: () ->
             shape = buttonShape,
             modifier = modifier
         ) {
-            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.Center) {
+            Row(verticalAlignment = CenterVertically, horizontalArrangement = Arrangement.Center) {
                 IconButton(onClick = onRemoveUnitPressed) {
                     Image(
                         painter = painterResource(id = R.drawable.icon_remove),
@@ -52,7 +52,12 @@ fun AddButton(qty: Int, onAddUnitPressed: () -> Unit, onRemoveUnitPressed: () ->
                     )
                 }
 
-                Text(text = "$qty", fontSize = textSize, fontWeight = FontWeight.Bold, modifier = Modifier.align(CenterVertically))
+                Text(
+                    text = "$qty",
+                    fontSize = textSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.align(CenterVertically)
+                )
 
                 IconButton(onClick = onAddUnitPressed) {
                     Image(painter = painterResource(id = R.drawable.icon_add), contentDescription = null)
