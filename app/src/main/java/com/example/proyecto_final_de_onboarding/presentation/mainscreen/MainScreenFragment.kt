@@ -13,24 +13,17 @@ import android.widget.Toast
 import androidx.compose.material.MaterialTheme
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.CarrouselPage
-import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.FeatureCarrouselFragment
 import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.ProductsCarrousel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainScreenFragment : Fragment() {
-
-    companion object {
-        private const val NUM_PAGES = 4
-    }
 
     private val viewModel: MainScreenViewModel by viewModels()
     private lateinit var binding: FragmentMainScreenBinding
@@ -125,13 +118,6 @@ class MainScreenFragment : Fragment() {
         manager.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
-//    private fun setUpCarrousel() {
-//        val carrousel = binding.carrousel
-//        carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
-//        binding.viewPageIndicator.setUpWithViewPager2(carrousel)
-//        carrousel.setPageTransformer(ZoomOutPageTransformer())
-//    }
-
     private fun setUpCarrousel(pages: List<CarrouselPage>) {
         binding.composeCarrousel.setContent {
             MaterialTheme {
@@ -173,38 +159,5 @@ class MainScreenFragment : Fragment() {
         )
 
     }
-
-    private inner class BannerSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
-        override fun getItemCount(): Int = NUM_PAGES
-
-        override fun createFragment(position: Int): Fragment {
-            val fragment = FeatureCarrouselFragment()
-            fragment.arguments = Bundle().apply {
-                putInt(
-                    FeatureCarrouselFragment.ARG_DRAWABLE_ID, when (position) {
-                        0 -> R.drawable.banner_1
-                        1 -> R.drawable.banner_2
-                        2 -> R.drawable.banner_3
-                        else -> R.drawable.banner_4
-                    }
-                )
-
-                putString(
-                    FeatureCarrouselFragment.ARG_TITLE, when (position) {
-                        0 -> getString(R.string.brazilian_bananas)
-                        1 -> getString(R.string.chinese_grapefruits)
-                        2 -> getString(R.string.uruguayan_cucumbers)
-                        else -> getString(R.string.australian_kiwis)
-                    }
-                )
-
-                putString(
-                    FeatureCarrouselFragment.ARG_DESCRIPTION, getString(R.string.product_of_the_month)
-                )
-            }
-            return fragment
-        }
-    }
-
 
 }
