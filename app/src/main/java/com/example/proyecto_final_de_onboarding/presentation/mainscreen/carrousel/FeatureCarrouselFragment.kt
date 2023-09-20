@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.presentation.mainscreen.components
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel
 
 import android.os.Bundle
 import android.view.LayoutInflater

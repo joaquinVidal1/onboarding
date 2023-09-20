@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.presentation.mainscreen.components
+package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,31 +14,14 @@ import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 
-
-private const val ITEM_VIEW_TYPE_SECTION_CONTENT = 1
-private const val ITEM_VIEW_TYPE_SECTION_HEADER = 0
-
 class MainScreenAdapter(
-    private val addListener: AddUnitListener,
-    private val lessListener: RemoveUnitListener
-) :
-    ListAdapter<ScreenListItem, RecyclerView.ViewHolder>(MainScreenDiffCallback()) {
-
-    class AddUnitListener(private val clickListener: (itemId: Int) -> Unit) {
-        fun onClick(item: Product) = clickListener(item.id)
-    }
-
-    class RemoveUnitListener(private val clickListener: (itemId: Int) -> Unit) {
-        fun onClick(item: Product) = clickListener(item.id)
-    }
-
+    private val onAddUnitPressed: (Product) -> Unit, private val onRemoveUnitPressed: (Product) -> Unit
+) : ListAdapter<ScreenListItem, RecyclerView.ViewHolder>(MainScreenDiffCallback()) {
     class ViewHolder private constructor(val binding: ListItemMainScreenBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            item: ScreenListItem.ScreenItem,
-            addClickListener: AddUnitListener,
-            removeClickListener: RemoveUnitListener
+            item: ScreenListItem.ScreenItem, addClickListener: (Product) -> Unit, removeClickListener: (Product) -> Unit
         ) {
             if (item.quantity == 0) {
                 binding.buttonAddQty.visibility = View.GONE
@@ -47,17 +30,14 @@ class MainScreenAdapter(
                 binding.entireButtonAdd.visibility = View.GONE
                 binding.buttonAddQty.visibility = View.VISIBLE
             }
-            binding.entireButtonAdd.setOnClickListener { addClickListener.onClick(item.product) }
-            binding.buttonAdd.setOnClickListener { addClickListener.onClick(item.product) }
-            Glide.with(binding.itemImage.context)
-                .load(item.product.mainImage)
-                .placeholder(R.mipmap.main_placeholder)
-                .centerInside()
-                .into(binding.itemImage)
+            binding.entireButtonAdd.setOnClickListener { addClickListener(item.product) }
+            binding.buttonAdd.setOnClickListener { addClickListener(item.product) }
+            Glide.with(binding.itemImage.context).load(item.product.mainImage).placeholder(R.mipmap.main_placeholder)
+                .centerInside().into(binding.itemImage)
             binding.itemName.text = item.product.name
             binding.itemPrice.text = binding.root.context.getString(R.string.price, item.product.roundedPrice)
             binding.cantText.text = item.quantity.toString()
-            binding.buttonRemove.setOnClickListener { removeClickListener.onClick(item.product) }
+            binding.buttonRemove.setOnClickListener { removeClickListener(item.product) }
         }
 
         companion object {
@@ -69,8 +49,7 @@ class MainScreenAdapter(
         }
     }
 
-    class TextViewHolder(val binding: ListKindMainScreenBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class TextViewHolder(val binding: ListKindMainScreenBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(kind: Kind) {
             binding.kindHeader.text = kind.header
         }
@@ -97,8 +76,9 @@ class MainScreenAdapter(
         when (holder) {
             is ViewHolder -> {
                 val listItem = getItem(position) as ScreenListItem.ScreenItem
-                holder.bind(listItem, addListener, lessListener)
+                holder.bind(listItem, onAddUnitPressed, onRemoveUnitPressed)
             }
+
             is TextViewHolder -> {
                 val listHeader = getItem(position) as ScreenListItem.ScreenHeader
                 holder.bind(listHeader.kind)
@@ -118,8 +98,14 @@ class MainScreenAdapter(
         override fun areContentsTheSame(oldItem: ScreenListItem, newItem: ScreenListItem): Boolean {
             return oldItem == newItem
         }
+
         override fun areItemsTheSame(oldItem: ScreenListItem, newItem: ScreenListItem): Boolean {
             return oldItem.id == newItem.id
         }
+    }
+
+    companion object {
+        const val ITEM_VIEW_TYPE_SECTION_CONTENT = 1
+        const val ITEM_VIEW_TYPE_SECTION_HEADER = 0
     }
 }

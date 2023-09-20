@@ -19,9 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
-import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.FeatureCarrouselFragment
-import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.MainScreenAdapter
-import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.ZoomOutPageTransformer
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.FeatureCarrouselFragment
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.ZoomOutPageTransformer
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -111,9 +110,9 @@ class MainScreenFragment : Fragment() {
 
 
     private fun setUpAdapter() {
-        adapter = MainScreenAdapter(MainScreenAdapter.AddUnitListener { itemId ->
-            viewModel.onAddItem(itemId)
-        }, MainScreenAdapter.RemoveUnitListener { itemId -> viewModel.onRemoveItem(itemId) })
+        adapter = MainScreenAdapter(onAddUnitPressed = { product ->
+            viewModel.onAddItem(product.id)
+        }, onRemoveUnitPressed = { product -> viewModel.onRemoveItem(product.id) })
         binding.itemsList.adapter = adapter
         binding.itemsList.layoutManager = LinearLayoutManager(activity)
     }
