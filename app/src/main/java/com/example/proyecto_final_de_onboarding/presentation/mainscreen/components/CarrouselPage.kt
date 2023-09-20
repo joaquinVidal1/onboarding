@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,9 +22,12 @@ import com.example.proyecto_final_de_onboarding.R
 
 @Composable
 fun CarrouselBanner(
-    @DrawableRes image: Int, title: String, subtitle: String, modifier: Modifier = Modifier
+    @DrawableRes image: Int,
+    title: String,
+    subtitle: String,
+    modifier: Modifier = Modifier
 ) {
-    Box(modifier) {
+    Box(modifier.wrapContentWidth()) {
         Image(
             painter = painterResource(id = image), contentDescription = null
         )
@@ -51,7 +55,9 @@ fun CarrouselBanner(
 fun CarrouselPagePreview() {
     MaterialTheme {
         CarrouselBanner(
-            title = "Brazilian Bananas", subtitle = "Product of the month", image = R.drawable.banner_1
+            title = "Brazilian Bananas",
+            subtitle = "Product of the month",
+            image = R.drawable.banner_1
         )
     }
 }
