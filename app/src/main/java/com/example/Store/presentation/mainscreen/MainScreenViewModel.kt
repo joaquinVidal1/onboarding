@@ -4,7 +4,9 @@ import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.data.Result
+import com.example.proyecto_final_de_onboarding.domain.CarrouselPage
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
