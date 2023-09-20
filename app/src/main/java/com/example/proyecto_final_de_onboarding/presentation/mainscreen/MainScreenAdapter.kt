@@ -1,8 +1,10 @@
 package com.example.proyecto_final_de_onboarding.presentation.mainscreen
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.compose.foundation.layout.width
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -13,6 +15,7 @@ import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBi
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.AddButton
 
 class MainScreenAdapter(
     private val onAddUnitPressed: (Product) -> Unit, private val onRemoveUnitPressed: (Product) -> Unit
@@ -21,23 +24,24 @@ class MainScreenAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(
-            item: ScreenListItem.ScreenItem, addClickListener: (Product) -> Unit, removeClickListener: (Product) -> Unit
+            item: ScreenListItem.ScreenItem, onAddUnitPressed: (Product) -> Unit, onRemoveUnitPressed: (Product) -> Unit
         ) {
-            if (item.quantity == 0) {
-                binding.buttonAddQty.visibility = View.GONE
-                binding.entireButtonAdd.visibility = View.VISIBLE
-            } else {
-                binding.entireButtonAdd.visibility = View.GONE
-                binding.buttonAddQty.visibility = View.VISIBLE
+
+            binding.buttonAdd.setContent {
+                AddButton(
+                    qty = item.quantity,
+                    onAddUnitPressed = { onAddUnitPressed(item.product) },
+                    onRemoveUnitPressed = { onRemoveUnitPressed(item.product) },
+                    modifier = Modifier.width(
+                        100.dp
+                    )
+                )
             }
-            binding.entireButtonAdd.setOnClickListener { addClickListener(item.product) }
-            binding.buttonAdd.setOnClickListener { addClickListener(item.product) }
+
             Glide.with(binding.itemImage.context).load(item.product.mainImage).placeholder(R.mipmap.main_placeholder)
                 .centerInside().into(binding.itemImage)
             binding.itemName.text = item.product.name
             binding.itemPrice.text = binding.root.context.getString(R.string.price, item.product.roundedPrice)
-            binding.cantText.text = item.quantity.toString()
-            binding.buttonRemove.setOnClickListener { removeClickListener(item.product) }
         }
 
         companion object {
