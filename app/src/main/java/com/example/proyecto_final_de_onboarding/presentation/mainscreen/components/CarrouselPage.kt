@@ -38,6 +38,7 @@ fun CarrouselBanner(
                 .wrapContentHeight()
                 .align(Alignment.BottomStart)
         ) {
+
             Text(text = subtitle, color = Color.White, fontSize = 14.sp)
             Text(
                 text = title,
