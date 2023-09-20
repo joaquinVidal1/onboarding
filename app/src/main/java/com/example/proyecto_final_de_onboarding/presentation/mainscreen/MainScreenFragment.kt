@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import androidx.compose.material.MaterialTheme
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
@@ -19,8 +20,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
+import com.example.proyecto_final_de_onboarding.domain.CarrouselPage
 import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.FeatureCarrouselFragment
-import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.ZoomOutPageTransformer
+import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.ProductsCarrousel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -50,7 +52,7 @@ class MainScreenFragment : Fragment() {
         setUpAdapter()
         setUpObservers()
         setUpListeners()
-        setUpCarrousel()
+        setUpCarrousel(getCarrouselPages())
     }
 
     private fun setUpListeners() {
@@ -106,6 +108,7 @@ class MainScreenFragment : Fragment() {
             Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
 
         }
+
     }
 
 
@@ -122,11 +125,19 @@ class MainScreenFragment : Fragment() {
         manager.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
-    private fun setUpCarrousel() {
-        val carrousel = binding.carrousel
-        carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
-        binding.viewPageIndicator.setUpWithViewPager2(carrousel)
-        carrousel.setPageTransformer(ZoomOutPageTransformer())
+//    private fun setUpCarrousel() {
+//        val carrousel = binding.carrousel
+//        carrousel.adapter = BannerSlidePagerAdapter(requireActivity())
+//        binding.viewPageIndicator.setUpWithViewPager2(carrousel)
+//        carrousel.setPageTransformer(ZoomOutPageTransformer())
+//    }
+
+    private fun setUpCarrousel(pages: List<CarrouselPage>) {
+        binding.composeCarrousel.setContent {
+            MaterialTheme {
+                ProductsCarrousel(pages = pages)
+            }
+        }
     }
 
 
@@ -140,6 +151,28 @@ class MainScreenFragment : Fragment() {
         return binding.root
     }
 
+    private fun getCarrouselPages(): List<CarrouselPage> {
+        return listOf(
+            CarrouselPage(
+                title = getString(R.string.brazilian_bananas),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_1
+            ), CarrouselPage(
+                title = getString(R.string.chinese_grapefruits),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_2
+            ), CarrouselPage(
+                title = getString(R.string.uruguayan_cucumbers),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_3
+            ), CarrouselPage(
+                title = getString(R.string.australian_kiwis),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_4
+            )
+        )
+
+    }
 
     private inner class BannerSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = NUM_PAGES
@@ -161,7 +194,7 @@ class MainScreenFragment : Fragment() {
                         0 -> getString(R.string.brazilian_bananas)
                         1 -> getString(R.string.chinese_grapefruits)
                         2 -> getString(R.string.uruguayan_cucumbers)
-                        else -> getString(R.string.asutralian_kiwis)
+                        else -> getString(R.string.australian_kiwis)
                     }
                 )
 
