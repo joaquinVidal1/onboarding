@@ -10,7 +10,6 @@ import android.widget.NumberPicker
 import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +18,7 @@ import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
+import com.example.proyecto_final_de_onboarding.presentation.checkoutscreen.components.CheckoutScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -33,14 +33,6 @@ class CheckoutScreenFragment : Fragment() {
         lifecycle.addObserver(viewModel)
     }
 
-//    override fun onCreateView(
-//        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-//    ): View {
-//        binding = DataBindingUtil.inflate(
-//            inflater, R.layout.fragment_checkout_screen, container, false
-//        )
-//        return binding.root
-//    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +42,7 @@ class CheckoutScreenFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                NewFeatureScreen()
+                CheckoutScreen()
             }
         }
     }
