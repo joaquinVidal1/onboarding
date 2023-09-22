@@ -8,7 +8,7 @@ plugins {
 
 
 android {
-    compileSdk 33
+    compileSdk 34
 
     defaultConfig {
         applicationId "com.example.Store"
@@ -112,7 +112,7 @@ dependencies {
 
     implementation "androidx.compose.runtime:runtime"
     implementation "androidx.compose.ui:ui"
-    implementation "androidx.compose.foundation:foundation"
+    implementation "androidx.compose.foundation:foundation:1.5.1"
     implementation "androidx.compose.foundation:foundation-layout"
     implementation "androidx.compose.material:material"
     implementation "androidx.compose.runtime:runtime-livedata"
