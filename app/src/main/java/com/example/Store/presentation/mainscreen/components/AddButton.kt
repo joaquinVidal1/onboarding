@@ -1,4 +1,4 @@
-package com.example.proyecto_final_de_onboarding.presentation.mainscreen.components
+package com.example.Store.presentation.mainscreen.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
