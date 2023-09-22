@@ -50,9 +50,9 @@ class CheckoutScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpListeners()
-        setUpAdapter()
-        setUpObservers()
+//        setUpListeners()
+//        setUpAdapter()
+//        setUpObservers()
     }
 
     override fun onDestroy() {

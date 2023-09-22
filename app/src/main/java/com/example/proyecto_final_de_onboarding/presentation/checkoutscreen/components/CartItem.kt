@@ -32,7 +32,8 @@ fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
             AsyncImage(
                 model = item.product.checkoutImage,
                 contentDescription = null,
-                placeholder = painterResource(id = R.drawable.placeholder)
+                placeholder = painterResource(id = R.drawable.placeholder),
+                modifier = Modifier.fillMaxWidth()
             )
 
             Spacer(modifier = Modifier.size(19.dp))
@@ -41,17 +42,18 @@ fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
 
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = paddingFromImage)
             ) {
                 Text(
                     text = item.product.name,
-                    modifier = Modifier.padding(start = paddingFromImage)
                 )
 
                 Text(
                     text = stringResource(
                         id = R.string.price, item.product.roundedPrice
-                    ), modifier = Modifier.padding(end = paddingFromImage)
+                    )
                 )
             }
 
