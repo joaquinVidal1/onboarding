@@ -1,11 +1,15 @@
 package com.example.proyecto_final_de_onboarding.domain.usecase.base
 
+import com.example.Store.di.DispatcherModule
 import com.example.proyecto_final_de_onboarding.data.Result
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
-abstract class CoroutineUseCase<in P, R>(private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.IO) {
+abstract class CoroutineUseCase<in P, R>() {
+
+    @Inject
+    @DispatcherModule.IoDispatcher lateinit var coroutineDispatcher: CoroutineDispatcher
     suspend operator fun invoke(params: P): Result<R> = try {
         withContext(coroutineDispatcher) {
             execute(params).let {
