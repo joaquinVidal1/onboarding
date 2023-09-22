@@ -14,14 +14,19 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.Store.presentation.mainscreen.MainScreenViewModel
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.FeatureCarrouselFragment
 import com.example.proyecto_final_de_onboarding.presentation.mainscreen.carrousel.ZoomOutPageTransformer
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainScreenFragment : Fragment() {
@@ -55,10 +60,14 @@ class MainScreenFragment : Fragment() {
 
     private fun setUpListeners() {
         binding.itemSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun beforeTextChanged(
+                p0: CharSequence?, p1: Int, p2: Int, p3: Int
+            ) {
             }
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            override fun onTextChanged(
+                p0: CharSequence?, p1: Int, p2: Int, p3: Int
+            ) {
                 viewModel.onQueryChanged(binding.itemSearch.text.toString())
             }
 
@@ -82,29 +91,40 @@ class MainScreenFragment : Fragment() {
     }
 
     private fun setUpObservers() {
-        viewModel.displayList.observe(viewLifecycleOwner) {
-            it?.let {
-                adapter.submitList(it)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                launch {
+                    viewModel.displayList.collect {
+                        it.let {
+                            adapter.submitList(it)
+                        }
+                    }
+                }
+
+//                viewModel.products.observe(viewLifecycleOwner) {}
+                launch {
+                    viewModel.showCartCircle.collect {
+                        val cartDot = binding.cartDot
+                        val cartButton = binding.cartButton
+                        if (it) {
+                            cartDot.visibility = View.VISIBLE
+                            cartButton.isEnabled = true
+                        } else {
+                            cartDot.visibility = View.GONE
+                            cartButton.isEnabled = false
+                        }
+                    }
+                }
+
+                launch {
+                    viewModel.error.collect {
+                        it?.let {
+                            Toast.makeText(context, it, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                }
             }
-        }
-
-        viewModel.products.observe(viewLifecycleOwner) {}
-
-        viewModel.showCartCircle.observe(viewLifecycleOwner) {
-            val cartDot = binding.cartDot
-            val cartButton = binding.cartButton
-            if (it) {
-                cartDot.visibility = View.VISIBLE
-                cartButton.isEnabled = true
-            } else {
-                cartDot.visibility = View.GONE
-                cartButton.isEnabled = false
-            }
-        }
-
-        viewModel.error.observe(viewLifecycleOwner) {
-            Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
-
         }
     }
 
@@ -112,13 +132,15 @@ class MainScreenFragment : Fragment() {
     private fun setUpAdapter() {
         adapter = MainScreenAdapter(onAddUnitPressed = { product ->
             viewModel.onAddItem(product.id)
-        }, onRemoveUnitPressed = { product -> viewModel.onRemoveItem(product.id) })
+        },
+            onRemoveUnitPressed = { product -> viewModel.onRemoveItem(product.id) })
         binding.itemsList.adapter = adapter
         binding.itemsList.layoutManager = LinearLayoutManager(activity)
     }
 
     private fun hideKeyboard() {
-        val manager = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val manager =
+            activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         manager.hideSoftInputFromWindow(view?.windowToken, 0)
     }
 
@@ -131,7 +153,9 @@ class MainScreenFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(
@@ -141,7 +165,8 @@ class MainScreenFragment : Fragment() {
     }
 
 
-    private inner class BannerSlidePagerAdapter(fa: FragmentActivity) : FragmentStateAdapter(fa) {
+    private inner class BannerSlidePagerAdapter(fa: FragmentActivity) :
+        FragmentStateAdapter(fa) {
         override fun getItemCount(): Int = NUM_PAGES
 
         override fun createFragment(position: Int): Fragment {
@@ -166,7 +191,8 @@ class MainScreenFragment : Fragment() {
                 )
 
                 putString(
-                    FeatureCarrouselFragment.ARG_DESCRIPTION, getString(R.string.product_of_the_month)
+                    FeatureCarrouselFragment.ARG_DESCRIPTION,
+                    getString(R.string.product_of_the_month)
                 )
             }
             return fragment

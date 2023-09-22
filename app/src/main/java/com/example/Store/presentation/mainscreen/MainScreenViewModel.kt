@@ -1,13 +1,8 @@
-package com.example.proyecto_final_de_onboarding.presentation.mainscreen
+package com.example.Store.presentation.mainscreen
 
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.data.Result
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
@@ -18,9 +13,17 @@ import com.example.proyecto_final_de_onboarding.domain.usecase.GetCartUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.GetProductsUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.RemoveProductFromCartUseCase
 import com.example.proyecto_final_de_onboarding.domain.usecase.UpdateProductsUseCase
-import com.example.proyecto_final_de_onboarding.domain.utils.SingleLiveEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,53 +36,43 @@ class MainScreenViewModel @Inject constructor(
     private val getCartUseCase: GetCartUseCase
 ) : ViewModel(), DefaultLifecycleObserver {
 
-    private val _cart = MutableLiveData<List<CartItem>>()
-    private val _query = MutableLiveData("")
+    private val _cart = MutableStateFlow<List<CartItem>>(listOf())
+    private val _query = MutableStateFlow("")
 
-    val products: LiveData<List<Product>> = liveData {
+    val products: StateFlow<List<Product>> = flow {
         emit(refreshData())
-    }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(500),
+        initialValue = listOf()
+    )
 
-    val showCartCircle: LiveData<Boolean> = _cart.map { it.isNotEmpty() }
+    val showCartCircle: Flow<Boolean> = _cart.map { it.isNotEmpty() }
 
-    private val _error = SingleLiveEvent<String>()
-    val error: LiveData<String> = _error
+    private val _error = MutableStateFlow<String?>(null)
+    val error: StateFlow<String?> = _error.asStateFlow()
 
-    private val screenItemsList = MediatorLiveData<List<ScreenListItem.ScreenItem>>()
+    private val screenItemsList: Flow<List<ScreenListItem.ScreenItem>> =
+        combine(products, _cart, _query) { products, cart, query ->
+            products.filter {
+                it.matchesQuery(query)
+            }.map { item ->
+                ScreenListItem.ScreenItem(
+                    item, cart.getItemQty(item.id)
+                )
+            }
+        }
 
-    val displayList: LiveData<List<ScreenListItem>> = screenItemsList.map { list ->
+    val displayList: Flow<List<ScreenListItem>> = screenItemsList.map { list ->
         list.groupBy { item -> item.product.kind }.entries.map { kind ->
             listOf<ScreenListItem>(ScreenListItem.ScreenHeader(kind.key)) + kind.value.sortedBy { it.product.name }
         }.flatten()
-    }
-
-    init {
-        screenItemsList.addSource(products) {
-            screenItemsList.value = onInputChanged()
-        }
-        screenItemsList.addSource(_cart) {
-            screenItemsList.value = onInputChanged()
-        }
-        screenItemsList.addSource(_query) {
-            screenItemsList.value = onInputChanged()
-        }
     }
 
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         getCart()
     }
-
-    private fun getItemQty(itemId: Int) = _cart.value?.find { cartItem -> itemId == cartItem.productId }?.quantity ?: 0
-
-    private fun onInputChanged(): List<ScreenListItem.ScreenItem> = products.value?.filter {
-        it.matchesQuery(_query.value)
-    }?.map { item ->
-        ScreenListItem.ScreenItem(
-            item, getItemQty(item.id)
-        )
-    } ?: listOf()
-
 
     fun onAddItem(productId: Int) {
         viewModelScope.launch {
@@ -117,7 +110,7 @@ class MainScreenViewModel @Inject constructor(
         return if (response is Result.Success) {
             response.value
         } else {
-            _error.postValue((response as Result.Error).message ?: "Error")
+            _error.value = (response as Result.Error).message ?: "Error"
             listOf()
         }
     }
@@ -136,4 +129,7 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
+    private fun List<CartItem>.getItemQty(itemId: Int): Int {
+        return this.find { it.productId == itemId }?.quantity ?: 0
+    }
 }
