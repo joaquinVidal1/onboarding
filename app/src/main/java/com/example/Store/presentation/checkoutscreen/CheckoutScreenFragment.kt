@@ -11,13 +11,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
+import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class CheckoutScreenFragment : Fragment() {
@@ -32,7 +37,9 @@ class CheckoutScreenFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_checkout_screen, container, false
@@ -69,32 +76,54 @@ class CheckoutScreenFragment : Fragment() {
         }
 
         binding.checkoutButton.setOnClickListener {
-            Toast.makeText(context, getString(R.string.checkout_message, viewModel.getCheckout()), Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(
+                context,
+                getString(R.string.checkout_message, viewModel.getCheckout()),
+                Toast.LENGTH_SHORT
+            ).show()
             viewModel.cleanCart()
             this.findNavController().popBackStack()
         }
     }
 
     private fun setUpObservers() {
-        viewModel.screenList.observe(viewLifecycleOwner) {
-            it?.let { adapter.submitList(it) }
-        }
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                launch {
+                    viewModel.screenList.collect {
+                        it.let { adapter.submitList(it) }
+                    }
+                }
 
-        viewModel.totalAmount.observe(viewLifecycleOwner) {
-            binding.totalAmount.text = getString(R.string.price, it.getRoundedPrice())
-        }
+                launch {
+                    viewModel.totalAmount.collect {
+                        binding.totalAmount.text =
+                            getString(R.string.price, it.getRoundedPrice())
+                    }
+                }
 
-        viewModel.showCheckoutButton.observe(viewLifecycleOwner) {
-            binding.checkoutButton.isEnabled = it
-        }
+                launch {
+                    viewModel.showCheckoutButton.collect {
+                        binding.checkoutButton.isEnabled = it
+                    }
+                }
 
-        viewModel.error.observe(viewLifecycleOwner) {
-            Toast.makeText(context, getString(it), Toast.LENGTH_SHORT).show()
-        }
+                launch {
+                    viewModel.error.collect {
+                        Toast.makeText(
+                            context,
+                            getString(it),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
 
-        viewModel.showEditQtyDialog.observe(viewLifecycleOwner) {
-            showEditQuantityDialog(it)
+                launch {
+                    viewModel.showEditQtyDialog.collect {
+                        showEditQuantityDialog(it)
+                    }
+                }
+            }
         }
     }
 
@@ -106,10 +135,12 @@ class CheckoutScreenFragment : Fragment() {
             value = cartItem.quantity
         }
 
-        AlertDialog.Builder(context).setPositiveButton(getString(R.string.confirm)) { _, _ ->
-            viewModel.itemQtyChanged(cartItem.productId, numberPicker.value)
-        }.setNegativeButton(getString(R.string.cancel)) { _, _ -> }.setTitle(getString(R.string.dialog_title))
-            .setView(numberPicker).show()
+        AlertDialog.Builder(context)
+            .setPositiveButton(getString(R.string.confirm)) { _, _ ->
+                viewModel.itemQtyChanged(cartItem.productId, numberPicker.value)
+            }.setNegativeButton(getString(R.string.cancel)) { _, _ -> }
+            .setTitle(getString(R.string.dialog_title)).setView(numberPicker)
+            .show()
 
     }
 

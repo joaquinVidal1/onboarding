@@ -39,7 +39,7 @@ class MainScreenViewModel @Inject constructor(
     private val _cart = MutableStateFlow<List<CartItem>>(listOf())
     private val _query = MutableStateFlow("")
 
-    val products: StateFlow<List<Product>> = flow {
+    private val products: StateFlow<List<Product>> = flow {
         emit(refreshData())
     }.stateIn(
         scope = viewModelScope,

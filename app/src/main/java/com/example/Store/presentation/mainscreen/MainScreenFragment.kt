@@ -101,7 +101,6 @@ class MainScreenFragment : Fragment() {
                     }
                 }
 
-//                viewModel.products.observe(viewLifecycleOwner) {}
                 launch {
                     viewModel.showCartCircle.collect {
                         val cartDot = binding.cartDot
