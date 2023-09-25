@@ -18,11 +18,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
+import com.example.Store.presentation.checkoutscreen.components.CheckoutScreen
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
-import com.example.proyecto_final_de_onboarding.presentation.checkoutscreen.components.CheckoutScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
