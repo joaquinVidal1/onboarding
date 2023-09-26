@@ -65,16 +65,16 @@ class CheckoutScreenViewModel @Inject constructor(
 
     val showCheckoutButton: Flow<Boolean> = screenList.map { it.isNotEmpty() }
 
-    val totalAmount: StateFlow<Double> = screenList.map {
-        it.sumOf { item -> item.quantity * item.product.price }
+    val totalAmount: StateFlow<String> = screenList.map {
+        it.sumOf { item -> item.quantity * item.product.price }.getRoundedPrice()
     }.stateIn(
         scope = viewModelScope,
-        initialValue = 0.0,
+        initialValue = "0.0",
         started = SharingStarted.WhileSubscribed(500)
     )
 
     fun getCheckout(): String {
-        return (totalAmount.value).getRoundedPrice()
+        return totalAmount.value
     }
 
     fun cleanCart() {
