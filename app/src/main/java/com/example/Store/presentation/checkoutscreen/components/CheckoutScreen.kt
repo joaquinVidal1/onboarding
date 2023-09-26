@@ -44,72 +44,86 @@ fun CheckoutScreen(
 ) {
     val listState = rememberLazyGridState()
 
-    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
-
+    Column {
         Spacer(modifier = Modifier.size(12.dp))
 
         IconButton(
-            onClick = onBackPressed, modifier = Modifier.padding(start = 0.dp)
+            onClick = onBackPressed
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_back),
-                contentDescription = null
+                contentDescription = null,
+                modifier = Modifier.size(24.dp)
             )
         }
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        Text(text = stringResource(id = R.string.shopping_cart_text))
 
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 150.dp),
-            state = listState,
-            contentPadding = PaddingValues(vertical = 24.dp)
-        ) {
-            items(items = cart, key = { it.product.id }) {
-                CartItem(
-                    item = it, modifier = Modifier
-                        .padding(
-                            start = 6.dp, end = 6.dp
+        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+
+            Text(text = stringResource(id = R.string.shopping_cart_text))
+
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 150.dp),
+                state = listState,
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalArrangement = Arrangement.spacedBy(24.dp),
+                contentPadding = PaddingValues(vertical = 24.dp),
+                modifier = Modifier.weight(1f)
+            ) {
+                items(items = cart, key = { item -> item.product.id }) { item ->
+                    CartItem(
+                        item = item, modifier = Modifier
+                            .width(150.dp)
+                    )
+                }
+            }
+
+            Column(modifier = Modifier.weight(0.3f)) {
+
+
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(text = stringResource(id = R.string.totalText))
+
+                    Text(
+                        text = stringResource(
+                            id = R.string.price,
+                            totalAmount
                         )
-                        .width(150.dp)
-                )
+                    )
+                }
+
+                Spacer(modifier = Modifier.size(30.dp))
+
+                FloatingActionButton(
+                    onClick = onCheckoutPressed,
+                    shape = RoundedCornerShape(50),
+                    backgroundColor = colorResource(
+                        id = R.color.color_checkout_button
+                    ),
+                    modifier = Modifier
+                        .align(CenterHorizontally)
+                        .fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.checkout),
+                        color = colorResource(id = R.color.white),
+                        modifier = Modifier.padding(
+                            vertical = 14.dp,
+                        ),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 16.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.size(40.dp))
+
             }
         }
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = stringResource(id = R.string.totalText))
-
-            Text(text = stringResource(id = R.string.price, totalAmount))
-
-        }
-
-        Spacer(modifier = Modifier.size(30.dp))
-
-        FloatingActionButton(
-            onClick = onCheckoutPressed,
-            shape = RoundedCornerShape(50),
-            backgroundColor = colorResource(
-                id = R.color.color_checkout_button
-            ),
-            modifier = Modifier.align(CenterHorizontally).fillMaxWidth()
-        ) {
-            Text(
-                text = stringResource(id = R.string.checkout),
-                color = colorResource(id = R.color.white),
-                modifier = Modifier.padding(
-                    vertical = 14.dp,
-                ),
-                fontWeight = FontWeight.Bold,
-                fontSize = 16.sp
-            )
-        }
-
-        Spacer(modifier = Modifier.size(40.dp))
-
     }
 }
 
@@ -119,6 +133,36 @@ fun CheckoutScreenPreview() {
     MaterialTheme {
         Surface {
             CheckoutScreen(cart = listOf(
+                ScreenListItem.ScreenItem(
+                    product = Product(
+                        id = 1,
+                        name = "Kiwi",
+                        price = 5.0,
+                        mainImage = "",
+                        checkoutImage = "",
+                        kind = Kind.Fruit
+                    ), quantity = 1
+                ),
+                ScreenListItem.ScreenItem(
+                    product = Product(
+                        id = 1,
+                        name = "Kiwi",
+                        price = 5.0,
+                        mainImage = "",
+                        checkoutImage = "",
+                        kind = Kind.Fruit
+                    ), quantity = 1
+                ),
+                ScreenListItem.ScreenItem(
+                    product = Product(
+                        id = 1,
+                        name = "Kiwi",
+                        price = 5.0,
+                        mainImage = "",
+                        checkoutImage = "",
+                        kind = Kind.Fruit
+                    ), quantity = 1
+                ),
                 ScreenListItem.ScreenItem(
                     product = Product(
                         id = 1,
