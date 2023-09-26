@@ -18,8 +18,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
 import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
 import com.example.Store.presentation.checkoutscreen.components.CheckoutScreen
 import com.example.proyecto_final_de_onboarding.R
@@ -33,13 +31,11 @@ class CheckoutScreenFragment : Fragment() {
 
     private val viewModel: CheckoutScreenViewModel by viewModels()
     private lateinit var binding: FragmentCheckoutScreenBinding
-    private lateinit var adapter: CheckoutScreenAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycle.addObserver(viewModel)
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,19 +49,28 @@ class CheckoutScreenFragment : Fragment() {
                     initial = listOf()
                 )
                 val totalAmount by viewModel.totalAmount.collectAsState(initial = "0.0")
-                CheckoutScreen(
-                    cart = cart,
+                val enableCheckoutButton: Boolean by viewModel.showCheckoutButton.collectAsState(
+                    initial = false
+                )
+
+                CheckoutScreen(cart = cart,
                     totalAmount = totalAmount,
                     onBackPressed = { this.findNavController().navigateUp() },
                     onCheckoutPressed = {
                         Toast.makeText(
-                            context,
-                            getString(R.string.checkout_message, viewModel.getCheckout()),
-                            Toast.LENGTH_SHORT
+                            context, getString(
+                                R.string.checkout_message,
+                                viewModel.getCheckout()
+                            ), Toast.LENGTH_SHORT
                         ).show()
                         viewModel.cleanCart()
                         this.findNavController().popBackStack()
+                    },
+                    isCheckoutButtonEnabled = enableCheckoutButton,
+                    onItemPressed = { item ->
+
                     })
+
             }
         }
     }
@@ -75,53 +80,9 @@ class CheckoutScreenFragment : Fragment() {
         lifecycle.removeObserver(viewModel)
     }
 
-    private fun setUpAdapter() {
-        adapter = CheckoutScreenAdapter { viewModel.onProductPressed(it) }
-
-        binding.cartItemsList.also {
-            it.adapter = adapter
-            it.layoutManager = GridLayoutManager(activity, 2)
-        }
-
-    }
-
-    private fun setUpListeners() {
-        binding.backButton.setOnClickListener {
-            this.findNavController().popBackStack()
-        }
-
-        binding.checkoutButton.setOnClickListener {
-            Toast.makeText(
-                context,
-                getString(R.string.checkout_message, viewModel.getCheckout()),
-                Toast.LENGTH_SHORT
-            ).show()
-            viewModel.cleanCart()
-            this.findNavController().popBackStack()
-        }
-    }
-
     private fun setUpObservers() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.RESUMED) {
-                launch {
-                    viewModel.screenList.collect {
-                        it.let { adapter.submitList(it) }
-                    }
-                }
-
-                launch {
-                    viewModel.totalAmount.collect {
-//                        binding.totalAmount.text =
-//                            getString(R.string.price, it.getRoundedPrice())
-                    }
-                }
-
-                launch {
-                    viewModel.showCheckoutButton.collect {
-                        binding.checkoutButton.isEnabled = it
-                    }
-                }
 
                 launch {
                     viewModel.error.collect {

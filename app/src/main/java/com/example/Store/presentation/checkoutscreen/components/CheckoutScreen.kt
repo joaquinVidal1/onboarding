@@ -1,5 +1,6 @@
 package com.example.Store.presentation.checkoutscreen.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,9 +21,14 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.ripple.LocalRippleTheme
+import androidx.compose.material.ripple.RippleAlpha
+import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -40,7 +46,9 @@ fun CheckoutScreen(
     cart: List<ScreenListItem.ScreenItem>,
     totalAmount: String,
     onBackPressed: () -> Unit,
-    onCheckoutPressed: () -> Unit
+    onCheckoutPressed: () -> Unit,
+    isCheckoutButtonEnabled: Boolean,
+    onItemPressed: (ScreenListItem.ScreenItem) -> Unit,
 ) {
     val listState = rememberLazyGridState()
 
@@ -72,11 +80,12 @@ fun CheckoutScreen(
                 contentPadding = PaddingValues(vertical = 24.dp),
                 modifier = Modifier.weight(1f)
             ) {
+
                 items(items = cart, key = { item -> item.product.id }) { item ->
-                    CartItem(
-                        item = item, modifier = Modifier
+                    CartItem(item = item,
+                        modifier = Modifier
                             .width(150.dp)
-                    )
+                            .clickable { onItemPressed(item) })
                 }
             }
 
@@ -91,33 +100,38 @@ fun CheckoutScreen(
 
                     Text(
                         text = stringResource(
-                            id = R.string.price,
-                            totalAmount
+                            id = R.string.price, totalAmount
                         )
                     )
                 }
 
                 Spacer(modifier = Modifier.size(30.dp))
 
-                FloatingActionButton(
-                    onClick = onCheckoutPressed,
-                    shape = RoundedCornerShape(50),
-                    backgroundColor = colorResource(
-                        id = R.color.color_checkout_button
-                    ),
-                    modifier = Modifier
-                        .align(CenterHorizontally)
-                        .fillMaxWidth()
+                CompositionLocalProvider(
+                    LocalRippleTheme provides if (isCheckoutButtonEnabled) LocalRippleTheme.current else NoRippleTheme
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.checkout),
-                        color = colorResource(id = R.color.white),
-                        modifier = Modifier.padding(
-                            vertical = 14.dp,
+
+                    FloatingActionButton(
+                        onClick = { if (isCheckoutButtonEnabled) onCheckoutPressed() },
+                        shape = RoundedCornerShape(50),
+                        backgroundColor = colorResource(
+                            id = if (isCheckoutButtonEnabled) R.color.color_checkout_button
+                            else R.color.grey
                         ),
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp
-                    )
+                        modifier = Modifier
+                            .align(CenterHorizontally)
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = stringResource(id = R.string.checkout),
+                            color = colorResource(id = R.color.white),
+                            modifier = Modifier.padding(
+                                vertical = 14.dp,
+                            ),
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                        )
+                    }
                 }
 
                 Spacer(modifier = Modifier.size(40.dp))
@@ -126,6 +140,16 @@ fun CheckoutScreen(
         }
     }
 }
+
+private object NoRippleTheme : RippleTheme {
+    @Composable
+    override fun defaultColor() = Color.Unspecified
+
+    @Composable
+    override fun rippleAlpha(): RippleAlpha =
+        RippleAlpha(0.0f, 0.0f, 0.0f, 0.0f)
+}
+
 
 @Composable
 @Preview
@@ -142,8 +166,7 @@ fun CheckoutScreenPreview() {
                         checkoutImage = "",
                         kind = Kind.Fruit
                     ), quantity = 1
-                ),
-                ScreenListItem.ScreenItem(
+                ), ScreenListItem.ScreenItem(
                     product = Product(
                         id = 1,
                         name = "Kiwi",
@@ -152,8 +175,7 @@ fun CheckoutScreenPreview() {
                         checkoutImage = "",
                         kind = Kind.Fruit
                     ), quantity = 1
-                ),
-                ScreenListItem.ScreenItem(
+                ), ScreenListItem.ScreenItem(
                     product = Product(
                         id = 1,
                         name = "Kiwi",
@@ -162,8 +184,7 @@ fun CheckoutScreenPreview() {
                         checkoutImage = "",
                         kind = Kind.Fruit
                     ), quantity = 1
-                ),
-                ScreenListItem.ScreenItem(
+                ), ScreenListItem.ScreenItem(
                     product = Product(
                         id = 1,
                         name = "Kiwi",
@@ -176,7 +197,9 @@ fun CheckoutScreenPreview() {
             ),
                 onBackPressed = { },
                 totalAmount = "0.0",
-                onCheckoutPressed = { })
+                onCheckoutPressed = { },
+                isCheckoutButtonEnabled = true,
+                onItemPressed = { _ -> })
         }
     }
 }
