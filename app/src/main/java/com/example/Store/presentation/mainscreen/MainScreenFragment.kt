@@ -122,7 +122,6 @@ class MainScreenFragment : Fragment() {
         }
     }
 
-
     private fun setUpAdapter() {
         adapter = MainScreenAdapter(onAddUnitPressed = { product ->
             viewModel.onAddItem(product.id)
