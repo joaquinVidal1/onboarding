@@ -36,11 +36,14 @@ fun ProductRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
 
+        val placeholderImage = painterResource(id = R.drawable.placeholder)
+
         AsyncImage(
             model = product.mainImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            placeholder = painterResource(id = R.drawable.placeholder),
+            placeholder = placeholderImage,
+            error = placeholderImage,
             modifier = Modifier
                 .size(56.dp)
                 .clip(CircleShape)

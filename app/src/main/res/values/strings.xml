@@ -28,6 +28,7 @@
     <string name="error_updating_cart">Error while updating cart</string>
     <string name="price">$%s</string>
     <string name="checkout_message">Total is: %s</string>
+    <string name="bottom_sheet_title">Edit item count</string>
     <plurals name="unit">
         <item quantity="one">%d unit</item>
         <item quantity="other">%d units</item>

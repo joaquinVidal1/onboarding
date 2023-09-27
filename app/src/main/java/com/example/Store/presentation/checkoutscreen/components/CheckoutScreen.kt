@@ -14,7 +14,6 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
@@ -139,6 +138,7 @@ fun CheckoutScreen(
                     onUpdateQuantity(
                         it.product, it.quantity
                     )
+                    showBottomSheet = Pair(false, null)
                 },
                 onRemoveUnitPressed = {
                     showBottomSheet = showBottomSheet.copy(
