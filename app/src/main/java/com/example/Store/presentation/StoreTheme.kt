@@ -1,7 +1,7 @@
 package com.example.Store.presentation
 
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material3.Typography
+import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
@@ -11,11 +11,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.proyecto_final_de_onboarding.R
 
-
-@Immutable
-data class ExtendedColors(
-    val primary: Color, val secondary: Color
-)
 
 @Composable
 fun StoreTheme(
@@ -35,7 +30,7 @@ fun StoreTheme(
     )
 
     val storeTypography = Typography(
-        titleMedium = h1, titleSmall = h2
+        h1 = h1, h2 = h2
     )
 
     MaterialTheme(typography = storeTypography) {
