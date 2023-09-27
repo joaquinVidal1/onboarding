@@ -15,7 +15,7 @@ import com.example.proyecto_final_de_onboarding.databinding.ListKindMainScreenBi
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
-import com.example.Store.presentation.mainscreen.components.AddButton
+import com.example.Store.presentation.common.components.AddButton
 
 class MainScreenAdapter(
     private val onAddUnitPressed: (Product) -> Unit, private val onRemoveUnitPressed: (Product) -> Unit
