@@ -22,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.Store.presentation.StoreTheme
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
@@ -56,12 +57,13 @@ fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
         ) {
             Text(
                 text = item.product.name,
+                style = MaterialTheme.typography.h1
             )
 
             Text(
                 text = stringResource(
                     id = R.string.price, item.product.roundedPrice
-                )
+                ), style = MaterialTheme.typography.h2
             )
         }
 
@@ -70,7 +72,9 @@ fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
         Text(
             text = pluralStringResource(
                 id = R.plurals.unit, item.quantity, item.quantity
-            ), modifier = Modifier.padding(start = paddingFromImage)
+            ),
+            style = MaterialTheme.typography.h2,
+            modifier = Modifier.padding(start = paddingFromImage)
         )
     }
 
@@ -80,7 +84,7 @@ fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
 @Preview
 fun CartItemPreview() {
     Surface {
-        MaterialTheme {
+        StoreTheme {
             CartItem(
                 item = ScreenListItem.ScreenItem(
                     product = Product(

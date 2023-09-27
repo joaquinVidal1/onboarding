@@ -14,28 +14,24 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
@@ -48,9 +44,17 @@ fun CheckoutScreen(
     onBackPressed: () -> Unit,
     onCheckoutPressed: () -> Unit,
     isCheckoutButtonEnabled: Boolean,
-    onItemPressed: (ScreenListItem.ScreenItem) -> Unit,
+    onUpdateQuantity: (Product, Int) -> Unit
 ) {
     val listState = rememberLazyGridState()
+
+    var showBottomSheet by remember {
+        mutableStateOf(
+            Pair<Boolean, ScreenListItem.ScreenItem?>(
+                false, null
+            )
+        )
+    }
 
     Column {
         Spacer(modifier = Modifier.size(12.dp))
@@ -85,7 +89,7 @@ fun CheckoutScreen(
                     CartItem(item = item,
                         modifier = Modifier
                             .width(150.dp)
-                            .clickable { onItemPressed(item) })
+                            .clickable { showBottomSheet = Pair(true, item) })
                 }
             }
 
@@ -107,47 +111,53 @@ fun CheckoutScreen(
 
                 Spacer(modifier = Modifier.size(30.dp))
 
-                CompositionLocalProvider(
-                    LocalRippleTheme provides if (isCheckoutButtonEnabled) LocalRippleTheme.current else NoRippleTheme
-                ) {
-
-                    FloatingActionButton(
-                        onClick = { if (isCheckoutButtonEnabled) onCheckoutPressed() },
-                        shape = RoundedCornerShape(50),
-                        backgroundColor = colorResource(
-                            id = if (isCheckoutButtonEnabled) R.color.color_checkout_button
-                            else R.color.grey
-                        ),
-                        modifier = Modifier
-                            .align(CenterHorizontally)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.checkout),
-                            color = colorResource(id = R.color.white),
-                            modifier = Modifier.padding(
-                                vertical = 14.dp,
-                            ),
-                            fontWeight = FontWeight.Bold,
-                            fontSize = 16.sp,
-                        )
-                    }
-                }
+                ConfirmationFABButton(
+                    text = stringResource(id = R.string.checkout),
+                    isEnabled = isCheckoutButtonEnabled,
+                    onButtonPressed = onCheckoutPressed,
+                    enabledColor = colorResource(
+                        id = R.color.color_checkout_button
+                    ),
+                    modifier = Modifier
+                        .align(CenterHorizontally)
+                        .fillMaxWidth()
+                )
 
                 Spacer(modifier = Modifier.size(40.dp))
 
             }
         }
     }
-}
 
-private object NoRippleTheme : RippleTheme {
-    @Composable
-    override fun defaultColor() = Color.Unspecified
+    if (showBottomSheet.first) {
+        showBottomSheet.second?.let {
+            ModifyProductQuantityDialog(
+                productQty = it.quantity,
+                product = it.product,
+                onDisMissDialog = { showBottomSheet = Pair(false, null) },
+                onEditQuantityConfirmed = {
+                    onUpdateQuantity(
+                        it.product, it.quantity
+                    )
+                },
+                onRemoveUnitPressed = {
+                    showBottomSheet = showBottomSheet.copy(
+                        second = it.copy(
+                            quantity = it.quantity - 1
+                        )
+                    )
+                },
+                onAddUnitPressed = {
+                    showBottomSheet = showBottomSheet.copy(
+                        second = it.copy(
+                            quantity = it.quantity + 1
+                        )
+                    )
+                },
 
-    @Composable
-    override fun rippleAlpha(): RippleAlpha =
-        RippleAlpha(0.0f, 0.0f, 0.0f, 0.0f)
+                )
+        }
+    }
 }
 
 
@@ -199,7 +209,7 @@ fun CheckoutScreenPreview() {
                 totalAmount = "0.0",
                 onCheckoutPressed = { },
                 isCheckoutButtonEnabled = true,
-                onItemPressed = { _ -> })
+                onUpdateQuantity = { _, _ -> })
         }
     }
 }

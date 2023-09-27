@@ -18,6 +18,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.findNavController
+import com.example.Store.presentation.StoreTheme
 import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
 import com.example.Store.presentation.checkoutscreen.components.CheckoutScreen
 import com.example.proyecto_final_de_onboarding.R
@@ -45,32 +46,41 @@ class CheckoutScreenFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val cart by viewModel.screenList.collectAsState(
-                    initial = listOf()
-                )
-                val totalAmount by viewModel.totalAmount.collectAsState(initial = "0.0")
-                val enableCheckoutButton: Boolean by viewModel.showCheckoutButton.collectAsState(
-                    initial = false
-                )
+                StoreTheme {
 
-                CheckoutScreen(cart = cart,
-                    totalAmount = totalAmount,
-                    onBackPressed = { this.findNavController().navigateUp() },
-                    onCheckoutPressed = {
-                        Toast.makeText(
-                            context, getString(
-                                R.string.checkout_message,
-                                viewModel.getCheckout()
-                            ), Toast.LENGTH_SHORT
-                        ).show()
-                        viewModel.cleanCart()
-                        this.findNavController().popBackStack()
-                    },
-                    isCheckoutButtonEnabled = enableCheckoutButton,
-                    onItemPressed = { item ->
+                    val cart by viewModel.screenList.collectAsState(
+                        initial = listOf()
+                    )
+                    val totalAmount by viewModel.totalAmount.collectAsState(
+                        initial = "0.0"
+                    )
+                    val enableCheckoutButton: Boolean by viewModel.showCheckoutButton.collectAsState(
+                        initial = false
+                    )
 
-                    })
+                    CheckoutScreen(cart = cart,
+                        totalAmount = totalAmount,
+                        onBackPressed = {
+                            this.findNavController().navigateUp()
+                        },
+                        onCheckoutPressed = {
+                            Toast.makeText(
+                                context, getString(
+                                    R.string.checkout_message,
+                                    viewModel.getCheckout()
+                                ), Toast.LENGTH_SHORT
+                            ).show()
+                            viewModel.cleanCart()
+                            this.findNavController().popBackStack()
+                        },
+                        isCheckoutButtonEnabled = enableCheckoutButton,
+                        onUpdateQuantity = { product, qty ->
+                            viewModel.itemQtyChanged(
+                                productId = product.id, newQty = qty
+                            )
+                        })
 
+                }
             }
         }
     }

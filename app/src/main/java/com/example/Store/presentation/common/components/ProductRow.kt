@@ -18,6 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.Store.presentation.StoreTheme
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
@@ -26,8 +27,8 @@ import com.example.proyecto_final_de_onboarding.domain.model.Product
 fun ProductRow(
     product: Product,
     quantity: Int,
-    onAddUnitPressed: (Product) -> Unit,
-    onRemoveUnitPressed: (Product) -> Unit,
+    onAddUnitPressed: () -> Unit,
+    onRemoveUnitPressed: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -48,39 +49,43 @@ fun ProductRow(
         Spacer(modifier = Modifier.size(24.dp))
 
         Column {
-            Text(text = product.name, style = )
+            Text(text = product.name, style = MaterialTheme.typography.h1)
 
             Spacer(modifier = Modifier.size(8.dp))
 
             Text(
                 text = stringResource(
                     id = R.string.price, product.roundedPrice
-                )
+                ),
+                style = MaterialTheme.typography.h2
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
         AddButton(qty = quantity,
-            onAddUnitPressed = { onAddUnitPressed(product) },
-            onRemoveUnitPressed = { onRemoveUnitPressed(product) })
+            onAddUnitPressed = onAddUnitPressed,
+            onRemoveUnitPressed = onRemoveUnitPressed )
     }
 }
 
 @Composable
 @Preview
 fun productRowPreview() {
-    ProductRow(product = Product(
-        id = 1,
-        name = "Kiwi",
-        price = 5.0,
-        mainImage = "",
-        checkoutImage = "",
-        kind = Kind.Fruit
-    ),
-        quantity = 1,
-        onRemoveUnitPressed = { _ -> },
-        onAddUnitPressed = { _ -> },
-        modifier = Modifier.fillMaxWidth()
-    )
+    StoreTheme {
+        ProductRow(
+            product = Product(
+                id = 1,
+                name = "Kiwi",
+                price = 5.0,
+                mainImage = "",
+                checkoutImage = "",
+                kind = Kind.Fruit
+            ),
+            quantity = 1,
+            onRemoveUnitPressed = { },
+            onAddUnitPressed = { },
+            modifier = Modifier.fillMaxWidth()
+        )
+    }
 }
