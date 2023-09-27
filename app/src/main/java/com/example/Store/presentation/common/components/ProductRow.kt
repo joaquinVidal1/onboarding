@@ -3,8 +3,10 @@ package com.example.Store.presentation.common.components
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -46,7 +48,7 @@ fun ProductRow(
         Spacer(modifier = Modifier.size(24.dp))
 
         Column {
-            Text(text = product.name)
+            Text(text = product.name, style = )
 
             Spacer(modifier = Modifier.size(8.dp))
 
@@ -59,27 +61,26 @@ fun ProductRow(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        AddButton(
-            qty = quantity,
+        AddButton(qty = quantity,
             onAddUnitPressed = { onAddUnitPressed(product) },
-            onRemoveUnitPressed = { onRemoveUnitPressed(product) },
+            onRemoveUnitPressed = { onRemoveUnitPressed(product) })
     }
 }
 
 @Composable
 @Preview
 fun productRowPreview() {
-    ProductRow(
-        product = Product(
-            id = 1,
-            name = "Kiwi",
-            price = 5.0,
-            mainImage = "",
-            checkoutImage = "",
-            kind = Kind.Fruit
-        ),
+    ProductRow(product = Product(
+        id = 1,
+        name = "Kiwi",
+        price = 5.0,
+        mainImage = "",
+        checkoutImage = "",
+        kind = Kind.Fruit
+    ),
         quantity = 1,
         onRemoveUnitPressed = { _ -> },
         onAddUnitPressed = { _ -> },
+        modifier = Modifier.fillMaxWidth()
     )
 }

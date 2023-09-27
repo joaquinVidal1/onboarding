@@ -5,4 +5,20 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="ProductName" parent="TextAppearance.AppCompat">
+        <item name="color">@color/colorPrimary</item>
+        <item name="fontFamily">@font/sf_pro_text</item>
+        <item name="fontWeight">700</item>
+        <item name="android:textSize">16sp</item>
+        <item name="lineHeight">20dp</item>
+    </style>
+
+    <style name="ProductPrice" parent="TextAppearance.AppCompat">
+        <item name="color">@color/colorSecondary</item>
+        <item name="fontFamily">@font/sf_pro_text</item>
+        <item name="fontWeight">500</item>
+        <item name="android:textSize">16sp</item>
+        <item name="lineHeight">20dp</item>
+    </style>
+
 </resources>
