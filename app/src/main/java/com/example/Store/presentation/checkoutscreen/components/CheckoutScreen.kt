@@ -24,13 +24,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
@@ -73,7 +76,11 @@ fun CheckoutScreen(
 
         Column(modifier = Modifier.padding(horizontal = 12.dp)) {
 
-            Text(text = stringResource(id = R.string.shopping_cart_text))
+            Text(
+                text = stringResource(id = R.string.shopping_cart_text),
+                style = MaterialTheme.typography.h1,
+                fontSize = 22.sp
+            )
 
             LazyVerticalGrid(
                 columns = GridCells.Adaptive(minSize = 150.dp),
@@ -97,14 +104,20 @@ fun CheckoutScreen(
 
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Bottom
                 ) {
-                    Text(text = stringResource(id = R.string.totalText))
+                    Text(
+                        text = stringResource(id = R.string.totalText),
+                        style = MaterialTheme.typography.h1,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Normal
+                    )
 
                     Text(
                         text = stringResource(
                             id = R.string.price, totalAmount
-                        )
+                        ), style = MaterialTheme.typography.h1, fontSize = 32.sp
                     )
                 }
 
