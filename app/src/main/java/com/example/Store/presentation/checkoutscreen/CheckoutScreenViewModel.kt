@@ -100,10 +100,6 @@ class CheckoutScreenViewModel @Inject constructor(
         }
     }
 
-    fun getQty(itemId: Int): Int {
-        return cart.value.find { it.productId == itemId }?.quantity ?: 0
-    }
-
     override fun onResume(owner: LifecycleOwner) {
         super.onResume(owner)
         getCart()
@@ -126,14 +122,6 @@ class CheckoutScreenViewModel @Inject constructor(
     private fun CartItem.getScreenItem(products: List<Product>): ScreenListItem.ScreenItem? {
         return products.firstOrNull { it.id == this.productId }?.let {
             ScreenListItem.ScreenItem(product = it, quantity = this.quantity)
-        }
-    }
-
-    fun onProductPressed(product: ScreenListItem.ScreenItem) {
-        viewModelScope.launch {
-            _showEditQtyDialog.emit(
-                CartItem(productId = product.id, quantity = product.quantity)
-            )
         }
     }
 
