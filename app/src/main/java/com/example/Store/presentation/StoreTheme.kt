@@ -3,8 +3,6 @@ package com.example.Store.presentation
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Typography
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Immutable
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +31,5 @@ fun StoreTheme(
         h1 = h1, h2 = h2
     )
 
-    MaterialTheme(typography = storeTypography) {
-        content
-    }
+    MaterialTheme(typography = storeTypography, content = content)
 }

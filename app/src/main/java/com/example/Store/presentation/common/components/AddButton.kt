@@ -1,4 +1,4 @@
-package com.example.Store.presentation.mainscreen.components
+package com.example.Store.presentation.common.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
