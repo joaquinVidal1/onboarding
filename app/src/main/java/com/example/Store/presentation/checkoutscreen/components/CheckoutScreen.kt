@@ -19,6 +19,8 @@ import androidx.compose.material.IconButton
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -27,8 +29,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment.Companion.Bottom
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -58,86 +60,89 @@ fun CheckoutScreen(
         )
     }
 
-    Column {
+    Column(modifier = Modifier.padding(horizontal = 12.dp)) {
         Spacer(modifier = Modifier.size(12.dp))
 
         IconButton(
             onClick = onBackPressed
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_back),
+            Icon(imageVector = Icons.Default.ArrowBack,
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
-            )
+                modifier = Modifier.layout { measurable, constraints ->
+                    val padding = 12.dp
+                    val noPaddingConstraints = constraints.copy(
+                        maxWidth = constraints.maxWidth + (padding * 2).roundToPx()
+                    )
+                    val placeable = measurable.measure(noPaddingConstraints)
+                    layout(placeable.width, placeable.height) {
+                        placeable.place(x = -padding.roundToPx(), y = 0)
+                    }
+                })
         }
 
         Spacer(modifier = Modifier.size(16.dp))
 
 
-        Column(modifier = Modifier.padding(horizontal = 12.dp)) {
+        Text(
+            text = stringResource(id = R.string.shopping_cart_text),
+            style = MaterialTheme.typography.h1,
+            fontSize = 22.sp
+        )
 
-            Text(
-                text = stringResource(id = R.string.shopping_cart_text),
-                style = MaterialTheme.typography.h1,
-                fontSize = 22.sp
-            )
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 150.dp),
+            state = listState,
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            contentPadding = PaddingValues(vertical = 24.dp),
+            modifier = Modifier.weight(1f)
+        ) {
 
-            LazyVerticalGrid(
-                columns = GridCells.Adaptive(minSize = 150.dp),
-                state = listState,
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                verticalArrangement = Arrangement.spacedBy(24.dp),
-                contentPadding = PaddingValues(vertical = 24.dp),
-                modifier = Modifier.weight(1f)
-            ) {
-
-                items(items = cart, key = { item -> item.product.id }) { item ->
-                    CartItem(item = item,
-                        modifier = Modifier
-                            .width(150.dp)
-                            .clickable { showBottomSheet = Pair(true, item) })
-                }
-            }
-
-            Column(modifier = Modifier.weight(0.3f)) {
-
-
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Bottom
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.totalText),
-                        style = MaterialTheme.typography.h1,
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Normal
-                    )
-
-                    Text(
-                        text = stringResource(
-                            id = R.string.price, totalAmount
-                        ), style = MaterialTheme.typography.h1, fontSize = 32.sp
-                    )
-                }
-
-                Spacer(modifier = Modifier.size(30.dp))
-
-                ConfirmationFABButton(
-                    text = stringResource(id = R.string.checkout),
-                    isEnabled = isCheckoutButtonEnabled,
-                    onButtonPressed = onCheckoutPressed,
-                    enabledColor = colorResource(
-                        id = R.color.color_checkout_button
-                    ),
+            items(items = cart, key = { item -> item.product.id }) { item ->
+                CartItem(item = item,
                     modifier = Modifier
-                        .align(CenterHorizontally)
-                        .fillMaxWidth()
+                        .width(150.dp)
+                        .clickable { showBottomSheet = Pair(true, item) })
+            }
+        }
+
+        Column(modifier = Modifier.weight(0.3f)) {
+
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Bottom
+            ) {
+                Text(
+                    text = stringResource(id = R.string.totalText),
+                    style = MaterialTheme.typography.h1,
+                    fontSize = 22.sp,
+                    fontWeight = FontWeight.Normal
                 )
 
-                Spacer(modifier = Modifier.size(40.dp))
-
+                Text(
+                    text = stringResource(
+                        id = R.string.price, totalAmount
+                    ), style = MaterialTheme.typography.h1, fontSize = 32.sp
+                )
             }
+
+            Spacer(modifier = Modifier.size(30.dp))
+
+            ConfirmationFABButton(
+                text = stringResource(id = R.string.checkout),
+                isEnabled = isCheckoutButtonEnabled,
+                onButtonPressed = onCheckoutPressed,
+                enabledColor = colorResource(
+                    id = R.color.color_checkout_button
+                ),
+                modifier = Modifier
+                    .align(CenterHorizontally)
+                    .fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.size(40.dp))
+
         }
     }
 
