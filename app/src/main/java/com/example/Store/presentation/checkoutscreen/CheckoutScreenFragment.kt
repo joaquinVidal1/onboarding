@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -38,18 +36,8 @@ class CheckoutScreenFragment : Fragment() {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 StoreTheme {
-                    val cart by viewModel.screenList.collectAsState(
-                        initial = listOf()
-                    )
-                    val totalAmount by viewModel.totalAmount.collectAsState(
-                        initial = "0.0"
-                    )
-                    val enableCheckoutButton: Boolean by viewModel.showCheckoutButton.collectAsState(
-                        initial = false
-                    )
 
-                    CheckoutScreen(cart = cart,
-                        totalAmount = totalAmount,
+                    CheckoutScreen(
                         onBackPressed = {
                             this.findNavController().navigateUp()
                         },
@@ -60,15 +48,9 @@ class CheckoutScreenFragment : Fragment() {
                                     viewModel.getCheckout()
                                 ), Toast.LENGTH_SHORT
                             ).show()
-                            viewModel.cleanCart()
                             this.findNavController().popBackStack()
                         },
-                        isCheckoutButtonEnabled = enableCheckoutButton,
-                        onUpdateQuantity = { product, qty ->
-                            viewModel.itemQtyChanged(
-                                productId = product.id, newQty = qty
-                            )
-                        })
+                    )
 
                 }
             }

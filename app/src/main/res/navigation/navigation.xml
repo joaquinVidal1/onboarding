@@ -12,10 +12,7 @@
         tools:layout="@layout/fragment_main_screen">
         <action
             android:id="@+id/action_mainScreenFragment_to_checkoutScreenFragment"
-            app:destination="@id/checkout_screen_fragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/in_from_left" />
+            app:destination="@id/checkout_screen_fragment" />
     </fragment>
 
     <fragment

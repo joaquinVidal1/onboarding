@@ -22,6 +22,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,21 +37,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
 import com.example.proyecto_final_de_onboarding.R
-import com.example.proyecto_final_de_onboarding.domain.model.Kind
-import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 
 @Composable
 fun CheckoutScreen(
-    cart: List<ScreenListItem.ScreenItem>,
-    totalAmount: String,
     onBackPressed: () -> Unit,
     onCheckoutPressed: () -> Unit,
-    isCheckoutButtonEnabled: Boolean,
-    onUpdateQuantity: (Product, Int) -> Unit
 ) {
     val listState = rememberLazyGridState()
+    val viewModel: CheckoutScreenViewModel = hiltViewModel()
+
+    val cart by viewModel.screenList.collectAsState(
+        initial = listOf()
+    )
+    val totalAmount by viewModel.totalAmount.collectAsState(
+        initial = "0.0"
+    )
+    val isCheckoutButtonEnabled: Boolean by viewModel.showCheckoutButton.collectAsState(
+        initial = false
+    )
+
 
     var showBottomSheet by remember {
         mutableStateOf(
@@ -81,7 +90,6 @@ fun CheckoutScreen(
         }
 
         Spacer(modifier = Modifier.size(16.dp))
-
 
         Text(
             text = stringResource(id = R.string.shopping_cart_text),
@@ -132,7 +140,10 @@ fun CheckoutScreen(
             ConfirmationFABButton(
                 text = stringResource(id = R.string.checkout),
                 isEnabled = isCheckoutButtonEnabled,
-                onButtonPressed = onCheckoutPressed,
+                onButtonPressed = {
+                    viewModel.cleanCart()
+                    onCheckoutPressed()
+                },
                 enabledColor = colorResource(
                     id = R.color.color_checkout_button
                 ),
@@ -153,8 +164,8 @@ fun CheckoutScreen(
                 product = it.product,
                 onDisMissDialog = { showBottomSheet = Pair(false, null) },
                 onEditQuantityConfirmed = {
-                    onUpdateQuantity(
-                        it.product, it.quantity
+                    viewModel.itemQtyChanged(
+                        productId = it.product.id, newQty = it.quantity
                     )
                     showBottomSheet = Pair(false, null)
                 },
@@ -180,54 +191,14 @@ fun CheckoutScreen(
 
 
 @Composable
-@Preview
+@Preview()
 fun CheckoutScreenPreview() {
     MaterialTheme {
         Surface {
-            CheckoutScreen(cart = listOf(
-                ScreenListItem.ScreenItem(
-                    product = Product(
-                        id = 1,
-                        name = "Kiwi",
-                        price = 5.0,
-                        mainImage = "",
-                        checkoutImage = "",
-                        kind = Kind.Fruit
-                    ), quantity = 1
-                ), ScreenListItem.ScreenItem(
-                    product = Product(
-                        id = 1,
-                        name = "Kiwi",
-                        price = 5.0,
-                        mainImage = "",
-                        checkoutImage = "",
-                        kind = Kind.Fruit
-                    ), quantity = 1
-                ), ScreenListItem.ScreenItem(
-                    product = Product(
-                        id = 1,
-                        name = "Kiwi",
-                        price = 5.0,
-                        mainImage = "",
-                        checkoutImage = "",
-                        kind = Kind.Fruit
-                    ), quantity = 1
-                ), ScreenListItem.ScreenItem(
-                    product = Product(
-                        id = 1,
-                        name = "Kiwi",
-                        price = 5.0,
-                        mainImage = "",
-                        checkoutImage = "",
-                        kind = Kind.Fruit
-                    ), quantity = 1
-                )
-            ),
+            CheckoutScreen(
                 onBackPressed = { },
-                totalAmount = "0.0",
                 onCheckoutPressed = { },
-                isCheckoutButtonEnabled = true,
-                onUpdateQuantity = { _, _ -> })
+            )
         }
     }
 }
