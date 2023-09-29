@@ -60,7 +60,6 @@ fun CheckoutScreen(
         initial = false
     )
 
-
     var showBottomSheet by remember {
         mutableStateOf(
             Pair<Boolean, ScreenListItem.ScreenItem?>(
