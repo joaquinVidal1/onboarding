@@ -1,6 +1,7 @@
 package com.example.Store.presentation.mainscreen.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
@@ -48,6 +50,7 @@ fun MainScreen(
     val carrouselPages by viewModel.carrouselPages.collectAsState(initial = listOf())
     val query by viewModel.query.collectAsState(initial = "")
     val products by viewModel.displayList.collectAsState(initial = listOf())
+    val enableCart by viewModel.showCartCircle.collectAsState(initial = false)
 
     val horizontalPadding = 18.dp
 
@@ -63,12 +66,23 @@ fun MainScreen(
                 .align(
                     Alignment.End
                 )
-                .padding(end = 30.dp)
+                .padding(end = horizontalPadding), enabled = enableCart
         ) {
-            Icon(
-                painter = painterResource(id = R.drawable.icon_cart),
-                contentDescription = null,
-            )
+            Box {
+                if (enableCart) {
+                    Box(
+                        modifier = Modifier
+                            .clip(CircleShape)
+                            .background(color = colorResource(id = R.color.color_dot_selected))
+                            .align(Alignment.TopEnd)
+                            .size(7.dp)
+                    )
+                }
+                Icon(
+                    painter = painterResource(id = R.drawable.icon_cart),
+                    contentDescription = null,
+                )
+            }
         }
 
         ProductsCarrousel(
@@ -111,9 +125,7 @@ fun MainScreen(
 
         LazyColumn(
             contentPadding = PaddingValues(
-                top = 24.dp,
-                start = horizontalPadding,
-                end = horizontalPadding
+                top = 24.dp, start = horizontalPadding, end = horizontalPadding
             )
         ) {
 
@@ -122,8 +134,8 @@ fun MainScreen(
                     ProductRow(
                         product = cartItem.product,
                         quantity = cartItem.quantity,
-                        onAddUnitPressed = { viewModel.onAddItem(cartItem.id) },
-                        onRemoveUnitPressed = { viewModel.onRemoveItem(cartItem.id) },
+                        onAddUnitPressed = { viewModel.onAddItem(cartItem.product.id) },
+                        onRemoveUnitPressed = { viewModel.onRemoveItem(cartItem.product.id) },
                         modifier = Modifier.padding(vertical = 16.dp)
                     )
 

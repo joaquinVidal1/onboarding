@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -59,16 +60,18 @@ fun ProductRow(
             Text(
                 text = stringResource(
                     id = R.string.price, product.roundedPrice
-                ),
-                style = MaterialTheme.typography.h2
+                ), style = MaterialTheme.typography.h2
             )
         }
 
         Spacer(modifier = Modifier.weight(1f))
 
-        AddButton(qty = quantity,
+        AddButton(
+            qty = quantity,
             onAddUnitPressed = onAddUnitPressed,
-            onRemoveUnitPressed = onRemoveUnitPressed )
+            onRemoveUnitPressed = onRemoveUnitPressed,
+            modifier = Modifier.width(100.dp)
+        )
     }
 }
 
