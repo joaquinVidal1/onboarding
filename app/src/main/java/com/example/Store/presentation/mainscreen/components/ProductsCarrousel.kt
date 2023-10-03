@@ -35,18 +35,14 @@ fun ProductsCarrousel(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HorizontalPager(
-            state = pagerState, modifier = modifier
+            state = pagerState, modifier = Modifier.wrapContentSize()
         ) { pagePosition ->
             val page = pages[pagePosition]
             CarrouselBanner(
                 image = page.image,
                 title = stringResource(id = page.title),
                 subtitle = stringResource(id = page.subtitle),
-                modifier = Modifier
-                    .padding(horizontal = 18.dp)
-                    .clip(
-                        RoundedCornerShape(4.dp)
-                    )
+                modifier = modifier
             )
         }
 
@@ -81,7 +77,11 @@ fun ProductsCarrouselPreview() {
                     subtitle = R.string.product_of_the_month,
                     image = R.drawable.banner_1
                 )
-            ), modifier = Modifier.wrapContentSize()
+            ), modifier = Modifier
+                .padding(horizontal = 18.dp)
+                .clip(
+                    RoundedCornerShape(4.dp)
+                )
         )
     }
 }
