@@ -134,4 +134,26 @@ class MainScreenViewModel @Inject constructor(
     private fun List<CartItem>.getItemQty(itemId: Int): Int {
         return this.find { it.productId == itemId }?.quantity ?: 0
     }
+
+    private fun getCarrouselPages(): List<CarrouselPage> {
+        return listOf(
+            CarrouselPage(
+                title = getString(R.string.brazilian_bananas),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_1
+            ), CarrouselPage(
+                title = getString(R.string.chinese_grapefruits),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_2
+            ), CarrouselPage(
+                title = getString(R.string.uruguayan_cucumbers),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_3
+            ), CarrouselPage(
+                title = getString(R.string.australian_kiwis),
+                subtitle = getString(R.string.chinese_grapefruits),
+                image = R.drawable.banner_4
+            )
+        )
+    }
 }

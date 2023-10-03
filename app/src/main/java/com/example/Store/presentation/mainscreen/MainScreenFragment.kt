@@ -11,7 +11,8 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.compose.material.MaterialTheme
-import androidx.databinding.DataBindingUtil
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -19,8 +20,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.Store.presentation.StoreTheme
+import com.example.Store.presentation.mainscreen.components.MainScreen
 import com.example.Store.presentation.mainscreen.MainScreenViewModel
-import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.CarrouselPage
 import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.ProductsCarrousel
@@ -151,33 +153,15 @@ class MainScreenFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_main_screen, container, false
-        )
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                StoreTheme {
+                    MainScreen(onCartPressed = {})
+                }
+            }
+        }
     }
 
-    private fun getCarrouselPages(): List<CarrouselPage> {
-        return listOf(
-            CarrouselPage(
-                title = getString(R.string.brazilian_bananas),
-                subtitle = getString(R.string.chinese_grapefruits),
-                image = R.drawable.banner_1
-            ), CarrouselPage(
-                title = getString(R.string.chinese_grapefruits),
-                subtitle = getString(R.string.chinese_grapefruits),
-                image = R.drawable.banner_2
-            ), CarrouselPage(
-                title = getString(R.string.uruguayan_cucumbers),
-                subtitle = getString(R.string.chinese_grapefruits),
-                image = R.drawable.banner_3
-            ), CarrouselPage(
-                title = getString(R.string.australian_kiwis),
-                subtitle = getString(R.string.chinese_grapefruits),
-                image = R.drawable.banner_4
-            )
-        )
-    }
 
 }
