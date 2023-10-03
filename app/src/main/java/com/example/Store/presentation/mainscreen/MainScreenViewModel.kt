@@ -40,6 +40,7 @@ class MainScreenViewModel @Inject constructor(
 
     private val _cart = MutableStateFlow<List<CartItem>>(listOf())
     private val _query = MutableStateFlow("")
+    val query: StateFlow<String> = _query.asStateFlow()
 
     private val products: StateFlow<List<Product>> = flow {
         emit(refreshData())
@@ -69,6 +70,10 @@ class MainScreenViewModel @Inject constructor(
         list.groupBy { item -> item.product.kind }.entries.map { kind ->
             listOf<ScreenListItem>(ScreenListItem.ScreenHeader(kind.key)) + kind.value.sortedBy { it.product.name }
         }.flatten()
+    }
+
+    val carrouselPages: Flow<List<CarrouselPage>> = flow {
+        emit(getCarrouselPages())
     }
 
     override fun onResume(owner: LifecycleOwner) {
@@ -138,20 +143,20 @@ class MainScreenViewModel @Inject constructor(
     private fun getCarrouselPages(): List<CarrouselPage> {
         return listOf(
             CarrouselPage(
-                title = getString(R.string.brazilian_bananas),
-                subtitle = getString(R.string.chinese_grapefruits),
+                title = R.string.brazilian_bananas,
+                subtitle = R.string.chinese_grapefruits,
                 image = R.drawable.banner_1
             ), CarrouselPage(
-                title = getString(R.string.chinese_grapefruits),
-                subtitle = getString(R.string.chinese_grapefruits),
+                title = R.string.chinese_grapefruits,
+                subtitle = R.string.chinese_grapefruits,
                 image = R.drawable.banner_2
             ), CarrouselPage(
-                title = getString(R.string.uruguayan_cucumbers),
-                subtitle = getString(R.string.chinese_grapefruits),
+                title = R.string.uruguayan_cucumbers,
+                subtitle = R.string.chinese_grapefruits,
                 image = R.drawable.banner_3
             ), CarrouselPage(
-                title = getString(R.string.australian_kiwis),
-                subtitle = getString(R.string.chinese_grapefruits),
+                title = R.string.australian_kiwis,
+                subtitle = R.string.chinese_grapefruits,
                 image = R.drawable.banner_4
             )
         )

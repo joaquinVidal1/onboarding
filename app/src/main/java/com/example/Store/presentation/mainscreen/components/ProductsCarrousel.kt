@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.proyecto_final_de_onboarding.R
@@ -39,8 +40,8 @@ fun ProductsCarrousel(
             val page = pages[pagePosition]
             CarrouselBanner(
                 image = page.image,
-                title = page.title,
-                subtitle = page.subtitle,
+                title = stringResource(id = page.title),
+                subtitle = stringResource(id = page.subtitle),
                 modifier = Modifier
                     .padding(horizontal = 18.dp)
                     .clip(
@@ -76,8 +77,8 @@ fun ProductsCarrouselPreview() {
         ProductsCarrousel(
             pages = listOf(
                 CarrouselPage(
-                    title = "Brazilian Bananas",
-                    subtitle = "Product of the month",
+                    title = R.string.brazilian_bananas,
+                    subtitle = R.string.product_of_the_month,
                     image = R.drawable.banner_1
                 )
             ), modifier = Modifier.wrapContentSize()

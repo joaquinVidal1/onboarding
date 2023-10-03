@@ -1,9 +1,10 @@
 package com.example.proyecto_final_de_onboarding.domain
 
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 
 data class CarrouselPage(
-    val title: String,
-    val subtitle: String,
+    @StringRes val title: Int,
+    @StringRes val subtitle: Int,
     @DrawableRes val image: Int
 )

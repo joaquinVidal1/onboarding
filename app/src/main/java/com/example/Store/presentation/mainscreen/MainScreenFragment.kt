@@ -21,8 +21,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.Store.presentation.StoreTheme
-import com.example.Store.presentation.mainscreen.components.MainScreen
 import com.example.Store.presentation.mainscreen.MainScreenViewModel
+import com.example.Store.presentation.mainscreen.components.MainScreen
 import com.example.proyecto_final_de_onboarding.databinding.FragmentMainScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.CarrouselPage
 import com.example.proyecto_final_de_onboarding.presentation.mainscreen.components.ProductsCarrousel
@@ -49,10 +49,9 @@ class MainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setUpAdapter()
-        setUpObservers()
-        setUpListeners()
-        setUpCarrousel(getCarrouselPages())
+//        setUpAdapter()
+//        setUpObservers()
+//        setUpListeners()
     }
 
     private fun setUpListeners() {
