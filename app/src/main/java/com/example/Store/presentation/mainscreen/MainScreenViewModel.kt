@@ -1,7 +1,6 @@
 package com.example.Store.presentation.mainscreen
 
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.data.Result
@@ -69,8 +68,7 @@ class MainScreenViewModel @Inject constructor(
         }.flatten()
     }
 
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
+    init {
         getCart()
     }
 

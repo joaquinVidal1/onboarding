@@ -1,7 +1,6 @@
 package com.example.Store.presentation.checkoutscreen
 
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.R
@@ -73,6 +72,10 @@ class CheckoutScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(500)
     )
 
+    init {
+        getCart()
+    }
+
     fun getCheckout(): String {
         return (totalAmount.value).getRoundedPrice()
     }
@@ -102,11 +105,6 @@ class CheckoutScreenViewModel @Inject constructor(
 
     fun getQty(itemId: Int): Int {
         return cart.value.find { it.productId == itemId }?.quantity ?: 0
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        getCart()
     }
 
     private fun getCart() {

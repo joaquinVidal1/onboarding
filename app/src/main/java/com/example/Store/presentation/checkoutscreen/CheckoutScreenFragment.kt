@@ -31,11 +31,6 @@ class CheckoutScreenFragment : Fragment() {
     private lateinit var binding: FragmentCheckoutScreenBinding
     private lateinit var adapter: CheckoutScreenAdapter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        lifecycle.addObserver(viewModel)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,11 +48,6 @@ class CheckoutScreenFragment : Fragment() {
         setUpListeners()
         setUpAdapter()
         setUpObservers()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        lifecycle.removeObserver(viewModel)
     }
 
     private fun setUpAdapter() {
