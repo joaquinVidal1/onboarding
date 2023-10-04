@@ -1,6 +1,5 @@
 package com.example.Store.presentation.checkoutscreen
 
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.R
@@ -32,7 +31,7 @@ class CheckoutScreenViewModel @Inject constructor(
     private val getCartUseCase: GetCartUseCase,
     private val getProductsUseCase: GetProductsUseCase,
     private val editQuantityUseCase: EditQuantityUseCase
-) : ViewModel(), DefaultLifecycleObserver {
+) : ViewModel() {
 
     private val cart = MutableStateFlow<List<CartItem>>(listOf())
 

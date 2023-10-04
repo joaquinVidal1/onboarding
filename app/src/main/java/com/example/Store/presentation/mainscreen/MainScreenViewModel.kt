@@ -1,6 +1,5 @@
 package com.example.Store.presentation.mainscreen
 
-import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.data.Result
@@ -33,7 +32,7 @@ class MainScreenViewModel @Inject constructor(
     private val addProductToCart: AddProductToCartUseCase,
     private val removeProductFromCart: RemoveProductFromCartUseCase,
     private val getCartUseCase: GetCartUseCase
-) : ViewModel(), DefaultLifecycleObserver {
+) : ViewModel() {
 
     private val _cart = MutableStateFlow<List<CartItem>>(listOf())
     private val _query = MutableStateFlow("")
