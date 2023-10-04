@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
@@ -14,7 +13,6 @@ import androidx.navigation.findNavController
 import com.example.Store.presentation.StoreTheme
 import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
 import com.example.Store.presentation.checkoutscreen.components.CheckoutScreen
-import com.example.proyecto_final_de_onboarding.R
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,16 +38,8 @@ class CheckoutScreenFragment : Fragment() {
                     CheckoutScreen(
                         onBackPressed = {
                             this.findNavController().navigateUp()
-                        },
-                        onCheckoutPressed = {
-                            Toast.makeText(
-                                context, getString(
-                                    R.string.checkout_message,
-                                    viewModel.getCheckout()
-                                ), Toast.LENGTH_SHORT
-                            ).show()
-                            this.findNavController().popBackStack()
-                        },
+                        }
+
                     )
 
                 }

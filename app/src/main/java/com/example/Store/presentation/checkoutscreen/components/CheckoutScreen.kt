@@ -44,10 +44,10 @@ import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 
 @Composable
 fun CheckoutScreen(
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    viewModel: CheckoutScreenViewModel = hiltViewModel()
 ) {
     val listState = rememberLazyGridState()
-    val viewModel: CheckoutScreenViewModel = hiltViewModel()
 
     val cart by viewModel.screenList.collectAsState(
         initial = listOf()
@@ -194,7 +194,7 @@ fun CheckoutScreenPreview() {
     MaterialTheme {
         Surface {
             CheckoutScreen(
-                onBackPressed = { },
+                onBackPressed = { }
             )
         }
     }

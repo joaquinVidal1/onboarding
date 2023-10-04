@@ -1,6 +1,7 @@
 package com.example.Store.presentation.nav
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -14,12 +15,17 @@ fun StoreNavHost(navController: NavHostController) {
     ) {
 
         composable(route = HomeDestination.route) {
-            MainScreen(onCartPressed = { navController.navigateToCart() })
+            MainScreen(
+                onCartPressed = { navController.navigateToCart() },
+                viewModel = hiltViewModel()
+            )
         }
 
         composable(route = CartDestination.route) {
-            CheckoutScreen(onBackPressed = { navController.navigateUp() },
-                onCheckoutPressed = { navController.navigateUp() })
+            CheckoutScreen(
+                onBackPressed = { navController.navigateUp() },
+                viewModel = hiltViewModel()
+            )
         }
     }
 }

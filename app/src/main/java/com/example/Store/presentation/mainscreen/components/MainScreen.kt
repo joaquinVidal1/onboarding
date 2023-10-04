@@ -43,10 +43,10 @@ import com.example.proyecto_final_de_onboarding.presentation.mainscreen.componen
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainScreen(
-    onCartPressed: () -> Unit
+    onCartPressed: () -> Unit,
+    viewModel: MainScreenViewModel = hiltViewModel(),
 ) {
 
-    val viewModel: MainScreenViewModel = hiltViewModel()
     val carrouselPages by viewModel.carrouselPages.collectAsState(initial = listOf())
     val query by viewModel.query.collectAsState(initial = "")
     val products by viewModel.displayList.collectAsState(initial = listOf())
@@ -164,8 +164,8 @@ fun MainScreen(
 @Preview
 fun MainScreenPreview() {
     StoreTheme {
-        MainScreen {
-
-        }
+        MainScreen(
+            onCartPressed = {},
+        )
     }
 }
