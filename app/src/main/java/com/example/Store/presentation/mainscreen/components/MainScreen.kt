@@ -134,8 +134,12 @@ fun MainScreen(
                     ProductRow(
                         product = cartItem.product,
                         quantity = cartItem.quantity,
-                        onAddUnitPressed = { viewModel.onAddItem(cartItem.product.id) },
-                        onRemoveUnitPressed = { viewModel.onRemoveItem(cartItem.product.id) },
+                        onAddUnitPressed = {
+                            viewModel.onAddItem(cartItem.product.id)
+                        },
+                        onRemoveUnitPressed = {
+                            viewModel.onRemoveItem(cartItem.product.id)
+                        },
                         modifier = Modifier.padding(vertical = 16.dp)
                     )
 
