@@ -73,6 +73,10 @@ class CheckoutScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(500)
     )
 
+    init {
+        getCart()
+    }
+
     fun getCheckout(): String {
         return totalAmount.value
     }

@@ -1,7 +1,6 @@
 package com.example.Store.presentation.mainscreen
 
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.R
@@ -76,8 +75,7 @@ class MainScreenViewModel @Inject constructor(
         emit(getCarrouselPages())
     }
 
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
+    init {
         getCart()
     }
 

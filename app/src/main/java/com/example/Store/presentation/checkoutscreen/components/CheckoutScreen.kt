@@ -104,7 +104,7 @@ fun CheckoutScreen(
             modifier = Modifier.weight(1f)
         ) {
 
-            items(items = cart, key = { item -> item.product.id }) { item ->
+            items(items = cart) { item ->
                 CartItem(item = item,
                     modifier = Modifier
                         .width(150.dp)

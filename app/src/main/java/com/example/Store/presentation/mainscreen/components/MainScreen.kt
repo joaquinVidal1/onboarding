@@ -1,5 +1,6 @@
 package com.example.Store.presentation.mainscreen.components
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,6 +52,12 @@ fun MainScreen(
     val query by viewModel.query.collectAsState(initial = "")
     val products by viewModel.displayList.collectAsState(initial = listOf())
     val enableCart by viewModel.showCartCircle.collectAsState(initial = false)
+
+    Log.d("juacoCompose", "products: ${
+        products.filterIsInstance<ScreenListItem.ScreenItem>()
+            .map { "name: ${it.product.name}, id: ${it.id}, qty: ${it.quantity}" }
+    }"
+    )
 
     val horizontalPadding = 18.dp
 
@@ -135,9 +142,17 @@ fun MainScreen(
                         product = cartItem.product,
                         quantity = cartItem.quantity,
                         onAddUnitPressed = {
+                            Log.d(
+                                "juacoCompose",
+                                "add Unit: ${cartItem.product}"
+                            )
                             viewModel.onAddItem(cartItem.product.id)
                         },
                         onRemoveUnitPressed = {
+                            Log.d(
+                                "juacoCompose",
+                                "remove Unit: ${cartItem.product}"
+                            )
                             viewModel.onRemoveItem(cartItem.product.id)
                         },
                         modifier = Modifier.padding(vertical = 16.dp)
