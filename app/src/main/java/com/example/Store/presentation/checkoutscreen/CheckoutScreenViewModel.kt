@@ -1,7 +1,5 @@
 package com.example.Store.presentation.checkoutscreen
 
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.proyecto_final_de_onboarding.R
@@ -33,7 +31,7 @@ class CheckoutScreenViewModel @Inject constructor(
     private val getCartUseCase: GetCartUseCase,
     private val getProductsUseCase: GetProductsUseCase,
     private val editQuantityUseCase: EditQuantityUseCase
-) : ViewModel(), DefaultLifecycleObserver {
+) : ViewModel() {
 
     private val cart = MutableStateFlow<List<CartItem>>(listOf())
 
@@ -73,6 +71,10 @@ class CheckoutScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(500)
     )
 
+    init {
+        getCart()
+    }
+
     fun getCheckout(): String {
         return totalAmount.value
     }
@@ -98,11 +100,6 @@ class CheckoutScreenViewModel @Inject constructor(
             }
 
         }
-    }
-
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
-        getCart()
     }
 
     private fun getCart() {
