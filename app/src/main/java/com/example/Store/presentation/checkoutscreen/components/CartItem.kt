@@ -28,9 +28,9 @@ import com.example.proyecto_final_de_onboarding.domain.model.Product
 import com.example.proyecto_final_de_onboarding.domain.model.ScreenListItem
 
 @Composable
-fun CartItem(item: ScreenListItem.ScreenItem) {
-    Column {
+fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
 
+    Column(modifier = modifier) {
         AsyncImage(
             model = item.product.checkoutImage,
             contentDescription = null,
