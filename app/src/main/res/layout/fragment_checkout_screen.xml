@@ -63,7 +63,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/sf_pro_text"
-            android:text="@string/totalText"
+            android:text="@string/total"
             android:textColor="@color/item_name_color"
             android:textSize="22sp"
             android:textStyle="normal"
