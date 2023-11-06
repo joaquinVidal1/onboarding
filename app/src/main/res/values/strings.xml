@@ -10,7 +10,6 @@
     <string name="brazilian_bananas">Brazilian Bananas</string>
     <string name="chinese_grapefruits">Chinese Grapefruits</string>
     <string name="uruguayan_cucumbers">Uruguayan Cucumbers</string>
-    <string name="asutralian_kiwis">Australian Kiwis</string>
     <string name="product_of_the_month">Product of the month</string>
     <string name="search">Search</string>
     <string name="confirm">CONFIRM</string>
@@ -27,6 +26,7 @@
     <string name="error_updating_cart">Error while updating cart</string>
     <string name="price">$%s</string>
     <string name="checkout_message">Total is: %s</string>
+    <string name="australian_kiwis">Australian Kiwis</string>
     <plurals name="unit">
         <item quantity="one">%d unit</item>
         <item quantity="other">%d units</item>

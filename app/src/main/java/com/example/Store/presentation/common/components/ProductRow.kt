@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -68,7 +69,8 @@ fun ProductRow(
 
         AddButton(qty = quantity,
             onAddUnitPressed = onAddUnitPressed,
-            onRemoveUnitPressed = onRemoveUnitPressed )
+            onRemoveUnitPressed = onRemoveUnitPressed,
+            modifier = Modifier.width(110.dp))
     }
 }
 

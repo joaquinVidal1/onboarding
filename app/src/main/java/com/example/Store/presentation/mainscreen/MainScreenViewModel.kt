@@ -1,9 +1,9 @@
 package com.example.Store.presentation.mainscreen
 
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.Store.domain.model.CarrouselPage
+import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.data.Result
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.model.Product
@@ -34,10 +34,11 @@ class MainScreenViewModel @Inject constructor(
     private val addProductToCart: AddProductToCartUseCase,
     private val removeProductFromCart: RemoveProductFromCartUseCase,
     private val getCartUseCase: GetCartUseCase
-) : ViewModel(), DefaultLifecycleObserver {
+) : ViewModel() {
 
     private val _cart = MutableStateFlow<List<CartItem>>(listOf())
     private val _query = MutableStateFlow("")
+    val query: StateFlow<String> = _query.asStateFlow()
 
     private val products: StateFlow<List<Product>> = flow {
         emit(refreshData())
@@ -69,8 +70,11 @@ class MainScreenViewModel @Inject constructor(
         }.flatten()
     }
 
-    override fun onResume(owner: LifecycleOwner) {
-        super.onResume(owner)
+    val carrouselPages: Flow<List<CarrouselPage>> = flow {
+        emit(getCarrouselPages())
+    }
+
+    init {
         getCart()
     }
 
@@ -131,5 +135,27 @@ class MainScreenViewModel @Inject constructor(
 
     private fun List<CartItem>.getItemQty(itemId: Int): Int {
         return this.find { it.productId == itemId }?.quantity ?: 0
+    }
+
+    private fun getCarrouselPages(): List<CarrouselPage> {
+        return listOf(
+            CarrouselPage(
+                title = R.string.brazilian_bananas,
+                subtitle = R.string.product_of_the_month,
+                image = R.drawable.banner_1
+            ), CarrouselPage(
+                title = R.string.chinese_grapefruits,
+                subtitle = R.string.product_of_the_month,
+                image = R.drawable.banner_2
+            ), CarrouselPage(
+                title = R.string.uruguayan_cucumbers,
+                subtitle = R.string.product_of_the_month,
+                image = R.drawable.banner_3
+            ), CarrouselPage(
+                title = R.string.australian_kiwis,
+                subtitle = R.string.chinese_grapefruits,
+                image = R.drawable.banner_4
+            )
+        )
     }
 }
