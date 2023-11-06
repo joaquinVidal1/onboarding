@@ -20,7 +20,6 @@ import com.example.Store.presentation.checkoutscreen.CheckoutScreenViewModel
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.databinding.FragmentCheckoutScreenBinding
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
-import com.example.proyecto_final_de_onboarding.domain.model.getRoundedPrice
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -88,7 +87,7 @@ class CheckoutScreenFragment : Fragment() {
                 launch {
                     viewModel.totalAmount.collect {
                         binding.totalAmount.text =
-                            getString(R.string.price, it.getRoundedPrice())
+                            getString(R.string.price, it)
                     }
                 }
 
