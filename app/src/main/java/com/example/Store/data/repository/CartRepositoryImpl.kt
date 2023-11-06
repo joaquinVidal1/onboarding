@@ -4,6 +4,7 @@ import com.example.proyecto_final_de_onboarding.data.db.CartDao
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.repository.CartRepository
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -40,10 +41,9 @@ class CartRepositoryImpl @Inject constructor(private val cartDao: CartDao) : Car
         }
     }
 
-    override suspend fun getCart(): List<CartItem> {
-        return withContext(Dispatchers.IO) {
-            cartDao.getCartItems()
-        }
+    override fun getCart(): Flow<List<CartItem>> {
+        return cartDao.getCartItemsObservable()
+
     }
 
 }

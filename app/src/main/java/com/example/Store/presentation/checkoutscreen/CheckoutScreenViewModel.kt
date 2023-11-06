@@ -15,7 +15,6 @@ import com.example.proyecto_final_de_onboarding.domain.usecase.GetProductsUseCas
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -33,7 +32,7 @@ class CheckoutScreenViewModel @Inject constructor(
     private val editQuantityUseCase: EditQuantityUseCase
 ) : ViewModel() {
 
-    private val cart = MutableStateFlow<List<CartItem>>(listOf())
+    private val cart = getCartUseCase()
 
     private val products = flow<List<Product>> {
         getProductsUseCase(Unit).let {
@@ -71,10 +70,6 @@ class CheckoutScreenViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(500)
     )
 
-    init {
-        getCart()
-    }
-
     fun getCheckout(): String {
         return (totalAmount.value).getRoundedPrice()
     }
@@ -91,29 +86,9 @@ class CheckoutScreenViewModel @Inject constructor(
                 EditQuantityUseCase.Params(
                     newQty = newQty, productId = productId
                 )
-            ).let {
-                if (it is Result.Success) {
-                    cart.value = it.value
-                } else {
-                    _error.emit(R.string.error_updating_cart)
-                }
-            }
-
+            )
         }
-    }
 
-    private fun getCart() {
-        viewModelScope.launch {
-            cart.value = getCartUseCase(Unit).let { cart ->
-                if (cart is Result.Success) {
-                    cart.value
-                } else {
-                    _error.emit(R.string.unable_to_get_cart)
-                    listOf()
-                }
-            }
-
-        }
     }
 
     private fun CartItem.getScreenItem(products: List<Product>): ScreenListItem.ScreenItem? {

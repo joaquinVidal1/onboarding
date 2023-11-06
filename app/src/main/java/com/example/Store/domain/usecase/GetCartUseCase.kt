@@ -1,14 +1,15 @@
 package com.example.proyecto_final_de_onboarding.domain.usecase
 
+import com.example.Store.domain.usecase.base.ObserveUseCase
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
 import com.example.proyecto_final_de_onboarding.domain.repository.CartRepository
-import com.example.proyecto_final_de_onboarding.domain.usecase.base.CoroutineUseCase
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class GetCartUseCase @Inject constructor(private val cartRepository: CartRepository) :
-    CoroutineUseCase<Unit, List<CartItem>>() {
+    ObserveUseCase<List<CartItem>> {
 
-    override suspend fun execute(params: Unit): List<CartItem> {
+    override fun invoke(): Flow<List<CartItem>> {
         return cartRepository.getCart()
     }
 }

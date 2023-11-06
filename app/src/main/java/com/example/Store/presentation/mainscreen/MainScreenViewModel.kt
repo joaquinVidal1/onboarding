@@ -36,7 +36,8 @@ class MainScreenViewModel @Inject constructor(
     private val getCartUseCase: GetCartUseCase
 ) : ViewModel() {
 
-    private val _cart = MutableStateFlow<List<CartItem>>(listOf())
+    private val _cart = getCartUseCase()
+
     private val _query = MutableStateFlow("")
     val query: StateFlow<String> = _query.asStateFlow()
 
@@ -74,31 +75,16 @@ class MainScreenViewModel @Inject constructor(
         emit(getCarrouselPages())
     }
 
-    init {
-        getCart()
-    }
 
     fun onAddItem(productId: Int) {
         viewModelScope.launch {
-            addProductToCart(AddProductToCartUseCase.Params(productId = productId)).let {
-                if (it is Result.Success) {
-                    _cart.value = it.value
-                } else {
-                    _error.value = (it as Result.Error).message ?: "Error"
-                }
-            }
+            addProductToCart(AddProductToCartUseCase.Params(productId = productId))
         }
     }
 
     fun onRemoveItem(productId: Int) {
         viewModelScope.launch {
-            removeProductFromCart(RemoveProductFromCartUseCase.Params(productId = productId)).let {
-                if (it is Result.Success) {
-                    _cart.value = it.value
-                } else {
-                    _error.value = (it as Result.Error).message ?: "Error"
-                }
-            }
+            removeProductFromCart(RemoveProductFromCartUseCase.Params(productId = productId))
         }
     }
 
@@ -119,19 +105,6 @@ class MainScreenViewModel @Inject constructor(
         }
     }
 
-    private fun getCart() {
-        viewModelScope.launch {
-            _cart.value = getCartUseCase(Unit).let { cart ->
-                if (cart is Result.Success) {
-                    cart.value
-                } else {
-                    _error.value = (cart as Result.Error).message ?: "Error"
-                    listOf()
-                }
-            }
-
-        }
-    }
 
     private fun List<CartItem>.getItemQty(itemId: Int): Int {
         return this.find { it.productId == itemId }?.quantity ?: 0

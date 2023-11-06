@@ -6,9 +6,13 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import com.example.proyecto_final_de_onboarding.domain.model.CartItem
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CartDao {
+    @Query("select * from cartTable")
+    fun getCartItemsObservable(): Flow<List<CartItem>>
+
     @Query("select * from cartTable")
     fun getCartItems(): List<CartItem>
 
