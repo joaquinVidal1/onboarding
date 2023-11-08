@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.Store.presentation.StoreTheme
 import com.example.proyecto_final_de_onboarding.R
 import com.example.proyecto_final_de_onboarding.domain.model.Kind
 import com.example.proyecto_final_de_onboarding.domain.model.Product
@@ -81,7 +80,6 @@ fun CartItem(item: ScreenListItem.ScreenItem, modifier: Modifier = Modifier) {
 @Composable
 @Preview(showBackground = true)
 fun CartItemPreview() {
-    StoreTheme {
         CartItem(
             item = ScreenListItem.ScreenItem(
                 product = Product(
@@ -94,5 +92,5 @@ fun CartItemPreview() {
                 ), quantity = 4
             )
         )
-    }
+
 }
